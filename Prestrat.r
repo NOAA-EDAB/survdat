@@ -79,6 +79,7 @@ prestrat <- function (survdat, areas, strat.col, area.col = 'area', sp.col = 'SV
   strat.year <- unique(stations)
   strat.year[, which(!names(strat.year) %in% c('YEAR', 'STRAT', 'S.AREA')) := NULL]
   strat.year[, W.h := S.AREA / sum(S.AREA, na.rm = T), by = YEAR]
+  strat.year[is.na(W.h), W.h := 0]
   strat.year[, S.AREA := NULL]
 
   #Merge back
