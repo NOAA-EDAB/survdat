@@ -4,17 +4,17 @@
 #SML
 
 #User parameters
-window <- F
-if(window == T){
+if(Sys.info()['sysname']=="Windows"){
   data.dir <- "L:\\EcoAP\\Data\\survey\\"
   out.dir  <- "L:\\EcoAP\\misc\\"
   r.dir    <- "L:\\Rworkspace\\Survey\\"
   gis.dir  <- "L:\\Rworkspace\\GIS_files"
 }
-if(window == F){
+
+if(Sys.info()['sysname']=="Linux"){
   data.dir <- "slucey/EcoAP/Data/survey/"
   out.dir  <- "slucey/EcoAP/misc/"
-  r.dir    <- "slucey/Rworkspace/Survey/"
+  r.dir    <- "slucey/Rworkspace/RSurvey/"
   gis.dir  <- "slucey/Rworkspace/GIS_files"
   uid <- 'slucey'
   cat('Oracle Password:')
@@ -55,10 +55,7 @@ stations.epu[, c('LON', 'LAT') := NULL]
 #Merge back to survdat
 survdat.epu <- merge(survdat, stations.epu, by = key(survdat)) 
 
-#Step 2 - Segregate by season
-fall <- survdat.epu[SEASON == 'FALL', ]
-
-#Step 3 - Generate stratum area table
+#Step 2 - Generate stratum area table
 epu.area <- getarea(EPU, strat.col = 'EPU')
 #If using survey:
 # #Add in connection to oracle to get species areas
@@ -73,16 +70,29 @@ epu.area <- getarea(EPU, strat.col = 'EPU')
 # stratum[, STRATUM_AREA := STRATUM_AREA * 3.429904]
 
 
+#Step 3 - Segregate by season
+fall <- survdat.epu[SEASON == 'FALL', ]
+
 #Step 4 - Preprocess the data for stratified means
+#Need to combine sexed species or generate a new species code - This is 
+#no longer done as part of prestrat
 fall.pre <- prestrat(fall, epu.area, strat.col = 'EPU', area.col = 'Area')
 
 #Step 5 - reduce or aggregate species
 fall.pre.gadids <- fall.pre[SVSPP %in% c(72:74, 76), ]
-#could alternatively do
+#could alternatively do - but make sure to aggregate the group
 #fall.pre[SVSPP %in% c(72:74, 76), Group := 'Gadid"]
+# setkey(fall.pre, CRUISE6, STRATUM, STATION, Group)
+# fall.pre[, biomass.new   := sum(BIOMASS),   by = key(fall.pre)]
+# fall.pre[, abundance.new := sum(ABUNDANCE), by = key(fall.pre)]
+# fall.pre <- unique(fall.pre)
+# fall.pre[, c('BIOMASS', 'ABUNDANCE') := NULL]
+# setnames(fall.pre, c('biomass.new', 'abundance.new'), c('BIOMASS', 'ABUNDANCE'))
+# fall.pre <- fall.pre[!is.na(Group), ]
 #And run stratmean off group.col = 'Group' instead of 'SVSPP'
 
 #Step 6 - Calculate stratified mean
+#You can now use an aggregate biomass or abundance by specifying weight/number parameter
 strat.mean.gadid <- stratmean(fall.pre.gadids, group.col = 'SVSPP', strat.col = 'EPU')
 
 #Step 7 - Calculate swept area
@@ -91,3 +101,7 @@ gadid.totbiomass <- sweptarea(fall.pre.gadids, strat.mean.gadid, strat.col = 'EP
 #Output - either RData or csv
 save(     gadid.totbiomass, file = paste(out.dir, "Gadid_Fall_Biomass.RData", sep = ''))
 write.csv(gadid.totbiomass, file = paste(out.dir, "Gadid_Fall_Biomass.csv",   sep = ''), row.names = F)
+
+
+
+
