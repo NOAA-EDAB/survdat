@@ -4,9 +4,22 @@
 #SML
 
 #User parameters
-data.dir <- "L:\\EcoAP\\Data\\survey\\"
-out.dir  <- "L:\\EcoAP\\Data\\survey\\"
-r.dir    <- "L:\\Rworkspace\\Survey\\"
+if(Sys.info()['sysname']=="Windows"){
+  data.dir <- "L:\\EcoAP\\Data\\survey\\"
+  out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+  r.dir    <- "L:\\Rworkspace\\RSurvey\\"
+  gis.dir  <- "L:\\Rworkspace\\GIS_files"
+}
+
+if(Sys.info()['sysname']=="Linux"){
+  data.dir <- "slucey/EcoAP/Data/survey/"
+  out.dir  <- "slucey/EcoAP/Data/survey/"
+  r.dir    <- "slucey/Rworkspace/RSurvey/"
+  gis.dir  <- "slucey/Rworkspace/GIS_files"
+  uid <- 'slucey'
+  cat('Oracle Password:')
+  pwd <- readLines(n=1)
+}
 
 #-------------------------------------------------------------------------------
 #Required packages
@@ -19,7 +32,9 @@ library(data.table); library(RODBC)
 load(paste(data.dir, "survdat.RData", sep = ''))
 
 #Need a length/weight coefficients
-channel <- odbcDriverConnect()
+if(Sys.info()['sysname']=="Windows") channel <- odbcDriverConnect()
+if(Sys.info()['sysname']=="Linux")   channel <- odbcConnect('sole', uid, pwd)
+  
 lw.qry <- "select svspp, sex, svlwexp,        svlwcoeff,
                               svlwexp_spring, svlwcoeff_spring,
                               svlwexp_fall,   svlwcoeff_fall,
@@ -159,5 +174,10 @@ setkey(survdat.lw, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX, SIZECAT)
 
 survdat.lw[, WGTCAT := sum(WGTLEN), by = key(survdat.lw)]
 survdat.lw[, NUMCAT := sum(NUMLEN), by = key(survdat.lw)]
+
+survdat.lw <- unique(survdat.lw)
+
+#Drop individual columns
+survdat.lw[, c('LENGTH', 'NUMLEN', 'INDWT', 'WGTLEN') := NULL]
 
 save(survdat.lw, file = paste(out.dir, "survdat_lw.RData", sep = ''))
