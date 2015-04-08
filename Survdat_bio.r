@@ -6,8 +6,19 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-out.dir <- "L:\\EcoAP\\Data\\survey"
-shg.check <- 'y' # y = use only SHG <=136 otherwise n
+windows <- F
+if(windows == T){
+  data.dir <- "L:\\EcoAP\\Data\\survey\\"
+  out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+  memory.limit(4000)
+}
+if(windows == F){
+  data.dir <- "slucey/EcoAP/Data/survey/"
+  out.dir  <- "slucey/EcoAP/Data/survey/"
+  uid      <- 'slucey'
+  cat('Oracle Password:')
+  pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
+}
 
 #-------------------------------------------------------------------------------
 #Required packages
@@ -15,7 +26,7 @@ library(RODBC); library(data.table)
 
 #-------------------------------------------------------------------------------
 #Created functions
-  #Convert output to text for RODBC query
+#Convert output to text for RODBC query
 sqltext<-function(x){
   out<-x[1]
   if(length(x) > 1){
@@ -29,76 +40,17 @@ sqltext<-function(x){
 
 #-------------------------------------------------------------------------------
 #Begin script
+if(windows == T){
+  channel <- odbcDriverConnect()
+}else{
+  channel <- odbcConnect('sole', uid, pwd)
+}
 
-#Increase memory size (max is 4096 in 32-bit R)
-memory.limit(4000)
-
-#Connect to Oracle
-channel <- odbcDriverConnect()
-
-#Generate cruise list
-cruise.qry <- "select unique year, cruise6, svvessel, season
-  from mstr_cruise
-  where purpose_code = 10
-  and year >= 1963
-  and (season = 'FALL'
-    or season = 'SPRING')
-    order by year, cruise6"
-
-cruise <- as.data.table(sqlQuery(channel, cruise.qry))
-cruise <- na.omit(cruise)
-setkey(cruise, CRUISE6, SVVESSEL)
+#Read in Survdat
+load(paste(data.dir, 'Survdat.RData', sep = ''))
 
 #Use cruise codes to select other data
-cruise6 <- sqltext(cruise$CRUISE6)
-
-#Station data
-if(shg.check == 'y'){
-  station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon
-    from Union_fscs_svsta
-    where cruise6 in (", cruise6, ")
-    and SHG <= 136
-    order by cruise6, station", sep='')
-  }
-
-if(shg.check == 'n'){
-  station.qry<-paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon
-    from UNION_FSCS_SVSTA
-    where cruise6 in (", cruise6, ")
-    order by cruise6, station", sep='')
-  }
-  
-station <- as.data.table(sqlQuery(channel, station.qry))
-setkey(station, CRUISE6, SVVESSEL)
-
-#merge cruise and station
-survdat <- merge(cruise, station)
-
-#Catch data
-catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
-  from UNION_FSCS_SVCAT
-  where cruise6 in (", cruise6, ")
-  order by cruise6, station, svspp", sep='')
-
-catch <- as.data.table(sqlQuery(channel, catch.qry))
-setkey(catch, CRUISE6, STATION, STRATUM)
-
-#merge with survdat
-setkey(survdat, CRUISE6, STATION, STRATUM)
-survdat <- merge(survdat, catch)
-
-#Length data
-length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
-  from UNION_FSCS_SVLEN
-  where cruise6 in (", cruise6, ")
-  order by cruise6, station, svspp, length", sep='')
-
-len <- as.data.table(sqlQuery(channel, length.qry))
-setkey(len, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
-
-#merge with survdat
-setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
-survdat <- merge(survdat, len, all.x = T)
+cruise6 <- sqltext(unique(survdat[, CRUISE6]))
 
 #Bio data
 bio.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, indid,
@@ -107,6 +59,7 @@ bio.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, ind
                 where cruise6 in (", cruise6, ")", sep = '')
                 
 bio <- as.data.table(sqlQuery(channel, bio.qry))
+
 #Fix catch sex prior to 2001
 bio[is.na(CATCHSEX), CATCHSEX := 0L]
 bio[SVSPP %in% c(15, 301) & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1L]
@@ -114,87 +67,17 @@ bio[SVSPP %in% c(15, 301) & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2L]
 
 setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
 
+#Remove YT Stratum
+bio <- bio[!STRATUM %like% 'YT', ]
+bio[, STRATUM := as.numeric(as.character(STRATUM))]
+
 #merge with survdat
 setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
-survdat <- merge(survdat, bio, all.x =T, allow.cartesian = T)
-
-
-#Conversion Factors
-#need to make abundance column a double instead of an integer
-survdat[, ABUNDANCE := as.double(ABUNDANCE)]
-
-#Grab all conversion factors off the network
-convert.qry<-"select *
-  from survan_conversion_factors"
-
-convert<-as.data.table(sqlQuery(channel,convert.qry))
-
-#DCF < 1985 Door Conversion
-dcf.spp<-convert[DCF_WT > 0, SVSPP]
-for(i in 1:length(dcf.spp)){
-  survdat[YEAR < 1985 & SVSPP == dcf.spp[i],
-      BIOMASS := BIOMASS * convert[SVSPP == dcf.spp[i], DCF_WT]]
-  }
-dcf.spp<-convert[DCF_NUM > 0, SVSPP]
-for(i in 1:length(dcf.spp)){
-  survdat[YEAR < 1985 & SVSPP == dcf.spp[i],
-      ABUNDANCE := round(ABUNDANCE * convert[SVSPP == dcf.spp[i], DCF_NUM])]
-  }
-
-#GCF Spring 1973-1981  Net Conversion
-gcf.spp<-convert[GCF_WT > 0, SVSPP]
-for(i in 1:length(gcf.spp)){
-  survdat[SEASON == 'SPRING' & YEAR > 1972 & YEAR < 1982 & SVSPP == gcf.spp[i],
-      BIOMASS := BIOMASS / convert[SVSPP == gcf.spp[i], GCF_WT]]
-  }
-gcf.spp<-convert[GCF_NUM > 0, SVSPP]
-for(i in 1:length(gcf.spp)){
-  survdat[SEASON == 'SPRING' & YEAR > 1972 & YEAR < 1982 & SVSPP == gcf.spp[i],
-      ABUNDANCE := round(ABUNDANCE / convert[SVSPP == gcf.spp[i], GCF_NUM])]
-  }
-
-#VCF SVVESSEL=DE  Vessel Conversion
-vcf.spp<-convert[VCF_WT > 0, SVSPP]
-for(i in 1:length(vcf.spp)){
-  survdat[SVVESSEL == 'DE' & SVSPP == vcf.spp[i],
-      BIOMASS := BIOMASS * convert[SVSPP == vcf.spp[i], VCF_WT]]
-  }
-vcf.spp<-convert[VCF_NUM > 0, SVSPP]
-for(i in 1:length(vcf.spp)){
-  survdat[SVVESSEL == 'DE' & SVSPP == vcf.spp[i],
-      ABUNDANCE := round(ABUNDANCE * convert[SVSPP == vcf.spp[i], VCF_NUM])]
-  }
-
-#Bigelow >2008 Vessel Conversion - need flat files (not on network)
-big.fall<-as.data.table(read.csv('bigelow_fall_calibration.csv'))
-big.spring<-as.data.table(read.csv('bigelow_spring_calibration.csv'))
-
-bf.spp<-big.fall[pW != 1, svspp]
-for(i in 1:length(bf.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'FALL' & SVSPP == bf.spp[i],
-      BIOMASS := BIOMASS / big.fall[svspp == bf.spp[i], pW]]
-  }
-bf.spp<-big.fall[pw != 1, svspp]
-for(i in 1:length(bf.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'FALL' & SVSPP == bf.spp[i],
-      ABUNDANCE := round(ABUNDANCE / big.fall[svspp == bf.spp[i], pw])]
-  }
-
-bs.spp<-big.spring[pW != 1, svspp]
-for(i in 1:length(bs.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'SPRING' & SVSPP == bs.spp[i],
-      BIOMASS := BIOMASS / big.spring[svspp == bs.spp[i], pW]]
-  }
-bs.spp<-big.spring[pw != 1, svspp]
-for(i in 1:length(bs.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'SPRING' & SVSPP == bs.spp[i],
-      ABUNDANCE := round(ABUNDANCE / big.spring[svspp == bs.spp[i], pw])]
-  }
+survdat.bio <- merge(survdat, bio)
 
 odbcClose(channel)
 
-
-save(survdat, file = paste(out.dir, "\\Survdat.RData", sep=''))
+save(survdat.bio, file = paste(out.dir, "SurvdatBio.RData", sep=''))
 
 
 
