@@ -2,7 +2,7 @@
 #Prepare data for Stratmean.r
 #SML
 
-prestrat <- function (survdat, areas, strat.col, area.col = 'area', sp.col = 'SVSPP') {
+prestrat <- function (survdat, areas, strat.col, area.col = 'area') {
   #survdat   <- data table created by Survdat.r
   #areas     <- data table with stratum and areas
   #strat.col <- column of survdat and areas with the strata names
@@ -56,8 +56,8 @@ prestrat <- function (survdat, areas, strat.col, area.col = 'area', sp.col = 'SV
   #Merge catch with station data
   strat.survdat <- merge(x, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
   
-  setnames(strat.survdat, c('SP',   'STRAT',   'S.AREA'),
-                          c(sp.col, strat.col, area.col))
+  setnames(strat.survdat, c('STRAT',   'S.AREA'),
+                          c(strat.col, area.col))
   
   return(strat.survdat)
   }
