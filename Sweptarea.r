@@ -46,8 +46,13 @@ sweptarea <- function (prestrat.x, stratmean.x, q = NULL, a = 0.0384, strat.col,
   swept.area[, Tot.biomass   :=       (strat.biomass * A/a)/q]
   swept.area[, Tot.abundance := round((strat.abund   * A/a)/q)]
   
+  #Calculate variance
+  swept.area[, var.constant := (A/a)/q]
+  swept.area[, tot.bio.s2   := var.constant^2 * biomass.s2]
+  swept.area[, tot.abund.s2 := var.constant^2 * abund.s2]
+  
   #remove extra columns
-  swept.area[, c('A', 'q') := NULL]
+  swept.area[, c('A', 'q', 'var.constant') := NULL]
 
   return(swept.area)
   }
