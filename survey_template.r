@@ -38,7 +38,12 @@ source(paste(r.dir, "Sweptarea.r", sep = ''))
 #Load Survdat.RData
 load(paste(data.dir, "Survdat.RData", sep = ''))
 
-#Step 1 - change stratification
+#Step 1 - Remove length data
+setkey(survdat, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+survdat <- unique(survdat)
+survdat[, c('LENGTH', 'NUMLEN') := NULL]
+
+#Step 2 - change stratification
 #Grab shapefile for new strata
 EPU <- readOGR(gis.dir, 'EPU')
 
@@ -55,7 +60,7 @@ stations.epu[, c('LON', 'LAT') := NULL]
 #Merge back to survdat
 survdat.epu <- merge(survdat, stations.epu, by = key(survdat)) 
 
-#Step 2 - Generate stratum area table
+#Step 3 - Generate stratum area table
 epu.area <- getarea(EPU, strat.col = 'EPU')
 #If using survey:
 # #Add in connection to oracle to get species areas
@@ -70,15 +75,15 @@ epu.area <- getarea(EPU, strat.col = 'EPU')
 # stratum[, STRATUM_AREA := STRATUM_AREA * 3.429904]
 
 
-#Step 3 - Segregate by season
+#Step 4 - Segregate by season
 fall <- survdat.epu[SEASON == 'FALL', ]
 
-#Step 4 - Preprocess the data for stratified means
+#Step 5 - Preprocess the data for stratified means
 #Need to combine sexed species or generate a new species code - This is 
 #no longer done as part of prestrat
 fall.pre <- prestrat(fall, epu.area, strat.col = 'EPU', area.col = 'Area')
 
-#Step 5 - reduce or aggregate species
+#Step 6 - reduce or aggregate species
 fall.pre.gadids <- fall.pre[SVSPP %in% c(72:74, 76), ]
 #could alternatively do - but make sure to aggregate the group
 #fall.pre[SVSPP %in% c(72:74, 76), Group := 'Gadid"]
@@ -91,11 +96,11 @@ fall.pre.gadids <- fall.pre[SVSPP %in% c(72:74, 76), ]
 # fall.pre <- fall.pre[!is.na(Group), ]
 #And run stratmean off group.col = 'Group' instead of 'SVSPP'
 
-#Step 6 - Calculate stratified mean
+#Step 7 - Calculate stratified mean
 #You can now use an aggregate biomass or abundance by specifying weight/number parameter
 strat.mean.gadid <- stratmean(fall.pre.gadids, group.col = 'SVSPP', strat.col = 'EPU')
 
-#Step 7 - Calculate swept area
+#Step 8 - Calculate swept area
 gadid.totbiomass <- sweptarea(fall.pre.gadids, strat.mean.gadid, strat.col = 'EPU', area.col = 'Area', group.col = 'SVSPP')
 
 #Output - either RData or csv
