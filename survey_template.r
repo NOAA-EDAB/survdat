@@ -81,6 +81,11 @@ fall <- survdat.epu[SEASON == 'FALL', ]
 #Step 5 - Preprocess the data for stratified means
 #Need to combine sexed species or generate a new species code - This is 
 #no longer done as part of prestrat
+setkey(fall, CRUISE6, STRATUM, STATION, SVSPP)
+fall[, BIOMASS   := sum(BIOMASS),   by = key(fall)]
+fall[, ABUNDANCE := sum(ABUNDANCE), by = key(fall)]
+fall <- unique(fall)
+
 fall.pre <- prestrat(fall, epu.area, strat.col = 'EPU', area.col = 'Area')
 
 #Step 6 - reduce or aggregate species
@@ -101,7 +106,8 @@ fall.pre.gadids <- fall.pre[SVSPP %in% c(72:74, 76), ]
 strat.mean.gadid <- stratmean(fall.pre.gadids, group.col = 'SVSPP', strat.col = 'EPU')
 
 #Step 8 - Calculate swept area
-gadid.totbiomass <- sweptarea(fall.pre.gadids, strat.mean.gadid, strat.col = 'EPU', area.col = 'Area', group.col = 'SVSPP')
+gadid.totbiomass <- sweptarea(fall.pre.gadids, strat.mean.gadid, strat.col = 'EPU', 
+                              area.col = 'Area', group.col = 'SVSPP')
 
 #Output - either RData or csv
 save(     gadid.totbiomass, file = paste(out.dir, "Gadid_Fall_Biomass.RData", sep = ''))
