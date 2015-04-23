@@ -6,13 +6,12 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-windows <- F
-if(windows == T){
+if(Sys.info()['sysname']=="Windows"){
   data.dir <- "L:\\Rworkspace\\RSurvey\\"
   out.dir  <- "L:\\EcoAP\\Data\\survey\\"
   memory.limit(4000)
 }
-if(windows == F){
+if(Sys.info()['sysname']=="Linux"){
   data.dir <- "slucey/Rworkspace/RSurvey/"
   out.dir  <- "slucey/EcoAP/Data/survey/"
   uid      <- 'slucey'
@@ -22,7 +21,7 @@ if(windows == F){
 
 shg.check  <- 'y' # y = use only SHG <=136 otherwise n
 raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still save data with conversions (survdat)
-all.season <- 'n' # y = save data with purpose code 10 not just spring/fall (survdat.allseason), will not save survdat regular
+all.season <- 'y' # y = save data with purpose code 10 not just spring/fall (survdat.allseason), will not save survdat regular
 
 #-------------------------------------------------------------------------------
 #Required packages
@@ -31,22 +30,22 @@ library(RODBC); library(data.table)
 #-------------------------------------------------------------------------------
 #Created functions
   #Convert output to text for RODBC query
-sqltext<-function(x){
-  out<-x[1]
+sqltext <- function(x){
+  out <- x[1]
   if(length(x) > 1){
     for(i in 2:length(x)){
-      out<-paste(out, x[i], sep="','")
+      out <- paste(out, x[i], sep = "','")
     }
   }
-  out<-paste("'", out, "'", sep='')
+  out <- paste("'", out, "'", sep = '')
   return(out)
 }
 
 #-------------------------------------------------------------------------------
 #Begin script
-if(windows == T){
+if(Sys.info()['sysname']=="Windows"){
   channel <- odbcDriverConnect()
-}else{
+} else {
   channel <- odbcConnect('sole', uid, pwd)
 }
 
