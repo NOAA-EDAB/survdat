@@ -1,9 +1,11 @@
 Package: Survdat
 Type: Package
-Title: What the package does (short line)
+Title: Tools for working with NEFSC survey data
 Version: 1.0
 Date: 2015-03-03
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: person("Lucey", "Sean", email = "Sean.Lucey@NOAA.gov",
+  role = c("aut", "cre"))
+Description: A collection of functions for use with NEFSC survey data.  Functions
+  will generate stratified means and swept area estimates from the surveys.
+Imports: data.table
+Suggests: rgdal
