@@ -4,7 +4,7 @@
 \alias{sweptarea}
 \title{Calculate the estimate of total biomass and abundance}
 \usage{
-sweptarea(survdat, stratmean, q = NULL, a = 0.0384, strata.col, area.col,
+sweptarea(survdat, stratmean, q = NULL, a = 0.0384, strat.col, area.col,
   group.col = "SVSPP")
 }
 \arguments{
@@ -19,7 +19,7 @@ estimates).}
 \item{a}{The average swept area of the trawl.  Default value is the swept area of a
 standard NOAA Ship Albatross IV tow.}
 
-\item{strata.col}{Column of survdat containing strata designations.}
+\item{strat.col}{Column of survdat containing strata designations.}
 
 \item{area.col}{Column of survdat containing the stratum areas.}
 

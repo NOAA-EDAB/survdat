@@ -31,7 +31,7 @@ sweptarea <- function (prestrat.x, stratmean.x, q = NULL, a = 0.0384, strat.col,
   
   setkey(prestrat.x, YEAR, STRAT)
   stratum <- unique(prestrat.x)
-  stratum <- stratum[, sum(S.AREA), by = 'YEAR']
+  stratum <- stratum[, sum(S.AREA, na.rm = T), by = 'YEAR']
   setnames(stratum, "V1", "A")
   
   #Merge A
