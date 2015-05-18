@@ -175,11 +175,13 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   }
   
   if(merge.sex == T){
+    setkey(x, CRUISE6, strat, STATION, group, sex)
+    x <- unique(x)
+    x[, c('LENGTH', 'NUMLEN') := NULL]
     setkey(x, CRUISE6, strat, STATION, group)
     x[, BIO := sum(BIO), by = key(x)]
     x[, NUM := sum(NUM), by = key(x)]
     x <- unique(x)
-    x[, c('LENGTH', 'NUMLEN') := NULL]
   }
     
   #Fix Na's
