@@ -161,29 +161,22 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
                        area.wgt = 'W.h', weight = 'BIOMASS', number = 'ABUNDANCE') {
   x <- copy(survdat)
   
+  #Remove length data if present
+  setkey(x, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+  x <- unique(x)
+  x[, c('LENGTH', 'NUMLEN') := NULL]
+  
   setnames(x, c(group.col, sex.col, strat.col, nsta.col, area.wgt, weight, number),
            c('group', 'sex', 'strat', 'ntows', 'W.h', 'BIO', 'NUM'))
   
   #Merge sex or keep seperate
-  if(merge.sex == F){
-    x[, group := as.numeric(paste(group, sex, sep = ''))]
-    setkey(x, CRUISE6, strat, STATION, group)
-    x <- unique(x)
-    x[, c('LENGTH', 'NUMLEN') := NULL]
-    groups <- as.numeric(paste(groups, c(rep(0, length(groups)), rep(1, length(groups)), 
-                                         rep(2, length(groups))), sep = ''))
-  }
+  if(merge.sex == F) x[, group := paste(group, sex, sep = '')]
+
+  setkey(x, CRUISE6, strat, STATION, group)
+  x[, BIO := sum(BIO), by = key(x)]
+  x[, NUM := sum(NUM), by = key(x)]
+  x <- unique(x)
   
-  if(merge.sex == T){
-    setkey(x, CRUISE6, strat, STATION, group, sex)
-    x <- unique(x)
-    x[, c('LENGTH', 'NUMLEN') := NULL]
-    setkey(x, CRUISE6, strat, STATION, group)
-    x[, BIO := sum(BIO), by = key(x)]
-    x[, NUM := sum(NUM), by = key(x)]
-    x <- unique(x)
-  }
-    
   #Fix Na's
   x[is.na(BIO), BIO := 0]
   x[is.na(NUM), NUM := 0]
@@ -195,7 +188,11 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   setnames(N, 'V1', 'N')
   
   #Subset data if necessary
-  if(groups[1] != 'all') x <- x[group %in% groups, ]
+  if(groups[1] != 'all'){
+    if(merge.sex == F) groups <- c(paste(groups, 0, sep = ''), paste(groups, 1, sep = ''),
+                                   paste(groups, 2, sep = ''), paste(groups, 3, sep = ''))
+    x <- x[group %in% groups, ]
+  }
   
   #Calculate weight per tow and number per tow
   setkey(x, group, strat, YEAR)
@@ -243,8 +240,8 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   }
   
   #standard error of the means
-  stratified[, biomass.SE := sqrt(biomass.s2) / sqrt(N), by = key(stratified)]
-  stratified[, abund.SE   := sqrt(abund.s2)   / sqrt(N), by = key(stratified)]
+  stratified[, biomass.SE := sqrt(biomass.s2), by = key(stratified)]
+  stratified[, abund.SE   := sqrt(abund.s2),   by = key(stratified)]
   
   #Delete extra rows/columns
   stratified.means <- unique(stratified)
