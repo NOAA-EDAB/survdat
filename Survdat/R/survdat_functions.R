@@ -235,24 +235,24 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   
   #Stratified variance
   if(poststrat == F){
-    stratified[, biomass.s2 := sum(((W.h^2) * Sh.2.b) / ntows), by = key(stratified)]
-    stratified[, abund.s2   := sum(((W.h^2) * Sh.2.a) / ntows), by = key(stratified)]
+    stratified[, biomass.var := sum(((W.h^2) * Sh.2.b) / ntows), by = key(stratified)]
+    stratified[, abund.var   := sum(((W.h^2) * Sh.2.a) / ntows), by = key(stratified)]
   }
   
   if(poststrat == T){
-    stratified[, biomass.s2 := sum(Sh.2.b * W.h) / N + sum((1 - W.h) * Sh.2.b) / N^2, by = key(stratified)]
-    stratified[, abund.s2   := sum(Sh.2.a * W.h) / N + sum((1 - W.h) * Sh.2.a) / N^2, by = key(stratified)]
+    stratified[, biomass.var := sum(Sh.2.b * W.h) / N + sum((1 - W.h) * Sh.2.b) / N^2, by = key(stratified)]
+    stratified[, abund.var   := sum(Sh.2.a * W.h) / N + sum((1 - W.h) * Sh.2.a) / N^2, by = key(stratified)]
     
   }
   
   #standard error of the means
-  stratified[, biomass.SE := sqrt(biomass.s2), by = key(stratified)]
-  stratified[, abund.SE   := sqrt(abund.s2),   by = key(stratified)]
+  stratified[, biomass.SE := sqrt(biomass.var), by = key(stratified)]
+  stratified[, abund.SE   := sqrt(abund.var),   by = key(stratified)]
   
   #Delete extra rows/columns
   stratified.means <- unique(stratified)
-  stratified.means <- stratified.means[, list(YEAR, group, sex, N, strat.biomass, biomass.s2, biomass.SE, 
-                                              strat.abund, abund.s2, abund.SE)]
+  stratified.means <- stratified.means[, list(YEAR, group, sex, N, strat.biomass, biomass.var, biomass.SE, 
+                                              strat.abund, abund.var, abund.SE)]
   if(merge.sex == T) stratified.means[, sex := NULL]
   
   if(merge.sex == F){
@@ -318,16 +318,28 @@ sweptarea <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, area
   swept.area <- merge(swept.area, q, by = group.col)
   
   #Calculate swept area biomass
-  swept.area[, Tot.biomass   :=       (strat.biomass * A/a)/q]
-  swept.area[, Tot.abundance := round((strat.abund   * A/a)/q)]
+  swept.area[, tot.biomass   :=       (strat.biomass * A/a)/q]
+  swept.area[, tot.abundance := round((strat.abund   * A/a)/q)]
   
   #Calculate variance
   swept.area[, var.constant := (A/a)/q]
-  swept.area[, tot.bio.s2   := var.constant^2 * biomass.s2]
-  swept.area[, tot.abund.s2 := var.constant^2 * abund.s2]
+  swept.area[, tot.bio.var   := var.constant^2 * biomass.var]
+  swept.area[, tot.abund.var := var.constant^2 * abund.var]
   
-  #remove extra columns
-  #swept.area[, c('A', 'q', 'var.constant') := NULL]
+  #Calculate standard error
+  swept.area[, tot.bio.SE   := sqrt(tot.bio.var)]
+  swept.area[, tot.abund.SE := sqrt(tot.abund.var)]
+  
+  #remove extra columns - need to add sex column if stratmean object does not have one
+  #then remove before output
+  if(length(which(names(stratmean.x) == 'sex')) == 0) swept.area[, sex := 0]
+  swept.area <- swept.area[, list(YEAR, get(group.col), sex, N, 
+                                  strat.biomass, biomass.var,   biomass.SE, 
+                                  strat.abund,   abund.var,     abund.SE,
+                                  tot.biomass,   tot.bio.var,   tot.bio.SE,
+                                  tot.abundance, tot.abund.var, tot.abund.SE)]
+  setnames(swept.area, 'V2', group.col)
+  if(length(which(names(stratmean.x) == 'sex')) == 0) swept.area[, sex := NULL]
   
   return(swept.area)
 }
