@@ -6,13 +6,12 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-windows <- F
-if(windows == T){
+if(Sys.info()['sysname']=="Windows"){
   data.dir <- "L:\\EcoAP\\Data\\survey\\"
   out.dir  <- "L:\\EcoAP\\Data\\survey\\"
   memory.limit(4000)
 }
-if(windows == F){
+if(Sys.info()['sysname']=="Linux"){
   data.dir <- "slucey/EcoAP/Data/survey/"
   out.dir  <- "slucey/EcoAP/Data/survey/"
   uid      <- 'slucey'
@@ -27,20 +26,20 @@ library(RODBC); library(data.table)
 #-------------------------------------------------------------------------------
 #Created functions
 #Convert output to text for RODBC query
-sqltext<-function(x){
-  out<-x[1]
+sqltext <- function(x){
+  out <- x[1]
   if(length(x) > 1){
     for(i in 2:length(x)){
-      out<-paste(out, x[i], sep="','")
+      out <- paste(out, x[i], sep = "','")
     }
   }
-  out<-paste("'", out, "'", sep='')
+  out <- paste("'", out, "'", sep = '')
   return(out)
 }
 
 #-------------------------------------------------------------------------------
 #Begin script
-if(windows == T){
+if(Sys.info()['sysname']=="Windows"){
   channel <- odbcDriverConnect()
 }else{
   channel <- odbcConnect('sole', uid, pwd)
