@@ -28,3 +28,6 @@ load(paste(data.dir, 'Survdat.RData', sep = ''))
 svspp <- as.data.table(read.csv(paste(data.dir, 'SVSPP.csv', sep = '')))
 
 fish <- merge(survdat, svspp[FISH == 'Y', ], by = 'SVSPP')
+
+
+
