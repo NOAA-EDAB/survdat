@@ -41,9 +41,11 @@ stratmean.geo <- function (survdat, groups = 'all', group.col = 'SVSPP',
   #Calculate weight per tow and number per tow
   setkey(x, group, strat, YEAR)
   
-  x[, n.zero     := ntows - length(BIO), by = key(x)]
-  x[, biomass.tow   := exp((sum(log(BIO + constant) + log(constant) * n.zero) / ntows), by = key(x)]
-  x[, abundance.tow := exp((sum(log(NUM + constant) + log(constant) * n.zero) / ntows), by = key(x)]
+  x[, n.zero        := ntows - length(BIO), by = key(x)]
+  x[, biomass.tow   := exp((sum(log(BIO + constant) + log(constant) * n.zero) / 
+                              ntows)), by = key(x)]
+  x[, abundance.tow := exp((sum(log(NUM + constant) + log(constant) * n.zero) / 
+                              ntows)), by = key(x)]
   
   #Calculated stratified means
   x[, weighted.biomass   := biomass.tow   * W.h]

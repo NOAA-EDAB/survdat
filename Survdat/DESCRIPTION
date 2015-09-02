@@ -5,6 +5,7 @@ Version: 1.0
 Date: 2015-03-03
 Author: person("Lucey", "Sean", email = "Sean.Lucey@NOAA.gov",
   role = c("aut", "cre"))
+Maintainer: Sean Lucey <Sean.Lucey@NOAA.gov>
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
 Imports: data.table
