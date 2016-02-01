@@ -20,8 +20,10 @@ if(Sys.info()['sysname']=="Linux"){
 }
 
 shg.check  <- 'y' # y = use only SHG <=136 otherwise n
-raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still save data with conversions (survdat)
-all.season <- 'n' # y = save data with purpose code 10 not just spring/fall (survdat.allseason), will not save survdat regular
+raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still 
+                  #     save data with conversions (survdat)
+all.season <- 'n' # y = save data with purpose code 10 not just spring/fall 
+                  #     (survdat.allseason), will not save survdat regular
 
 #-------------------------------------------------------------------------------
 #Required packages
