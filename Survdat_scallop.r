@@ -7,7 +7,19 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-out.dir    <- "L:\\EcoAP\\Data\\survey"
+if(Sys.info()['sysname']=="Windows"){
+  out.dir  <- "L:\\EcoAP\\Data\\survey"
+  memory.limit(4000)
+}
+
+if(Sys.info()['sysname']=="Linux"){
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
+  uid      <- 'slucey'
+  cat('Oracle Password:')
+  pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
+}
+
+
 shg.check  <- 'y' # y = use only SHG <=136 otherwise n
 scall.only <- 'y' # y = grab only Atl. sea scallop (401)
 
@@ -32,11 +44,12 @@ sqltext<-function(x){
 #-------------------------------------------------------------------------------
 #Begin script
 
-#Increase memory size (max is 4096 in 32-bit R)
-memory.limit(4000)
-
 #Connect to Oracle
-channel <- odbcDriverConnect()
+if(Sys.info()['sysname']=="Windows"){
+  channel <- odbcDriverConnect()
+} else {
+  channel <- odbcConnect('sole', uid, pwd)
+}
 
 #Generate cruise list
 cruise.qry <- "select unique year, cruise6, svvessel
@@ -151,7 +164,7 @@ scalldat[, stamw := sum(expmw), by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')
 scalldat[, c('a', 'b', 'meatwt', 'expmw') := NULL]
 setnames(scalldat, "stamw", "BIOMASS.MW") 
 
-save(scalldat, file = paste(out.dir, "\\Scalldat.RData", sep=''))
+save(scalldat, file = file.path(out.dir, "Scalldat.RData"))
 
 
 
