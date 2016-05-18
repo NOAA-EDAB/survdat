@@ -12,8 +12,8 @@ if(Sys.info()['sysname']=="Windows"){
   memory.limit(4000)
 }
 if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "slucey/Rworkspace/RSurvey/"
-  out.dir  <- "slucey/EcoAP/Data/survey/"
+  data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey/"
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey/"
   uid      <- 'slucey'
   cat('Oracle Password:')
   pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
