@@ -3,21 +3,23 @@
 
 #User parameters
 if(Sys.info()['sysname']=="Windows"){
-    r.dir    <- "L:\\Rworkspace\\RSurvey\\"
-    data.dir <- "L:\\EcoAP\\Data\\survey\\"
+    r.dir    <- "L:\\Rworkspace\\RSurvey"
+    data.dir <- "L:\\EcoAP\\Data\\survey"
     gis.dir  <- "L:\\Rworkspace\\GIS_files"
-    out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+    out.dir  <- "L:\\EcoAP\\Data\\survey"
     memory.limit(4000)
 }
 if(Sys.info()['sysname']=="Linux"){
-    r.dir    <- "/home/slucey/slucey/Rworkspace/RSurvey/"
-    data.dir <- "/home/slucey/slucey/EcoAP/Data/survey/"
+    r.dir    <- "/home/slucey/slucey/Rworkspace/RSurvey"
+    data.dir <- "/home/slucey/slucey/EcoAP/Data/survey"
     gis.dir  <- "/home/slucey/slucey/Rworkspace/GIS_files"
-    out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey/"
+    out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
 }
 
 #-------------------------------------------------------------------------------
 #Required packages
+#May need to download Survdat package from GitHub
+#devtools::install_github('slucey/RSurvey/Survdat')
 library(data.table); library(rgdal); library(Survdat)
 
 #-------------------------------------------------------------------------------
@@ -25,7 +27,7 @@ library(data.table); library(rgdal); library(Survdat)
 
 #-------------------------------------------------------------------------------
 #Grab survdat.r
-load(paste(data.dir, 'Survdat.RData', sep = ''))
+load(file.path(data.dir, 'Survdat.RData'))
 
 #Grab strata
 strata <- readOGR(gis.dir, 'strata')
@@ -60,6 +62,5 @@ total.biomass <- sweptarea(GOM.prep, lob.mean, strat.col = 'STRATUM',
                            area.col = 'Area')
 
 #Output results either to a flat .csv file or .RData set
-write.csv(total.biomass, file = paste(out.dir, 'Lobster_GoM.csv',   sep = ''), 
-          row.names = F)
-save(     total.biomass, file = paste(out.dir, 'Lobster_GOM.RData', sep = ''))
+write.csv(total.biomass, file = file.path(out.dir, 'Lobster_GoM.csv'), row.names = F)
+save(     total.biomass, file = file.path(out.dir, 'Lobster_GOM.RData'))
