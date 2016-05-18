@@ -7,10 +7,24 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-out.dir    <- "L:\\EcoAP\\Data\\survey\\"
+if(Sys.info()['sysname']=="Windows"){
+    data.dir <- "L:\\Rworkspace\\RSurvey\\"
+    out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+    memory.limit(4000)
+}
+if(Sys.info()['sysname']=="Linux"){
+    data.dir <- "slucey/Rworkspace/RSurvey/"
+    out.dir  <- "slucey/EcoAP/Data/survey/"
+    uid      <- 'slucey'
+    cat('Oracle Password:')
+    pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
+}
+
 shg.check  <- 'y' # y = use only SHG <=136 otherwise n
-raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still save data with conversions (survdat)
-all.season <- 'n' # y = save data with purpose code 10 not just spring/fall (survdat.allseason), will not save survdat regular
+raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still 
+#     save data with conversions (survdat)
+all.season <- 'n' # y = save data with purpose code 10 not just spring/fall 
+#     (survdat.allseason), will not save survdat regular
 
 #-------------------------------------------------------------------------------
 #Required packages
@@ -33,11 +47,12 @@ sqltext<-function(x){
 #-------------------------------------------------------------------------------
 #Begin script
 
-#Increase memory size (max is 4096 in 32-bit R)
-memory.limit(4000)
-
 #Connect to Oracle
-channel <- odbcDriverConnect()
+if(Sys.info()['sysname']=="Windows"){
+    channel <- odbcDriverConnect()
+} else {
+    channel <- odbcConnect('sole', uid, pwd)
+}
 
 #Generate cruise list
 if(all.season == 'n'){
@@ -93,17 +108,19 @@ setkey(station, CRUISE6, SVVESSEL)
 survdat <- merge(cruise, station)
 
 #Catch data
-catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
-  from UNION_FSCS_SVCAT
-  where cruise6 in (", cruise6, ")
-  order by cruise6, station, svspp", sep='')
+catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, 
+                   expcatchwt as biomass
+                   from UNION_FSCS_SVCAT
+                   where cruise6 in (", cruise6, ")
+                   and stratum not like 'YT%'
+                   order by cruise6, station, svspp", sep='')
 
 catch <- as.data.table(sqlQuery(channel, catch.qry))
 setkey(catch, CRUISE6, STATION, STRATUM)
 
 #merge with survdat
 setkey(survdat, CRUISE6, STATION, STRATUM)
-survdat <- merge(survdat, catch)
+survdat <- merge(survdat, catch, by = key(survdat))
 
 spp <- as.data.table(sqlQuery(channel, "select svspp, comname from SVSPECIES_LIST"))
 setkey(spp, SVSPP)
@@ -113,9 +130,10 @@ survdat <- merge(survdat, spp, by = 'SVSPP', all.x = T)
 
 #Length data
 length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
-  from UNION_FSCS_SVLEN
-  where cruise6 in (", cruise6, ")
-  order by cruise6, station, svspp, length", sep='')
+                    from UNION_FSCS_SVLEN
+                    where cruise6 in (", cruise6, ")
+                    and stratum not like 'YT%'
+                    order by cruise6, station, svspp, length", sep='')
 
 len <- as.data.table(sqlQuery(channel, length.qry))
 setkey(len, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
@@ -176,8 +194,8 @@ for(i in 1:length(vcf.spp)){
   }
 
 #Bigelow >2008 Vessel Conversion - need flat files (not on network)
-big.fall <- as.data.table(read.csv('bigelow_fall_calibration.csv'))
-big.spring <- as.data.table(read.csv('bigelow_spring_calibration.csv'))
+big.fall   <- as.data.table(read.csv(paste(data.dir, 'bigelow_fall_calibration.csv',   sep = '')))
+big.spring <- as.data.table(read.csv(paste(data.dir, 'bigelow_spring_calibration.csv', sep = '')))
 
 bf.spp <- big.fall[pW != 1, svspp]
 for(i in 1:length(bf.spp)){
