@@ -8,7 +8,19 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-out.dir   <- "L:\\EcoAP\\Data\\survey"
+if(Sys.info()['sysname']=="Windows"){
+  data.dir <- "L:\\Rworkspace\\RSurvey\\"
+  out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+  memory.limit(4000)
+}
+if(Sys.info()['sysname']=="Linux"){
+  data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey/"
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey/"
+  uid      <- 'slucey'
+  cat('Oracle Password:')
+  pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
+}
+
 shg.check <- 'y' # y = use only SHG <=136 otherwise n
 clam.only <- 'y' # y = grab only Atl. surfclam (403) and ocean quahog (409)
 
@@ -31,13 +43,12 @@ sqltext<-function(x){
 }
 
 #-------------------------------------------------------------------------------
-#Begin script
-
-#Increase memory size (max is 4096 in 32-bit R)
-memory.limit(4000)
-
 #Connect to Oracle
-channel <- odbcDriverConnect()
+if(Sys.info()['sysname']=="Windows"){
+  channel <- odbcDriverConnect()
+} else {
+  channel <- odbcConnect('sole', uid, pwd)
+}
 
 #Generate cruise list
 cruise.qry <- "select unique year, cruise6, svvessel
@@ -145,7 +156,7 @@ clamdat[, stamw := sum(expmw), by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')]
 clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
 setnames(clamdat, "stamw", "BIOMASS.MW")   
 
-save(clamdat, file = paste(out.dir, "\\Clamdat.RData", sep=''))
+save(clamdat, file = file.path(out.dir, "Clamdat.RData"))
 
 
 
