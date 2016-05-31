@@ -17,8 +17,8 @@ if(Sys.info()['sysname']=="Linux"){
   data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey/"
   out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey/"
   uid      <- 'slucey'
-  cat('Oracle Password:')
-  pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
+  cat("Oracle Password: ")
+  pwd <- scan(stdin(), character(), n = 1)
 }
 
 shg.check <- 'y' # y = use only SHG <=136 otherwise n
