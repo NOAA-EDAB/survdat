@@ -1,7 +1,5 @@
 #Survdat.r
-#This script will generate data from the NEFSC spring and fall bottom trawl surveys
-#Added feature to output all survey data regardless of season
-#5/2014
+#This script will generate data from the NEFSC bottom trawl surveys
 #SML
 
 #-------------------------------------------------------------------------------
@@ -228,7 +226,7 @@ if(use.SAD == 'y'){
   setnames(sad, 'SEX', 'CATCHSEX')
   
   setkey(sad, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX, LENGTH)
-  sad <- unique(sad)
+  sad <- uniqCATCH_WT_B_CAL)ue(sad)
   survdat <- merge(survdat, sad, by = key(sad), all.x = T)
   
   #Carry over SAD values to survdat columns and delete SAD columns
