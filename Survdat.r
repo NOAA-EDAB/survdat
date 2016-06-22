@@ -7,13 +7,13 @@
 #-------------------------------------------------------------------------------
 #User parameters
 if(Sys.info()['sysname']=="Windows"){
-  data.dir <- "L:\\Rworkspace\\RSurvey\\"
-  out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+  data.dir <- "L:\\Rworkspace\\RSurvey"
+  out.dir  <- "L:\\EcoAP\\Data\\survey"
   memory.limit(4000)
 }
 if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey/"
-  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey/"
+  data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey"
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
   uid      <- 'slucey'
   cat("Oracle Password: ")
   pwd <- scan(stdin(), character(), n = 1)
@@ -190,8 +190,10 @@ for(i in 1:length(vcf.spp)){
   }
 
 #Bigelow >2008 Vessel Conversion - need flat files (not on network)
-big.fall   <- as.data.table(read.csv(paste(data.dir, 'bigelow_fall_calibration.csv',   sep = '')))
-big.spring <- as.data.table(read.csv(paste(data.dir, 'bigelow_spring_calibration.csv', sep = '')))
+big.fall   <- as.data.table(read.csv(file.path(data.dir, 
+                                               'bigelow_fall_calibration.csv')))
+big.spring <- as.data.table(read.csv(file.path(data.dir, 
+                                               'bigelow_spring_calibration.csv')))
 
 bf.spp <- big.fall[pW != 1, svspp]
 for(i in 1:length(bf.spp)){
@@ -239,8 +241,9 @@ if(use.SAD == 'y'){
 
 odbcClose(channel)
 
-if(all.season == 'n') save(survdat, file = paste(out.dir, "Survdat.RData", sep=''))
-if(all.season == 'y') save(survdat, file = paste(out.dir, "Survdat_allseason.RData", sep=''))
+if(all.season == 'n') save(survdat, file = file.path(out.dir, "Survdat.RData"))
+if(all.season == 'y') save(survdat, file = file.path(out.dir, 
+                                                     "Survdat_allseason.RData"))
 
 
 
