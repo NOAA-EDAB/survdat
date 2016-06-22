@@ -80,8 +80,9 @@ cruise6 <- sqltext(cruise$CRUISE6)
 
 #Station data
 if(shg.check == 'y'){
-  station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, 
-                       decdeg_beglon as lon, begin_est_towdate as est_towdate, avgdepth as depth, 
+  station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
+                       decdeg_beglat as lat, decdeg_beglon as lon, 
+                       begin_est_towdate as est_towdate, avgdepth as depth, 
                        surftemp, surfsalin, bottemp, botsalin
                        from Union_fscs_svsta
                        where cruise6 in (", cruise6, ")
@@ -90,8 +91,9 @@ if(shg.check == 'y'){
   }
 
 if(shg.check == 'n'){
-  station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, 
-                       decdeg_beglon as lon, begin_est_towdate as est_towdate, avgdepth as depth, 
+  station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
+                       decdeg_beglat as lat, decdeg_beglon as lon, 
+                       begin_est_towdate as est_towdate, avgdepth as depth, 
                        surftemp, surfsalin, bottemp, botsalin
                        from UNION_FSCS_SVSTA
                        where cruise6 in (", cruise6, ")
@@ -107,32 +109,33 @@ survdat <- merge(cruise, station)
 
 
 #Catch data
-catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, 
-                   expcatchwt as biomass
+catch.qry <- paste("select cruise6, station, stratum, tow, svspp, catchsex, 
+                   expcatchnum as abundance, expcatchwt as biomass
                    from UNION_FSCS_SVCAT
                    where cruise6 in (", cruise6, ")
                    and stratum not like 'YT%'
                    order by cruise6, station, svspp", sep='')
 
 catch <- as.data.table(sqlQuery(channel, catch.qry))
-setkey(catch, CRUISE6, STATION, STRATUM)
+setkey(catch, CRUISE6, STATION, STRATUM, TOW)
 
 #merge with survdat
-setkey(survdat, CRUISE6, STATION, STRATUM)
+setkey(survdat, CRUISE6, STATION, STRATUM, TOW)
 survdat <- merge(survdat, catch, by = key(survdat))
 
 #Length data
-length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
+length.qry <- paste("select cruise6, station, stratum, tow, svspp, catchsex, 
+                    length, expnumlen as numlen
                     from UNION_FSCS_SVLEN
                     where cruise6 in (", cruise6, ")
                     and stratum not like 'YT%'
                     order by cruise6, station, svspp, length", sep='')
 
 len <- as.data.table(sqlQuery(channel, length.qry))
-setkey(len, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
+setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
 
 #merge with survdat
-setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
+setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
 survdat <- merge(survdat, len, all.x = T)
 
 if(raw.check == 'y'){
