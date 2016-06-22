@@ -24,7 +24,8 @@ raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still
                   #     save data with conversions (survdat)
 all.season <- 'n' # y = save data with purpose code 10 not just spring/fall 
                   #     (survdat.allseason), will not save survdat regular
-
+use.SAD    <- 'y' # y = grab data from Survey Analysis Database (SAD) for 
+                  #     assessed species
 #-------------------------------------------------------------------------------
 #Required packages
 library(RODBC); library(data.table)
@@ -210,6 +211,28 @@ for(i in 1:length(bs.spp)){
   survdat[SVVESSEL == 'HB' & SEASON == 'SPRING' & SVSPP == bs.spp[i],
       ABUNDANCE := round(ABUNDANCE / big.spring[svspp == bs.spp[i], pw])]
   }
+
+if(use.SAD == 'y'){
+  sad.qry <- "select * from STOCKEFF.I_SV_MERGED_CATCH_CALIB_O"
+  sad     <- as.data.table(sqlQuery(channel, sad.qry))
+  
+  #remove unused columns
+  sad <- sad[, list(SVSPP, CRUISE6, STRATUM, TOW, STATION, SEX, CATCH_WT_B_CAL,
+                    CATCH_NO_B_CAL, LENGTH, LENGTH_NO_B_CAL)]
+  #Change column name to align with survdat
+  setnames(sad, 'SEX', 'CATCHSEX')
+  
+  setkey(sad, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX, LENGTH)
+  sad <- unique(sad)
+  survdat <- merge(survdat, sad, by = key(sad), all.x = T)
+  
+  #Carry over SAD values to survdat columns and delete SAD columns
+  survdat[!is.na(CATCH_WT_B_CAL),  BIOMASS   := CATCH_WT_B_CAL]
+  survdat[!is.na(CATCH_NO_B_CAL),  ABUNDANCE := CATCH_NO_B_CAL]
+  survdat[, NUMLEN := as.double(NUMLEN)]
+  survdat[!is.na(LENGTH_NO_B_CAL), NUMLEN    := LENGTH_NO_B_CAL]
+  survdat[, c('CATCH_WT_B_CAL', 'CATCH_NO_B_CAL', 'LENGTH_NO_B_CAL') := NULL]
+}
 
 odbcClose(channel)
 
