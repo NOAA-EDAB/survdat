@@ -17,7 +17,7 @@ if(Sys.info()['sysname']=="Linux"){
   pwd <- scan(stdin(), character(), n = 1)
 }
 
-shg.check  <- 'y' # y = use only SHG <=136 otherwise n
+shg.check  <- 'y' # y = use only SHG <=136 or TOGA <= 1324 (>2008)
 raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still 
                   #     save data with conversions (survdat)
 all.season <- 'n' # y = save data with purpose code 10 not just spring/fall 
@@ -78,14 +78,29 @@ cruise6 <- sqltext(cruise$CRUISE6)
 
 #Station data
 if(shg.check == 'y'){
-  station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
-                       decdeg_beglat as lat, decdeg_beglon as lon, 
-                       begin_est_towdate as est_towdate, avgdepth as depth, 
-                       surftemp, surfsalin, bottemp, botsalin
-                       from Union_fscs_svsta
-                       where cruise6 in (", cruise6, ")
-                       and SHG <= 136
-                       order by cruise6, station", sep='')
+  preHB.station.qry <- paste("select unique cruise6, svvessel, station, stratum,
+                             tow, decdeg_beglat as lat, decdeg_beglon as lon, 
+                             begin_est_towdate as est_towdate, avgdepth as depth, 
+                             surftemp, surfsalin, bottemp, botsalin
+                             from Union_fscs_svsta
+                             where cruise6 in (", cruise6, ")
+                             and SHG <= 136
+                             and cruise6 <= 200900
+                             order by cruise6, station", sep='')
+  
+  HB.station.qry <- paste("select unique cruise6, svvessel, station, stratum,
+                          tow, decdeg_beglat as lat, decdeg_beglon as lon, 
+                          begin_est_towdate as est_towdate, avgdepth as depth, 
+                          surftemp, surfsalin, bottemp, botsalin
+                          from Union_fscs_svsta
+                          where cruise6 in (", cruise6, ")
+                          and TOGA <= 1324
+                          and cruise6 > 200900
+                          order by cruise6, station", sep='')
+  
+  preHB.sta <- as.data.table(sqlQuery(channel, preHB.station.qry))
+  HB.sta    <- as.data.table(sqlQuery(channel, HB.station.qry))
+  station   <- rbindlist(list(preHB.sta, HB.sta))
   }
 
 if(shg.check == 'n'){
@@ -96,10 +111,9 @@ if(shg.check == 'n'){
                        from UNION_FSCS_SVSTA
                        where cruise6 in (", cruise6, ")
                        order by cruise6, station", sep='')
+  station <- as.data.table(sqlQuery(channel, station.qry))
   }
   
-station <- as.data.table(sqlQuery(channel, station.qry))
-
 setkey(station, CRUISE6, SVVESSEL)
 
 #merge cruise and station
@@ -216,17 +230,13 @@ for(i in 1:length(bs.spp)){
   }
 
 if(use.SAD == 'y'){
-  sad.qry <- "select * from STOCKEFF.I_SV_MERGED_CATCH_CALIB_O"
+  sad.qry <- "select svspp, cruise6, stratum, tow, station, sex as catchsex,
+             catch_wt_B_cal, catch_no_B_cal, length, length_no_B_cal
+             from STOCKEFF.I_SV_MERGED_CATCH_CALIB_O"
   sad     <- as.data.table(sqlQuery(channel, sad.qry))
   
-  #remove unused columns
-  sad <- sad[, list(SVSPP, CRUISE6, STRATUM, TOW, STATION, SEX, CATCH_WT_B_CAL,
-                    CATCH_NO_B_CAL, LENGTH, LENGTH_NO_B_CAL)]
-  #Change column name to align with survdat
-  setnames(sad, 'SEX', 'CATCHSEX')
-  
-  setkey(sad, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX, LENGTH)
-  sad <- uniqCATCH_WT_B_CAL)ue(sad)
+  setkey(sad, CRUISE6, STRATUM, TOW, STATION, SVSPP, CATCHSEX, LENGTH)
+  sad <- unique(sad)
   survdat <- merge(survdat, sad, by = key(sad), all.x = T)
   
   #Carry over SAD values to survdat columns and delete SAD columns
