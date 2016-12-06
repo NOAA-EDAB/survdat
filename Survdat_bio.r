@@ -76,6 +76,7 @@ survdat.bio <- merge(survdat, bio)
 
 odbcClose(channel)
 
+survdat.bio <- survdat.bio[!is.na(INDWT), ]
 save(survdat.bio, file = paste(out.dir, "SurvdatBio.RData", sep=''))
 
 

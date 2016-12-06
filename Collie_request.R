@@ -165,7 +165,7 @@ save(     spring, file = file.path(out.dir, 'NEFSC_Spring_Survey.RData'))
 data.dir <- '/home/slucey/slucey/EcoAP/Data/Commercial'
 out.dir <- data.dir
 
-load(file.path(data.dir, 'comland_meatwt.RData'))
+load(file.path(data.dir, 'comland_meatwt_deflated.RData'))
 
 #Condense data to year/EPU
 setkey(comland, YEAR, EPU, NESPP3)
@@ -176,4 +176,8 @@ write.csv(landings.epu, file = file.path(out.dir, 'Commercial_Landings_by_EPU.cs
           row.names = F)
 save(landings.epu, file = file.path(out.dir, 'Commercial_Landings_by_EPU.RData'))
 
+#Add species names
+data.dir <- "/home/slucey/slucey/EcoAP/Data/survey"
+load(file.path(data.dir, 'Species_codes.RData'))
 
+landings.epu <- merge(landings.epu, spp, by = 'NESPP3', all.x = T)
