@@ -7,13 +7,13 @@
 #-------------------------------------------------------------------------------
 #User parameters
 if(Sys.info()['sysname']=="Windows"){
-  data.dir <- "L:\\EcoAP\\Data\\survey\\"
-  out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+  data.dir <- "L:\\EcoAP\\Data\\survey"
+  out.dir  <- "L:\\EcoAP\\Data\\survey"
   memory.limit(4000)
 }
 if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "slucey/EcoAP/Data/survey/"
-  out.dir  <- "slucey/EcoAP/Data/survey/"
+  data.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
   uid      <- 'slucey'
   cat('Oracle Password:')
   pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
@@ -46,7 +46,7 @@ if(Sys.info()['sysname']=="Windows"){
 }
 
 #Read in Survdat
-load(paste(data.dir, 'Survdat.RData', sep = ''))
+load(file.path(data.dir, 'Survdat.RData'))
 
 #Use cruise codes to select other data
 cruise6 <- sqltext(unique(survdat[, CRUISE6]))
@@ -77,7 +77,7 @@ survdat.bio <- merge(survdat, bio)
 odbcClose(channel)
 
 survdat.bio <- survdat.bio[!is.na(INDWT), ]
-save(survdat.bio, file = paste(out.dir, "SurvdatBio.RData", sep=''))
+save(survdat.bio, file = file.path(out.dir, "SurvdatBio.RData"))
 
 
 
