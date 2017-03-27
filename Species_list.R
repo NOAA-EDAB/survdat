@@ -55,10 +55,42 @@ spp[, c('COMMON_NAME', 'SCIENTIFIC_NAME') := NULL]
 setcolorder(spp, c('ITISSPP', 'SVSPP', 'NESPP3', 'COMNAME', 'SCINAME'))
 setkey(spp, SVSPP, NESPP3)
 
+#-------------------------------------------------------------------------------
+#Add functional groups
+#From NEFMC EBFM PDT work
+#See Functional_group_table_Mike.csv in slucey/EcoAP/EBFM_PDT
+spp[, EBFM.PDT := factor(NA, levels = c('Apex Predator', 'Benthivore', 'Benthos',
+                                        'Macroplanktivore', 'Macrozoo-piscivore',
+                                        'Mesoplanktivore', 'Piscivore', 'Other'))]
+spp[SVSPP %in% c(11, 700, 704, 747), EBFM.PDT := 'Apex Predator']
+spp[SVSPP %in% c(14, 22, 25, 74, 102, 105, 106, 107, 141, 143, 151, 164, 172,
+                   176, 177, 192, 193, 301, 310, 312, 314, 317, 322, 501),
+    EBFM.PDT := 'Benthivore']
+spp[SVSPP %in% c(331, 336, 401, 403, 409), EBFM.PDT := 'Benthos']
+spp[NESPP3 %in% c(775, 781, 805, 806), EBFM.PDT := 'Benthos']  
+spp[SVSPP %in% c(76, 163, 168, 171, 502, 503), EBFM.PDT := 'Macroplanktivore']
+spp[SVSPP %in% c(13, 24, 26, 27, 75, 77, 84, 108, 112, 155, 156, 311),
+    EBFM.PDT := 'Macrozoo-piscivore']
+spp[SVSPP %in% c(32, 33, 34, 35, 36, 121, 131), EBFM.PDT := 'Mesoplanktivore']
+spp[SVSPP %in% c(15, 23, 28, 69, 72, 73, 101, 103, 104, 135, 139, 145, 197),
+    EBFM.PDT := 'Piscivore']
+spp[is.na(EBFM.PDT), EBFM.PDT := 'Other']
+
+
+#-------------------------------------------------------------------------------                   
+#Add EMAX q's
+load(file.path(data.dir, 'EMAX_groups.RData'))
+emax <- emax[!is.na(SVSPP), ]
+spp <- merge(spp, emax[, list(SVSPP, EMAX, Fall.q, Spring.q)], by = 'SVSPP', all.x = T)
+
+#Need to change emax abbreviations to actual names and add pelagics
+
+
+#-------------------------------------------------------------------------------
 save(spp, file = file.path(out.dir, 'Species_codes.RData'))
 
 #-------------------------------------------------------------------------------
-#Add Rpath box code
+#Add Rpath box code - Still working!!!!
 #Individual Species Groups
 spp[SVSPP == 13, RPATH := 'SmoothDogfish']
 spp[SVSPP == 15, RPATH := 'SpinyDogfish']
