@@ -25,7 +25,7 @@ poststrat <- function (survdat, stratum, strata.col = 'EPU', na.keep = F) {
   
   #Use only station data
   setkey(x, CRUISE6, STRATUM, STATION)
-  stations <- unique(x)
+  stations <- unique(x, by = key(x))
   stations <- stations[, list(CRUISE6, STRATUM, STATION, LAT, LON)]
   
   #Convert to spatial points data frame
