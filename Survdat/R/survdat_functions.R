@@ -104,7 +104,7 @@ stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   
   #Station data - remove catch/length
   setkey(x, CRUISE6, STRAT, STATION)
-  stations <- unique(x)
+  stations <- unique(x, by = key(x))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
   
   #count stations
@@ -116,7 +116,7 @@ stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   
   #Calculate stratum weight
   setkey(stations, 'YEAR', 'STRAT')
-  strat.year <- unique(stations)
+  strat.year <- unique(stations, by = key(stations))
   strat.year[, c('CRUISE6', 'STATION', 'ntows') := NULL]
   strat.year[, W.h := S.AREA / sum(S.AREA, na.rm = T), by = YEAR]
   strat.year[is.na(W.h), W.h := 0]
@@ -169,7 +169,7 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   
   #Remove length data if present
   setkey(x, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
-  x <- unique(x)
+  x <- unique(x, by = key(x))
   x[, c('LENGTH', 'NUMLEN') := NULL]
   
   setnames(x, c(group.col, sex.col, strat.col, nsta.col, area.wgt, weight, number),
@@ -181,7 +181,7 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   setkey(x, CRUISE6, strat, STATION, group)
   x[, BIO := sum(BIO), by = key(x)]
   x[, NUM := sum(NUM), by = key(x)]
-  x <- unique(x)
+  x <- unique(x, by = key(x))
   
   #Fix Na's
   x[is.na(BIO), BIO := 0]
@@ -189,7 +189,7 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   
   #Calculate total number of stations per year
   setkey(x, strat, YEAR)
-  N <- unique(x)
+  N <- unique(x, by = key(x))
   N <- N[, sum(ntows), by = 'YEAR']
   setnames(N, 'V1', 'N')
   
@@ -223,7 +223,7 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   x[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = key(x)]
   x[is.nan(Sh.2.a), Sh.2.a := 0]
   
-  stratified <- unique(x)
+  stratified <- unique(x, by = key(x))
   
   stratified <- merge(stratified, N, by = 'YEAR')
   
@@ -250,7 +250,7 @@ stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   stratified[, abund.SE   := sqrt(abund.var),   by = key(stratified)]
   
   #Delete extra rows/columns
-  stratified.means <- unique(stratified)
+  stratified.means <- unique(stratified, by = key(stratified))
   stratified.means <- stratified.means[, list(YEAR, group, sex, N, strat.biomass, biomass.var, biomass.SE, 
                                               strat.abund, abund.var, abund.SE)]
   if(merge.sex == T) stratified.means[, sex := NULL]
@@ -305,7 +305,7 @@ sweptarea <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, area
            c('STRAT', 'S.AREA'))
   
   setkey(stratprep.x, YEAR, STRAT)
-  stratum <- unique(stratprep.x)
+  stratum <- unique(stratprep.x, by = key(stratprep.x))
   stratum <- stratum[, sum(S.AREA, na.rm = T), by = 'YEAR']
   setnames(stratum, "V1", "A")
   
