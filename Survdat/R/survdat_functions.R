@@ -315,7 +315,8 @@ sweptarea <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, area
   #Merge q
   if(is.null(q)) q <- data.table(groups = unique(swept.area[, get(group.col)]), q = 1)
   setnames(q, names(q), c(group.col, 'q'))
-  swept.area <- merge(swept.area, q, by = group.col)
+  swept.area <- merge(swept.area, q, by = group.col, all.x = T)
+  swept.area[is.na(q), q := 1]
   
   #Calculate swept area biomass
   swept.area[, tot.biomass   :=       (strat.biomass * A/a)/q]
