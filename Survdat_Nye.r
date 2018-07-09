@@ -8,13 +8,13 @@
 #-------------------------------------------------------------------------------
 #User parameters
 if(Sys.info()['sysname']=="Windows"){
-    data.dir <- "L:\\Rworkspace\\RSurvey\\"
-    out.dir  <- "L:\\EcoAP\\Data\\survey\\"
+    data.dir <- "L:\\Rworkspace\\RSurvey"
+    out.dir  <- "L:\\EcoAP\\Data\\survey"
     memory.limit(4000)
 }
 if(Sys.info()['sysname']=="Linux"){
-    data.dir <- "slucey/Rworkspace/RSurvey/"
-    out.dir  <- "slucey/EcoAP/Data/survey/"
+    data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey"
+    out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
     uid      <- 'slucey'
     cat('Oracle Password:')
     pwd <- readLines(n=1) #If reading from source, need to manually add pwd here
@@ -23,7 +23,7 @@ if(Sys.info()['sysname']=="Linux"){
 shg.check  <- 'y' # y = use only SHG <=136 otherwise n
 raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still 
 #     save data with conversions (survdat)
-all.season <- 'n' # y = save data with purpose code 10 not just spring/fall 
+all.season <- 'y' # y = save data with purpose code 10 not just spring/fall 
 #     (survdat.allseason), will not save survdat regular
 
 #-------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ station <- as.data.table(sqlQuery(channel, station.qry))
 setkey(station, CRUISE6, SVVESSEL)
 
 #merge cruise and station
-survdat <- merge(cruise, station)
+survdat <- merge(cruise, station, by = key(cruise))
 
 #Catch data
 catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, 
@@ -140,11 +140,11 @@ setkey(len, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
 
 #merge with survdat
 setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
-survdat <- merge(survdat, len, all.x = T)
+survdat <- merge(survdat, len, by = key(survdat), all.x = T)
 
 if(raw.check == 'y'){
   survdat.raw <- survdat
-  save(survdat.raw, file = paste(out.dir, "Survdat_raw.RData", sep =''))
+  save(survdat.raw, file = file.path(out.dir, "Survdat_raw.RData"))
   }
 
 #Conversion Factors
@@ -194,8 +194,8 @@ for(i in 1:length(vcf.spp)){
   }
 
 #Bigelow >2008 Vessel Conversion - need flat files (not on network)
-big.fall   <- as.data.table(read.csv(paste(data.dir, 'bigelow_fall_calibration.csv',   sep = '')))
-big.spring <- as.data.table(read.csv(paste(data.dir, 'bigelow_spring_calibration.csv', sep = '')))
+big.fall   <- as.data.table(read.csv(file.path(data.dir, 'bigelow_fall_calibration.csv')))
+big.spring <- as.data.table(read.csv(file.path(data.dir, 'bigelow_spring_calibration.csv')))
 
 bf.spp <- big.fall[pW != 1, svspp]
 for(i in 1:length(bf.spp)){
@@ -230,8 +230,8 @@ setcolorder(survdat, c('ID', 'STATUS_CODE', 'EST_YEAR', 'EST_MONTH', 'EST_DAY', 
                        'WINDDIR', 'WINDSP', 'WAVEHGT', 'CRUISE6', 'STATION', 'LENGTH', 'NUMLEN'))
 
 
-if(all.season == 'n') save(survdat, file = paste(out.dir, "Survdat_Nye.RData", sep=''))
-if(all.season == 'y') save(survdat, file = paste(out.dir, "Survdat_allseason.RData", sep=''))
+if(all.season == 'n') save(survdat, file = file.path(out.dir, "Survdat_Nye.RData"))
+if(all.season == 'y') save(survdat, file = file.path(out.dir, "Survdat_Nye_allseason.RData"))
 
 
 
