@@ -202,6 +202,7 @@ for(i in 1:length(vcf.spp)){
   }
 
 #Bigelow >2008 Vessel Conversion - need flat files (not on network)
+#Use Bigelow conversions for Pisces as well (PC)
 big.fall   <- as.data.table(read.csv(file.path(data.dir, 
                                                'bigelow_fall_calibration.csv')))
 big.spring <- as.data.table(read.csv(file.path(data.dir, 
@@ -209,23 +210,23 @@ big.spring <- as.data.table(read.csv(file.path(data.dir,
 
 bf.spp <- big.fall[pW != 1, svspp]
 for(i in 1:length(bf.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'FALL' & SVSPP == bf.spp[i],
+  survdat[SVVESSEL %in% c('HB', 'PC') & SEASON == 'FALL' & SVSPP == bf.spp[i],
       BIOMASS := BIOMASS / big.fall[svspp == bf.spp[i], pW]]
   }
 bf.spp <- big.fall[pw != 1, svspp]
 for(i in 1:length(bf.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'FALL' & SVSPP == bf.spp[i],
+  survdat[SVVESSEL %in% c('HB', 'PC') & SEASON == 'FALL' & SVSPP == bf.spp[i],
       ABUNDANCE := round(ABUNDANCE / big.fall[svspp == bf.spp[i], pw])]
   }
 
 bs.spp <- big.spring[pW != 1, svspp]
 for(i in 1:length(bs.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'SPRING' & SVSPP == bs.spp[i],
+  survdat[SVVESSEL %in% c('HB', 'PC') & SEASON == 'SPRING' & SVSPP == bs.spp[i],
       BIOMASS := BIOMASS / big.spring[svspp == bs.spp[i], pW]]
   }
 bs.spp <- big.spring[pw != 1, svspp]
 for(i in 1:length(bs.spp)){
-  survdat[SVVESSEL == 'HB' & SEASON == 'SPRING' & SVSPP == bs.spp[i],
+  survdat[SVVESSEL %in% c('HB', 'PC') & SEASON == 'SPRING' & SVSPP == bs.spp[i],
       ABUNDANCE := round(ABUNDANCE / big.spring[svspp == bs.spp[i], pw])]
   }
 
