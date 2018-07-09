@@ -5,9 +5,10 @@ if(Sys.info()['sysname']=="Windows"){
   memory.limit(4000)
 }
 if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "/home/slucey/slucey/EcoAP/Data/survey"
-  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
-  uid      <- 'slucey'
+  data.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
+  out.dir   <- "/home/slucey/slucey/EcoAP/Data/survey"
+  out.dir.2 <- "/home/slucey/slucey/EcoAP/Data/Commercial"
+  uid       <- 'slucey'
   cat("Oracle Password: ")
   pwd <- scan(stdin(), character(), n = 1)
 }
@@ -35,7 +36,7 @@ cfspp <- unique(cfspp)
 cfspp[, NESPP4 := NULL]
 
 setkey(cfspp, ITISSPP, NESPP3)
-cfspp <- unique(cfspp)
+cfspp <- unique(cfspp, by = key(cfspp))
 
 #Merge to master species list
 spp <- merge(svspp, cfspp, by = 'ITISSPP', all = T)
@@ -46,6 +47,11 @@ spp <- spp[!SVSPP %in% c(193, 310), ]
 
 spp[ITISSPP == 630979, SVSPP  := 193] #Ocean Pout
 spp[ITISSPP == 620992, SVSPP  := 310] #Deepsea red crab
+spp[ITISSPP == 172783, SVSPP  := 104] #Fourspot flounder
+spp[ITISSPP == 166283, SVSPP  := 112] #John Dory
+spp[ITISSPP == 161731, SVSPP  :=  36] #Menhaden
+spp[ITISSPP ==  98671, SVSPP  := 311] #Cancer Crabs unk
+spp[ITISSPP ==  98455, SVSPP  := 317] #Spider crabs
 spp[ITISSPP == 159772, NESPP3 := 150] #Hagfish
 spp[ITISSPP == 166284, NESPP3 := 188] #John Dory
 spp[ITISSPP == 98670,  NESPP3 := 714] #Cancer Crabs unk
@@ -53,14 +59,21 @@ spp[ITISSPP == 98670,  NESPP3 := 714] #Cancer Crabs unk
 spp[ITISSPP %in% c(630979, 620992), COMNAME := COMMON_NAME]
 spp[ITISSPP %in% c(630979, 620992), SCINAME := SCIENTIFIC_NAME]
 
-spp <- spp[!SCIENTIFIC_NAME %like% 'HIPPOGLOSUS', ]
-
 #Drop extra columns
 spp[is.na(COMNAME), COMNAME := COMMON_NAME]
 spp[is.na(SCINAME), SCINAME := SCIENTIFIC_NAME]
 spp[, c('COMMON_NAME', 'SCIENTIFIC_NAME') := NULL]
 setcolorder(spp, c('ITISSPP', 'SVSPP', 'NESPP3', 'COMNAME', 'SCINAME'))
 setkey(spp, SVSPP, NESPP3)
+
+#-------------------------------------------------------------------------------
+#Add management authority
+mafmc <- c(103, 121, 131, 135, 141, 143, 151, 403, 409, 502, 503, 621)
+nefmc <- c(22:28, 32, 69, 72:77, 101, 102, 105:107, 155, 193, 310, 401, 894)
+joint <- c(15, 197)
+spp[SVSPP %in% mafmc, MANAGE := 'MAFMC']
+spp[SVSPP %in% nefmc, MANAGE := 'NEFMC']
+spp[SVSPP %in% joint, MANAGE := 'JOINT']
 
 #-------------------------------------------------------------------------------
 #Add functional groups
@@ -83,6 +96,8 @@ spp[SVSPP %in% c(15, 23, 28, 69, 72, 73, 101, 103, 104, 135, 139, 145, 197),
     EBFM.PDT := 'Piscivore']
 spp[is.na(EBFM.PDT), EBFM.PDT := 'Other']
 
+#Fix known issues
+spp[SVSPP == 160, EBFM.PDT := 'Macroplanktivore']
 
 #-------------------------------------------------------------------------------                   
 #Add EMAX q's
@@ -201,6 +216,22 @@ spp[is.na(RPATH) & is.na(SVSPP), RPATH := 'OtherDemersals']
 #Assign trash as fauna
 spp[SVSPP == 998, RPATH := 'Fauna']
 
-setkey(spp, SVSPP, NESPP3, ITISSPP)
-spp <- unique(spp)
-save(spp, file = file.path(out.dir, 'Species_codes.RData'))
+#Add feeding guilds - Simplified definitions based on NEFMC PDT work
+spp[, Feeding.guild := factor(NA, levels = c('Apex Predator', 'Benthivore', 'Benthos',
+                                        'Planktivore', 'Piscivore', 'Other'))]
+spp[SVSPP %in% c(13, 14, 22, 25, 74, 102, 105, 106, 107, 141, 143, 151, 172, 176, 
+                 177, 192, 193, 301, 310, 311, 312, 314, 317, 322, 501), 
+    Feeding.guild := 'Benthivore']
+spp[SVSPP %in% c(15, 23, 24, 26, 27, 28, 69, 72, 73, 75, 76, 77, 101, 103, 104, 
+                 108, 112, 135, 139, 145, 155, 164, 197), Feeding.guild := 'Piscivore']
+spp[SVSPP %in% c(32, 33, 34, 35, 36, 84, 121, 131, 156, 160, 163, 168, 171, 181, 502,
+                 503), Feeding.guild := 'Planktivore']
+spp[EBFM.PDT == 'Benthos', Feeding.guild := 'Benthos']
+spp[EBFM.PDT == 'Apex Predator', Feeding.guild := 'Apex Predator']
+spp[is.na(Feeding.guild), Feeding.guild := 'Other']
+
+#reduce rows
+setkey(spp, SVSPP, NESPP3)
+spp <- unique(spp, by = key(spp))
+save(spp, file = file.path(out.dir,   'Species_codes.RData'))
+save(spp, file = file.path(out.dir.2, 'Species_codes.RData'))
