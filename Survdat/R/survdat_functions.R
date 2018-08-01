@@ -36,7 +36,9 @@ poststrat <- function (survdat, stratum, strata.col = 'EPU', na.keep = F) {
   
   #Identify tows within new strata
   stratum     <- spTransform(stratum, lcc)
-  stations$newstrata <- over(stations, stratum)[ ,strata.col]
+  names(stratum@data)[which(names(stratum@data) == strata.col)] <- "strata.col"
+  stations$newstrata <- over(stations, stratum)[ ,'strata.col']
+  names(stratum@data)[which(names(stratum@data) == "strata.col")] <- strata.col
   
   #Output data (convert spatial data frame back to lat/lon)
   stations <- spTransform(stations, CRS('+init=epsg:4326'))
