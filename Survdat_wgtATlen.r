@@ -5,17 +5,17 @@
 
 #User parameters
 if(Sys.info()['sysname']=="Windows"){
-  data.dir <- "L:\\EcoAP\\Data\\survey\\"
-  out.dir  <- "L:\\EcoAP\\Data\\survey\\"
-  r.dir    <- "L:\\Rworkspace\\RSurvey\\"
+  data.dir <- "L:\\EcoAP\\Data\\survey"
+  out.dir  <- "L:\\EcoAP\\Data\\survey"
+  r.dir    <- "L:\\Rworkspace\\RSurvey"
   gis.dir  <- "L:\\Rworkspace\\GIS_files"
 }
 
 if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "slucey/EcoAP/Data/survey/"
-  out.dir  <- "slucey/EcoAP/Data/survey/"
-  r.dir    <- "slucey/Rworkspace/RSurvey/"
-  gis.dir  <- "slucey/Rworkspace/GIS_files"
+  data.dir <- "/home/slucey/slucey/EcoAP/Data/survey"
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
+  r.dir    <- "/home/slucey/slucey/Rworkspace/RSurvey"
+  gis.dir  <- "/home/slucey/slucey/Rworkspace/GIS_files"
   uid <- 'slucey'
   cat('Oracle Password:')
   pwd <- readLines(n=1)
@@ -29,7 +29,7 @@ library(data.table); library(RODBC)
 #User created functions
 
 #-------------------------------------------------------------------------------
-load(paste(data.dir, "survdat.RData", sep = ''))
+load(file.path(data.dir, "Survdat.RData"))
 
 #Need a length/weight coefficients
 if(Sys.info()['sysname']=="Windows") channel <- odbcDriverConnect()
@@ -175,9 +175,9 @@ setkey(survdat.lw, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX, SIZECAT)
 survdat.lw[, WGTCAT := sum(WGTLEN), by = key(survdat.lw)]
 survdat.lw[, NUMCAT := sum(NUMLEN), by = key(survdat.lw)]
 
-survdat.lw <- unique(survdat.lw)
+survdat.lw <- unique(survdat.lw, by = key(survdat.lw))
 
 #Drop individual columns
 survdat.lw[, c('LENGTH', 'NUMLEN', 'INDWT', 'WGTLEN') := NULL]
 
-save(survdat.lw, file = paste(out.dir, "survdat_lw.RData", sep = ''))
+save(survdat.lw, file = file.path(out.dir, "survdat_lw.RData"))
