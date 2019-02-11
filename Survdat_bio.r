@@ -72,7 +72,7 @@ bio[, STRATUM := as.numeric(as.character(STRATUM))]
 
 #merge with survdat
 setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
-survdat.bio <- merge(survdat, bio)
+survdat.bio <- merge(survdat, bio, by = key(survdat))
 
 odbcClose(channel)
 
