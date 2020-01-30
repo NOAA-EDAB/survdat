@@ -103,10 +103,13 @@ stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   setnames(x, strat.col, 'STRAT')
   setnames(y, c(strat.col, area.col), 
            c('STRAT',   'S.AREA'))
+  if(strat.col != 'STRATUM'){
+    x[, STATION2 := as.numeric(paste0(STRATUM, STATION))][]
+    setnames(x, c('STATION', 'STATION2'), c('ORIGSTATION', 'STATION'))
+  } 
   
   #Station data - remove catch/length
   setkey(x, CRUISE6, STRAT, STATION)
-  if(strat.col != 'STRATUM') setkey(x, CRUISE6, STRATUM, STATION, STRAT)
   stations <- unique(x, by = key(x))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
   
@@ -131,8 +134,13 @@ stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   #Merge catch with station data
   strat.survdat <- merge(x, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
   
-  setnames(strat.survdat, c('STRAT',   'S.AREA'),
+  setnames(strat.survdat, c('STRAT', 'S.AREA'),
            c(strat.col, area.col))
+  
+  if(strat.col != 'STRATUM'){
+    setnames(strat.survdat, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
+    strat.survdat[, STATION2 := NULL]
+  }
   
   return(strat.survdat)
 }
