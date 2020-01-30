@@ -106,7 +106,7 @@ stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   
   #Station data - remove catch/length
   setkey(x, CRUISE6, STRAT, STATION)
-  if(STRAT != 'STRATUM') setkey(x, CRUISE6, STRATUM, STATION, STRAT)
+  if(strat.col != 'STRATUM') setkey(x, CRUISE6, STRATUM, STATION, STRAT)
   stations <- unique(x, by = key(x))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
   
