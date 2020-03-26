@@ -4,15 +4,6 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-if(Sys.info()['sysname']=="Windows"){
-  data.dir <- "L:\\Rworkspace\\RSurvey"
-  out.dir  <- "L:\\EcoAP\\Data\\survey"
-}
-if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "/home/slucey/slucey/Rworkspace/RSurvey"
-  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
-}
-
 uid      <- 'slucey'
 cat("Oracle Password: ")
 pwd <- scan(stdin(), character(), n = 1)
@@ -26,7 +17,7 @@ use.SAD    <- 'n' # y = grab data from Survey Analysis Database (SAD) for
                   #     assessed species
 #-------------------------------------------------------------------------------
 #Required packages
-library(RODBC); library(data.table)
+library(RODBC); library(data.table); library(here)
 
 #-------------------------------------------------------------------------------
 #Created functions
@@ -288,9 +279,8 @@ if(use.SAD == 'y'){
 
 odbcClose(channel)
 
-if(all.season == 'n') save(survdat, file = file.path(out.dir, "Survdat.RData"))
-if(all.season == 'y') save(survdat, file = file.path(out.dir, 
-                                                     "Survdat_allseason.RData"))
+if(all.season == 'n') save(survdat, file = here('data/Survdat.RData'))
+if(all.season == 'y') save(survdat, file = here('data/Survdat_allseason.RData'))
 
 
 

@@ -1,31 +1,19 @@
 #Survdat_scallop.RData
 #This script will generate data from the NEFSC sea scallop surveys
-#Version 1.1
-#5/2014
-#V1.1 - added scallop regions and meat weight conversions
 #SML
 
 #-------------------------------------------------------------------------------
 #User parameters
-if(Sys.info()['sysname']=="Windows"){
-  out.dir  <- "L:\\EcoAP\\Data\\survey"
-  memory.limit(4000)
-}
-
-if(Sys.info()['sysname']=="Linux"){
-  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
-  uid      <- 'slucey'
-  cat("Oracle Password: ")
-  pwd <- scan(stdin(), character(), n = 1)
-}
-
+uid      <- 'slucey'
+cat("Oracle Password: ")
+pwd <- scan(stdin(), character(), n = 1)
 
 shg.check  <- 'y' # y = use only SHG <=136 otherwise n
 scall.only <- 'y' # y = grab only Atl. sea scallop (401)
 
 #-------------------------------------------------------------------------------
 #Required packages
-library(RODBC); library(data.table)
+library(RODBC); library(data.table); library(here)
 
 #-------------------------------------------------------------------------------
 #Created functions
@@ -45,11 +33,7 @@ sqltext<-function(x){
 #Begin script
 
 #Connect to Oracle
-if(Sys.info()['sysname']=="Windows"){
-  channel <- odbcDriverConnect()
-} else {
-  channel <- odbcConnect('sole', uid, pwd)
-}
+channel <- odbcConnect('sole', uid, pwd)
 
 #Generate cruise list
 cruise.qry <- "select unique year, cruise6, svvessel
@@ -164,7 +148,7 @@ scalldat[, stamw := sum(expmw), by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')
 scalldat[, c('a', 'b', 'meatwt', 'expmw') := NULL]
 setnames(scalldat, "stamw", "BIOMASS.MW") 
 
-save(scalldat, file = file.path(out.dir, "Scalldat.RData"))
+save(scalldat, file = here('data/Scalldat.RData'))
 
 
 
