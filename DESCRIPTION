@@ -1,4 +1,4 @@
-Package: Survdat
+Package: survdat
 Type: Package
 Title: Tools for working with NEFSC survey data
 Version: 1.0
@@ -9,5 +9,6 @@ Maintainer: Sean Lucey <Sean.Lucey@NOAA.gov>
 License: GPL-2
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
-Imports: data.table, rgdal
-
+Imports: 
+    rgdal,
+    data.table
