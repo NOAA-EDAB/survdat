@@ -11,4 +11,10 @@ Description: A collection of functions for use with NEFSC survey data.  Function
   will generate stratified means and swept area estimates from the surveys.
 Imports: 
     rgdal,
-    data.table
+    data.table,
+    here,
+    DBI,
+    odbc
+Remotes:
+    andybeet/dbutils
+RoxygenNote: 7.1.0

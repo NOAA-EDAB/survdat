@@ -14,6 +14,41 @@ to communicate with the database engine. (see \code{\link[dbutils]{connect_to_da
 
 \item{shg.check}{Boolean. use only SHG <=136 or TOGA <= 1324 (>2008) (T). Default = T}
 }
+\value{
+A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
+Each row of the data.table represents the number at length of a species on a specific tow along with physical  attributes of the tow.
+
+The data frame
+
+\item{CRUISE6}{}
+\item{STATION}{}
+\item{STRATUM}{}
+\item{TOW}{}
+\item{SVSPP}{}
+\item{CATCHSEX}{}
+\item{SVVESSEL}{}
+\item{YEAR}{}
+\item{SEASON}{}
+\item{LAT}{}
+\item{LON}{}
+\item{EST_TOWDATE}{}
+\item{DEPTH}{}
+\item{SURFTEMP}{}
+\item{SURFSALIN}{}
+\item{BOTTEMP}{}
+\item{BOTSALIN}{}
+\item{ABUNDANCE}{}
+\item{BIOMASS}{}
+\item{LENGTH}{}
+\item{NUMLEN}{}
+
+The list of sql statements:
+
+\item{cruise}{Select unique list of cruises. Table = MSTR_CRUISE}
+\item{station}{Select unique set of stations from result of \code{cruise}. tABLE = UNION_FSCS_SVSTA}
+\item{catch}{Select species abundance and biomass data from result of \code{station}. Table = UNION_FSCS_SVCAT}
+\item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
+}
 \description{
 Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, SURVAN_CONVERSION_FACTORS
 }
