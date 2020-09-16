@@ -45,10 +45,10 @@ The data frame
 The list of sql statements:
 
 \item{cruise}{Select unique list of cruises. Table = MSTR_CRUISE}
-\item{station}{Select unique set of stations from result of \code{cruise}. tABLE = UNION_FSCS_SVSTA}
+\item{station}{Select unique set of stations from result of \code{cruise}. Table = UNION_FSCS_SVSTA}
 \item{catch}{Select species abundance and biomass data from result of \code{station}. Table = UNION_FSCS_SVCAT}
 \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
 }
 \description{
-Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, SURVAN_CONVERSION_FACTORS
+Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA
 }

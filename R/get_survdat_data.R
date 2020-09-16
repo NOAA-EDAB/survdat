@@ -47,15 +47,6 @@
 
 get_survdat_data <- function(channel,all.season=F,shg.check=T,raw.check=F) {
 
-  #shg.check  <- 'y' # y = use only SHG <=136 or TOGA <= 1324 (>2008)
-  raw.check  <- 'n' # y = save data without conversions (survdat.raw), will still
-                    #     save data with conversions (survdat)
-  #all.season <- 'n' # y = save data with purpose code 10 not just spring/fall
-                    #     (survdat.allseason), will not save survdat regular
-  use.SAD    <- 'n' # y = grab data from Survey Analysis Database (SAD) for
-                    #     assessed species
-
-
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
   message("Getting Cruise list  ...")
