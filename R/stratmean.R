@@ -25,6 +25,8 @@
 #'for both means are provided.
 #'@import data.table
 #'@export
+
+
 stratmean <- function (survdat, groups = 'all', group.col = 'SVSPP',
                        merge.sex = T, sex.col = 'CATCHSEX',
                        strat.col = 'STRATUM', poststrat = F, nsta.col = 'ntows',

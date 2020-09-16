@@ -15,6 +15,8 @@
 #'stratum weights (W.h).
 #'@import data.table
 #'@export
+
+
 stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   x <- copy(survdat)
   y <- copy(areas)

@@ -23,6 +23,8 @@
 #'for both means are provided.
 #'@import data.table
 #'@export
+
+
 sweptarea <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, area.col,
                        group.col = 'SVSPP') {
   #This is necessary to break the link with the original data table

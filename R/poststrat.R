@@ -10,10 +10,12 @@
 #'@param strata.col Column name from stratum that contains the strata designations.
 #'@param na.keep Logical value to indicate whether original strata names should be retained.
 #'
-#'@return Returns a survdat object with new strata designations labeled as 'newstrata'.
+#'@return Returns a survdat object with new strata designations labeled as \code{newstrata}.
 #'@import data.table
 #'@import rgdal
 #'@export
+
+
 poststrat <- function (survdat, stratum, strata.col = 'EPU', na.keep = F) {
   if (!requireNamespace("rgdal", quietly = TRUE)) {
     stop("rgdal needed for this function to work. Please install it.",
