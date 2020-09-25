@@ -15,7 +15,9 @@ Imports:
     here,
     DBI,
     odbc,
-    sp
+    sp,
+    sf,
+    units
 Remotes:
     andybeet/dbutils
 RoxygenNote: 7.1.0
