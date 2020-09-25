@@ -14,7 +14,8 @@ Imports:
     data.table,
     here,
     DBI,
-    odbc
+    odbc,
+    sp
 Remotes:
     andybeet/dbutils
 RoxygenNote: 7.1.0
