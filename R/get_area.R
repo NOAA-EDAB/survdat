@@ -11,6 +11,8 @@
 #'
 #'@return Returns a data.table of areas in square kilometers.
 #'
+#'@importFrom magrittr "%>%"
+#'
 #'@export
 
 

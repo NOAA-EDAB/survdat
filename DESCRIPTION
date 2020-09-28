@@ -17,7 +17,9 @@ Imports:
     odbc,
     sp,
     sf,
-    units
+    units,
+    dplyr,
+    magrittr
 Remotes:
     andybeet/dbutils
 RoxygenNote: 7.1.0
