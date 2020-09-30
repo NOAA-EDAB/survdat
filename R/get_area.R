@@ -11,6 +11,10 @@
 #'
 #'@return Returns a data.table of areas in square kilometers.
 #'
+#'@section Coordinate reference system (CRS):
+#'The deafult CRS is the Lambert Conformal Conic as is denoted by :
+#'"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
+#'
 #'@importFrom magrittr "%>%"
 #'
 #'@export
@@ -18,6 +22,7 @@
 
 get_area <- function(stratum, col.name="STRATA", crs="+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "){
 
+  # Find area of polygons based on coordinate reference system supplied
   Area <- units::set_units(sf::st_area(stratum,crs),km^2)
 
   strata <- stratum %>%
