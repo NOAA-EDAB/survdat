@@ -11,43 +11,43 @@
 #'@param na.keep Logical value to indicate whether original strata names should be retained.
 #'
 #'@return Returns a survdat object with new strata designations labeled as \code{newstrata}.
-#'@import data.table
-#'@import rgdal
+#'
+#'
 #'@export
 
 
 poststrat <- function (survdat, stratum, strata.col = 'EPU', na.keep = F) {
-  if (!requireNamespace("rgdal", quietly = TRUE)) {
-    stop("rgdal needed for this function to work. Please install it.",
-         call. = FALSE)
-  }
+  # if (!requireNamespace("rgdal", quietly = TRUE)) {
+  #   stop("rgdal needed for this function to work. Please install it.",
+  #        call. = FALSE)
+  # }
 
   #Data
-  x <- copy(survdat)
+  x <- data.table::copy(survdat)
 
   #Use only station data
-  setkey(x, CRUISE6, STRATUM, STATION)
-  stations <- unique(x, by = key(x))
+  data.table::setkey(x, CRUISE6, STRATUM, STATION)
+  stations <- unique(x, by = data.table::key(x))
   stations <- stations[, list(CRUISE6, STRATUM, STATION, LAT, LON)]
 
   #Convert to spatial points data frame
-  coordinates(stations) <- ~LON+LAT
-  stations@proj4string  <- CRS('+init=epsg:4326') #Lat/Lon code
-  lcc <- CRS("+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 ") #Lambert Conformal Conic
-  stations <- spTransform(stations, lcc)
+  sp::coordinates(stations) <- ~LON+LAT
+  stations@proj4string  <- sp::CRS('+init=epsg:4326') #Lat/Lon code
+  lcc <- sp::CRS("+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 ") #Lambert Conformal Conic
+  stations <- sp::spTransform(stations, lcc)
 
   #Identify tows within new strata
-  stratum     <- spTransform(stratum, lcc)
+  stratum     <- sp::spTransform(stratum, lcc)
   names(stratum@data)[which(names(stratum@data) == strata.col)] <- "strata.col"
-  stations$newstrata <- over(stations, stratum)[ ,'strata.col']
+  stations$newstrata <- sp::over(stations, stratum)[ ,'strata.col']
   names(stratum@data)[which(names(stratum@data) == "strata.col")] <- strata.col
 
   #Output data (convert spatial data frame back to lat/lon)
-  stations <- spTransform(stations, CRS('+init=epsg:4326'))
-  sta.data <- as.data.table(as.data.frame(stations))
+  stations <- sp::spTransform(stations, sp::CRS('+init=epsg:4326'))
+  sta.data <- data.table::as.data.table(as.data.frame(stations))
   if(na.keep == F) sta.data <- sta.data[!is.na(newstrata), ]
   sta.data[, c('LAT', 'LON') := NULL]
-  out <- merge(x, sta.data, by = c('CRUISE6', 'STRATUM', 'STATION'))
+  out <- base::merge(x, sta.data, by = c('CRUISE6', 'STRATUM', 'STATION'))
 
   return(out)
 }
