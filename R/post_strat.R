@@ -48,7 +48,8 @@ post_strat <- function (survdata, stratum, strata.col = 'EPU', crs = "+proj=lcc 
 
   if (!(na.keep)) { # removes all points that fall outside of the areas defined by the polygons in stratum
     master <- master %>%
-      dplyr::filter(!is.na(get(strata.col)))
+      dplyr::filter(!is.na(get(strata.col))) %>%
+      data.table::as.data.table()
   }
 
 
