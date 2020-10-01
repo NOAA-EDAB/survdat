@@ -13,36 +13,36 @@
 #'
 #'@return Returns a survdat object with added columns for the number of tows (ntows) and
 #'stratum weights (W.h).
-#'@importFrom data.table  "copy"
+#'
+#'
 #'@export
 
 
-stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
-  x <- copy(survdat)
-  y <- copy(areas)
+strat_prep <- function (survdat, areas, strat.col, area.col = 'Area') {
+  x <- data.table::copy(survdat)
+  y <- data.table::copy(areas)
 
-  setnames(x, strat.col, 'STRAT')
-  setnames(y, c(strat.col, area.col),
-           c('STRAT',   'S.AREA'))
+  data.table::setnames(x, strat.col, 'STRAT')
+  data.table::setnames(y, c(strat.col, area.col), c('STRAT',   'S.AREA'))
   if(strat.col != 'STRATUM'){
     x[, STATION2 := as.numeric(paste0(STRATUM, STATION))][]
-    setnames(x, c('STATION', 'STATION2'), c('ORIGSTATION', 'STATION'))
+    data.table::setnames(x, c('STATION', 'STATION2'), c('ORIGSTATION', 'STATION'))
   }
 
   #Station data - remove catch/length
-  setkey(x, CRUISE6, STRAT, STATION)
+  data.table::setkey(x, CRUISE6, STRAT, STATION)
   stations <- unique(x, by = key(x))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
 
   #count stations
-  setkey(stations, YEAR, STRAT)
+  data.table::setkey(stations, YEAR, STRAT)
   stations[, ntows := length(STATION), by = key(stations)]
 
   #Merge stations and area
-  stations <- merge(stations, y, by = 'STRAT', all.x = T)
+  stations <- base::merge(stations, y, by = 'STRAT', all.x = T)
 
   #Calculate stratum weight
-  setkey(stations, 'YEAR', 'STRAT')
+  data.table::setkey(stations, 'YEAR', 'STRAT')
   strat.year <- unique(stations, by = key(stations))
   strat.year[, c('CRUISE6', 'STATION', 'ntows') := NULL]
   strat.year[, W.h := S.AREA / sum(S.AREA, na.rm = T), by = YEAR]
@@ -55,11 +55,11 @@ stratprep <- function (survdat, areas, strat.col, area.col = 'Area') {
   #Merge catch with station data
   strat.survdat <- merge(x, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
 
-  setnames(strat.survdat, c('STRAT', 'S.AREA'),
+  data.table::setnames(strat.survdat, c('STRAT', 'S.AREA'),
            c(strat.col, area.col))
 
   if(strat.col != 'STRATUM'){
-    setnames(strat.survdat, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
+    data.table::setnames(strat.survdat, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
     strat.survdat[, STATION2 := NULL]
   }
 
