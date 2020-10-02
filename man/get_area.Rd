@@ -6,20 +6,23 @@
 \usage{
 get_area(
   stratum,
-  col.name = "STRATA",
+  col.name,
  
     crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 )
 }
 \arguments{
-\item{stratum}{sf object. Name of the R object containing the shapefile.}
+\item{stratum}{sf object. Name of the object containing the shapefile.}
+
+\item{col.name}{Character String. Column name from \code{stratum} that contains the strata designations.}
 
 \item{crs}{Character string. Specifiy the coordinate refernce system.}
-
-\item{strata.col}{Character String. Column name from stratum that contains the strata designations.}
 }
 \value{
-Returns a data.table of areas in square kilometers.
+Returns a data.table (nx2).
+
+\item{STRATA}{The name of each Region}
+\item{AREA}{The area of the STRATA in square kilometers}
 }
 \description{
 Calculates the area of a stratum from a shapefile.  Necessary if post stratifying
@@ -36,6 +39,7 @@ Other Survdat:
 \code{\link{getarea}()},
 \code{\link{post_strat}()},
 \code{\link{poststrat}()},
+\code{\link{strat_mean}()},
 \code{\link{strat_prep}()},
 \code{\link{stratmean}()},
 \code{\link{stratprep}()},
