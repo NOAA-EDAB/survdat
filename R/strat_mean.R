@@ -24,6 +24,8 @@
 #'indicated by the group.col parameter.  In addition, the variance and standard error
 #'for both means are provided.
 #'
+#'@importFrom data.table "key"
+#'
 #'@export
 
 
@@ -36,7 +38,7 @@ strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
 
   #Remove length data if present
   data.table::setkey(x, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
-  x <- unique(x, by = data.table::key(x))
+  x <- unique(x, by = key(x))
   x[, c('LENGTH', 'NUMLEN') := NULL]
 
   data.table::setnames(x, c(group.col, sex.col, strat.col, nsta.col, area.wgt, weight, number),
@@ -46,9 +48,9 @@ strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   if(merge.sex == F) x[, group := paste(group, sex, sep = '')]
 
   data.table::setkey(x, CRUISE6, strat, STATION, group)
-  x[, BIO := sum(BIO), by = data.table::key(x)]
-  x[, NUM := sum(NUM), by = data.table::key(x)]
-  x <- unique(x, by = data.table::key(x))
+  x[, BIO := sum(BIO), by = key(x)]
+  x[, NUM := sum(NUM), by = key(x)]
+  x <- unique(x, by = key(x))
 
   #Fix Na's
   x[is.na(BIO), BIO := 0]
@@ -56,7 +58,7 @@ strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
 
   #Calculate total number of stations per year
   data.table::setkey(x, strat, YEAR)
-  N <- unique(x, by = data.table::key(x))
+  N <- unique(x, by = key(x))
   N <- N[, sum(ntows), by = 'YEAR']
   data.table::setnames(N, 'V1', 'N')
 
@@ -70,54 +72,54 @@ strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   #Calculate weight per tow and number per tow
   data.table::setkey(x, group, strat, YEAR)
 
-  x[, biomass.tow   := sum(BIO) / ntows, by = data.table::key(x)]
-  x[, abundance.tow := sum(NUM) / ntows, by = data.table::key(x)]
+  x[, biomass.tow   := sum(BIO) / ntows, by = key(x)]
+  x[, abundance.tow := sum(NUM) / ntows, by = key(x)]
 
   #Calculated stratified means
   x[, weighted.biomass   := biomass.tow   * W.h]
   x[, weighted.abundance := abundance.tow * W.h]
 
   #Variance - need to account for zero catch
-  x[, n.zero     := ntows - length(BIO), by = data.table::key(x)]
+  x[, n.zero     := ntows - length(BIO), by = key(x)]
 
   x[, zero.var.b := n.zero * (0 - biomass.tow)^2]
   x[, vari.b := (BIO - biomass.tow)^2]
-  x[, Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1), by = data.table::key(x)]
+  x[, Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1), by = key(x)]
   x[is.nan(Sh.2.b), Sh.2.b := 0]
 
   x[, zero.var.a := n.zero * (0 - abundance.tow)^2]
   x[, vari.a := (NUM - abundance.tow)^2]
-  x[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = data.table::key(x)]
+  x[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = key(x)]
   x[is.nan(Sh.2.a), Sh.2.a := 0]
 
-  stratified <- unique(x, by = data.table::key(x))
+  stratified <- unique(x, by = key(x))
 
   stratified <- merge(stratified, N, by = 'YEAR')
 
   #Stratified mean
   setkey(stratified, group, YEAR)
 
-  stratified[, strat.biomass := sum(weighted.biomass),   by = data.table::key(stratified)]
-  stratified[, strat.abund   := sum(weighted.abundance), by = data.table::key(stratified)]
+  stratified[, strat.biomass := sum(weighted.biomass),   by = key(stratified)]
+  stratified[, strat.abund   := sum(weighted.abundance), by = key(stratified)]
 
   #Stratified variance
   if(poststrat == F){
-    stratified[, biomass.var := sum(((W.h^2) * Sh.2.b) / ntows), by = data.table::key(stratified)]
-    stratified[, abund.var   := sum(((W.h^2) * Sh.2.a) / ntows), by = data.table::key(stratified)]
+    stratified[, biomass.var := sum(((W.h^2) * Sh.2.b) / ntows), by = key(stratified)]
+    stratified[, abund.var   := sum(((W.h^2) * Sh.2.a) / ntows), by = key(stratified)]
   }
 
   if(poststrat == T){
-    stratified[, biomass.var := sum(Sh.2.b * W.h) / N + sum((1 - W.h) * Sh.2.b) / N^2, by = data.table::key(stratified)]
-    stratified[, abund.var   := sum(Sh.2.a * W.h) / N + sum((1 - W.h) * Sh.2.a) / N^2, by = data.table::key(stratified)]
+    stratified[, biomass.var := sum(Sh.2.b * W.h) / N + sum((1 - W.h) * Sh.2.b) / N^2, by = key(stratified)]
+    stratified[, abund.var   := sum(Sh.2.a * W.h) / N + sum((1 - W.h) * Sh.2.a) / N^2, by = key(stratified)]
 
   }
 
   #standard error of the means
-  stratified[, biomass.SE := sqrt(biomass.var), by = data.table::key(stratified)]
-  stratified[, abund.SE   := sqrt(abund.var),   by = data.table::key(stratified)]
+  stratified[, biomass.SE := sqrt(biomass.var), by = key(stratified)]
+  stratified[, abund.SE   := sqrt(abund.var),   by = key(stratified)]
 
   #Delete extra rows/columns
-  stratified.means <- unique(stratified, by = data.table::key(stratified))
+  stratified.means <- unique(stratified, by = key(stratified))
   stratified.means <- stratified.means[, list(YEAR, group, sex, N, strat.biomass, biomass.var, biomass.SE,
                                               strat.abund, abund.var, abund.SE)]
   if(merge.sex == T) stratified.means[, sex := NULL]

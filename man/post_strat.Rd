@@ -41,6 +41,7 @@ Other Survdat:
 \code{\link{strat_prep}()},
 \code{\link{stratmean}()},
 \code{\link{stratprep}()},
+\code{\link{swept_area}()},
 \code{\link{sweptarea}()}
 }
 \concept{Survdat}
