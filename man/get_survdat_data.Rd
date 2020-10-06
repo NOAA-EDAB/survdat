@@ -4,7 +4,14 @@
 \alias{get_survdat_data}
 \title{Extracts Survey data  from Database}
 \usage{
-get_survdat_data(channel, all.season = F, shg.check = T, raw.check = F)
+get_survdat_data(
+  channel,
+  all.season = F,
+  shg.check = T,
+  raw.check = F,
+  conversion.factor = T,
+  use.SAD = F
+)
 }
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
@@ -13,34 +20,38 @@ to communicate with the database engine. (see \code{\link[dbutils]{connect_to_da
 \item{all.season}{Boolean. Spring and Fall only (F) otherwise T. Default = F}
 
 \item{shg.check}{Boolean. use only SHG <=136 or TOGA <= 1324 (>2008) (T). Default = T}
+
+\item{conversion.factor}{Boolean. Whether to apply conversion factors to the data pull (Default = T)}
+
+\item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. Default = F}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
-Each row of the data.table represents the number at length of a species on a specific tow along with physical  attributes of the tow.
+Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 
-The data frame
+The data frame (Description taken from Data dictionary \url{http://nova.nefsc.noaa.gov/datadict/})
 
-\item{CRUISE6}{}
-\item{STATION}{}
-\item{STRATUM}{}
-\item{TOW}{}
-\item{SVSPP}{}
-\item{CATCHSEX}{}
-\item{SVVESSEL}{}
-\item{YEAR}{}
-\item{SEASON}{}
-\item{LAT}{}
-\item{LON}{}
-\item{EST_TOWDATE}{}
-\item{DEPTH}{}
-\item{SURFTEMP}{}
-\item{SURFSALIN}{}
-\item{BOTTEMP}{}
-\item{BOTSALIN}{}
-\item{ABUNDANCE}{}
-\item{BIOMASS}{}
-\item{LENGTH}{}
-\item{NUMLEN}{}
+\item{CRUISE6}{Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)}
+\item{STATION}{Unique sequential order in which stations have been completed. Hangups and short tows each receive a non-repeated consecutive number.}
+\item{STRATUM}{	A predefined area where a net dredge, or other piece of gear was deployed. Code consists of 2 parts: Stratum group code number (2 bytes) and stratum number (3 bytes). Stratum group refers to if area fished is inshore or offshore North or South of Cape Hatteras or the type of cruise (shellfish, State of MA, offshore deepwater). The stratum number (third and fourth digits of code) refers to area defined by depth zone. See SVDBS.SVMSTRATA. The fifth digit of the code increases the length of the stratum number for revised strata after the Hague Line was established. Stratum group code: 01 = Trawl, offshore north of Hatteras; 02 = BIOM; 03 = Trawl, inshore north of Hatteras; 04 = Shrimp; 05 = Scotian shelf; 06 = Shellfish; 07 = Trawl, inshore south of Hatteras; 08 = Trawl, Offshore south of Hatteras; 09 = MA DMF; 99 = Offshore deepwater (outside the stratified area). A change in Bottom Trawl Stratum for the Gulf of Maine-Bay of Fundy has been in effect since Spring 1987, and may be summarized as follows: Previous strata: 01350; Present strata: 01351, 01352.}
+\item{TOW}{Sequential number representing order in which station was selected within a stratum.}
+\item{SVSPP}{A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST}
+\item{CATCHSEX}{Code used to identify species that are sexed at the catch level. See SVDBS.SEX_CODES}
+\item{SVVESSEL}{Standard two character code for a survey vessel. Refer to SVDBS.SV_VESSEL}
+\item{YEAR}{	Year in which cruise was conducted.}
+\item{SEASON}{	Season of the year in which cruise was conducted.}
+\item{LAT}{Beginning latitude of tow in decimal degrees.(DECDEG_BEGLAT)}
+\item{LON}{Beginning longitude of tow in decimal degrees.(DECDEG_BEGLON)}
+\item{EST_TOWDATE}{Date and time represented by Eastern Standard Time (EST) for the start of a tow or deployment.(BEGIN_EST_TOWDATE)}
+\item{DEPTH}{	A four digit number recording the average depth, to the nearest meter, during a survey gear deployment.(AVGDEPTH)}
+\item{SURFTEMP}{Surface temperature of water (degrees Celcius).}
+\item{SURFSALIN}{Salinity at water surface in practical salinity units (PSU).}
+\item{BOTTEMP}{Bottom temperature (degrees Celsius).}
+\item{BOTSALIN}{Bottom salinity in Practical Salinity Units (PSU).}
+\item{ABUNDANCE}{Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)}
+\item{BIOMASS}{Expanded catch weight of a species caught at a given station. (EXPCATCHWT)}
+\item{LENGTH}{Measured length of species in centimeters (cm). Measure method differs by species.}
+\item{NUMLEN}{Expanded number of specimens at a given length.(EXPNUMLEN)}
 
 The list of sql statements:
 
@@ -48,6 +59,8 @@ The list of sql statements:
 \item{station}{Select unique set of stations from result of \code{cruise}. Table = UNION_FSCS_SVSTA}
 \item{catch}{Select species abundance and biomass data from result of \code{station}. Table = UNION_FSCS_SVCAT}
 \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
+\item{sad}{Select ????? from Survey Analysis Database. Table = STOCKEFF.I_SV_MERGED_CATCH_CALIB_O}
+\item{conversions}{Select conversion factors. Table = SURVAN_CONVERSION_FACTORS}
 }
 \description{
 Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA

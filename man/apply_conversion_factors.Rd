@@ -16,7 +16,9 @@ to communicate with the database engine. (see \code{\link[dbutils]{connect_to_da
 }
 \value{
 A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
-Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow. See \code{\link{get_survdat_data}} fro more details
+Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow. See \code{\link{get_survdat_data}} for more details
+
+Do not export
 }
 \description{
 Connects to svdbs and pulls conversion factors from SURVAN_CONVERSION_FACTORS

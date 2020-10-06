@@ -10,9 +10,10 @@
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. Default = F
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
-#' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow. See \code{\link{get_survdat_data}} fro more details
+#' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow. See \code{\link{get_survdat_data}} for more details
 #'
-#' @export
+#' Do not export
+#'
 
 
 apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
