@@ -9,3 +9,6 @@ sqltext(x)
 \description{
 @param x
 }
+\details{
+Not exported
+}

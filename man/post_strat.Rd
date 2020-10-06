@@ -4,14 +4,7 @@
 \alias{post_strat}
 \title{Assigns points to polygon}
 \usage{
-post_strat(
-  survdata,
-  stratum,
-  strata.col,
- 
-    crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0",
-  na.keep = F
-)
+post_strat(survdata, stratum, strata.col, crs = crs, na.keep = F)
 }
 \arguments{
 \item{stratum}{sf object. Name of the object containing the shapefile.}

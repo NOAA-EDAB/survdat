@@ -2,6 +2,7 @@
 #'
 #'  @param x
 #'
+#' Not exported
 
 sqltext <- function(x){
   out <- x[1]
