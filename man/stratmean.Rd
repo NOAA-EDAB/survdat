@@ -55,9 +55,14 @@ variance and standard error.  Requires you to run stratprep() to survdat object 
 }
 \seealso{
 Other Survdat: 
+\code{\link{get_area}()},
 \code{\link{getarea}()},
+\code{\link{post_strat}()},
 \code{\link{poststrat}()},
+\code{\link{strat_mean}()},
+\code{\link{strat_prep}()},
 \code{\link{stratprep}()},
+\code{\link{swept_area}()},
 \code{\link{sweptarea}()}
 }
 \concept{Survdat}

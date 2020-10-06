@@ -20,9 +20,14 @@ a survdat file.
 }
 \seealso{
 Other Survdat: 
+\code{\link{get_area}()},
+\code{\link{post_strat}()},
 \code{\link{poststrat}()},
+\code{\link{strat_mean}()},
+\code{\link{strat_prep}()},
 \code{\link{stratmean}()},
 \code{\link{stratprep}()},
+\code{\link{swept_area}()},
 \code{\link{sweptarea}()}
 }
 \concept{Survdat}

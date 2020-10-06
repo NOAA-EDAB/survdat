@@ -26,9 +26,14 @@ subsetting the data by species of interest to ensure all stations are accounted.
 }
 \seealso{
 Other Survdat: 
+\code{\link{get_area}()},
 \code{\link{getarea}()},
+\code{\link{post_strat}()},
 \code{\link{poststrat}()},
+\code{\link{strat_mean}()},
+\code{\link{strat_prep}()},
 \code{\link{stratmean}()},
+\code{\link{swept_area}()},
 \code{\link{sweptarea}()}
 }
 \concept{Survdat}
