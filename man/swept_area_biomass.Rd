@@ -26,7 +26,7 @@ swept_area_biomass(
 
 \item{areaDescription}{Character string. The name of the column in areaPolygon that describes the area (eg. "EPU","STRATA")}
 
-\item{filterByArea}{Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column}
+\item{filterByArea}{Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea}}
 
 \item{filterBySeason}{Character Vector. Vecor of season names. Names found in the SEASON column of \code{data}}
 

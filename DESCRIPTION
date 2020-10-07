@@ -9,6 +9,7 @@ Author: c(person("Sean", "Lucey", email = "Sean.Lucey@NOAA.gov",
   role = c("aut")))
 Maintainer: Sean Lucey <Sean.Lucey@NOAA.gov>
 License: GPL-2
+Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
 Imports: 
@@ -29,3 +30,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+
