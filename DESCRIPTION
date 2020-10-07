@@ -3,8 +3,10 @@ Type: Package
 Title: Tools for working with NEFSC survey data
 Version: 1.0
 Date: 2015-03-03
-Author: person("Lucey", "Sean", email = "Sean.Lucey@NOAA.gov",
-  role = c("aut", "cre"))
+Author: c(person("Sean", "Lucey", email = "Sean.Lucey@NOAA.gov",
+  role = c("aut", "cre")),
+  person("Andy", "Beet", email = "andrew.beet@NOAA.gov",
+  role = c("aut")))
 Maintainer: Sean Lucey <Sean.Lucey@NOAA.gov>
 License: GPL-2
 Description: A collection of functions for use with NEFSC survey data.  Functions
