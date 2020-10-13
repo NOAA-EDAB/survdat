@@ -8,7 +8,6 @@ get_survdat_data(
   channel,
   all.season = F,
   shg.check = T,
-  raw.check = F,
   conversion.factor = T,
   use.SAD = F
 )
@@ -17,13 +16,13 @@ get_survdat_data(
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
 
-\item{all.season}{Boolean. Spring and Fall only (F) otherwise T. Default = F}
+\item{all.season}{Boolean. Spring and Fall only (F) otherwise T. (Default = F)}
 
-\item{shg.check}{Boolean. use only SHG <=136 or TOGA <= 1324 (>2008) (T). Default = T}
+\item{shg.check}{Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)}
 
-\item{conversion.factor}{Boolean. Whether to apply conversion factors to the data pull (Default = T)}
+\item{conversion.factor}{Boolean. Whether to apply conversion factors to the data pull, (Default = T)}
 
-\item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. Default = F}
+\item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data

@@ -4,10 +4,10 @@
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 #' to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
-#' @param all.season Boolean. Spring and Fall only (F) otherwise T. Default = F
-#' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008) (T). Default = T
-#' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull (Default = T)
-#' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. Default = F
+#' @param all.season Boolean. Spring and Fall only (F) otherwise T. (Default = F)
+#' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
+#' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
+#' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -49,7 +49,7 @@
 #'
 #'@export
 
-get_survdat_data <- function(channel,all.season=F,shg.check=T,raw.check=F,conversion.factor=T,use.SAD=F) {
+get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=T,use.SAD=F) {
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
@@ -145,12 +145,6 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,raw.check=F,conver
   #merge with survdat
   data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
   survdat <- merge(survdat, len, all.x = T)
-
-  #if(raw.check == 'y'){
-    #survdat.raw <- survdat
-#    save(survdat.raw, file = paste(out.dir, "Survdat_raw.RData", sep =''))
-  #}
-
 
   if(conversion.factor){
     survdatConv <- apply_conversion_factors(channel,survdat,use.SAD = use.SAD)
