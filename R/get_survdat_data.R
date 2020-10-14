@@ -8,6 +8,7 @@
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
 #' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
+#' @param bio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -36,6 +37,9 @@
 #' \item{LENGTH}{Measured length of species in centimeters (cm). Measure method differs by species.}
 #' \item{NUMLEN}{Expanded number of specimens at a given length.(EXPNUMLEN)}
 #'
+#' Additional columns if bio = T
+#'
+#'
 #' The list of sql statements:
 #'
 #' \item{cruise}{Select unique list of cruises. Table = MSTR_CRUISE}
@@ -49,7 +53,7 @@
 #'
 #'@export
 
-get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=T,use.SAD=F) {
+get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=T,use.SAD=F,bio=F) {
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
@@ -146,14 +150,38 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
   data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
   survdat <- merge(survdat, len, all.x = T)
 
-  if(conversion.factor){
-    survdatConv <- apply_conversion_factors(channel,survdat,use.SAD = use.SAD)
+  # create list of all sql calls
+  sql <- list(catch=catch.qry, cruise=cruise.qry, len=length.qry, station=station.qry)
+
+
+  # Biology Data --------------------------------------------------------------
+  if (bio) {
+    message("Getting Individual Fish (Bio) Data ...")
+    bio.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, indid,
+                  indwt, sex, maturity, age, stom_volume, stom_wgt
+                  from UNION_FSCS_SVBIO
+                  where cruise6 in (", cruise6, ")
+                  and stratum not like 'YT%'" , sep = '')
+    bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
+
+    #Fix catch sex prior to 2001
+    bio[is.na(CATCHSEX), CATCHSEX := 0L]
+    bio[SVSPP %in% c(15, 301) & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1L]
+    bio[SVSPP %in% c(15, 301) & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2L]
+
+    data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
+
+    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
+    survdat <- merge(survdat, bio, by = key(survdat))
+    sql <- c(sql,bio.qry)
   }
 
-  # create list of all sql calls
-  sql <- list(catch=catch.qry, cruise=cruise.qry, length=length.qry, station=station.qry)
-  sql <- c(sql,survdatConv$sql)
+  if(conversion.factor){
+    survdatConv <- apply_conversion_factors(channel,survdat,use.SAD = use.SAD)
+    sql <- c(sql,survdatConv$sql)
+    survdat <- survdatConv$survdat
+  }
 
-  return(list(survdat=survdatConv$survdat,sql=sql))
+  return(list(survdat=survdat,sql=sql))
 
 }

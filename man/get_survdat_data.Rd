@@ -9,7 +9,8 @@ get_survdat_data(
   all.season = F,
   shg.check = T,
   conversion.factor = T,
-  use.SAD = F
+  use.SAD = F,
+  bio = F
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ to communicate with the database engine. (see \code{\link[dbutils]{connect_to_da
 \item{conversion.factor}{Boolean. Whether to apply conversion factors to the data pull, (Default = T)}
 
 \item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)}
+
+\item{bio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
@@ -51,6 +54,9 @@ The data frame (Description taken from Data dictionary \url{http://nova.nefsc.no
 \item{BIOMASS}{Expanded catch weight of a species caught at a given station. (EXPCATCHWT)}
 \item{LENGTH}{Measured length of species in centimeters (cm). Measure method differs by species.}
 \item{NUMLEN}{Expanded number of specimens at a given length.(EXPNUMLEN)}
+
+Additional columns if bio = T
+
 
 The list of sql statements:
 
