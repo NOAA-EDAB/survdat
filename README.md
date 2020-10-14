@@ -12,7 +12,7 @@ To use this package you will need:
 
 ### Installation
 
-`remotes::install_github("NOAA-EDAB/survdatr",build_vignettes = TRUE)`
+`remotes::install_github("NOAA-EDAB/survdat",build_vignettes = TRUE)`
 
 
 
