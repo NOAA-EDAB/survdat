@@ -55,8 +55,15 @@ The data frame (Description taken from Data dictionary \url{http://nova.nefsc.no
 \item{LENGTH}{Measured length of species in centimeters (cm). Measure method differs by species.}
 \item{NUMLEN}{Expanded number of specimens at a given length.(EXPNUMLEN)}
 
-Additional columns if bio = T
+Additional columns if bio = T (UNION_FSCS_SVBIO)
 
+\item{INDID}{A unique identifier for each fish sampled.}
+\item{INDWT}{Individual weight (KG) of species being sampled.}
+\item{SEX}{Code indicating sex of fish or invertebrate species. See SVDBS.FSCS_SEX_CODES if using fscs data and SVDBS.SEX_CODES if using non FSCS data. Codes 0, 1, 2 and 4 are the only valid codes in fscs tables.}
+\item{MATURITY}{Stage of maturation of the fish being sampled. See SVDBS.FSCS_MATURITY_CODES}
+\item{AGE}{Age of specimen in years.}
+\item{STOM_VOLUME}{Volume of the stomach contents of the fish sampled, measured to the nearest tenth of a cubic centimeter (cc).}
+\item{STOM_WGT}{	Stomach weight of an individual fish in grams.}
 
 The list of sql statements:
 
@@ -66,6 +73,7 @@ The list of sql statements:
 \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
 \item{sad}{Select ????? from Survey Analysis Database. Table = STOCKEFF.I_SV_MERGED_CATCH_CALIB_O}
 \item{conversions}{Select conversion factors. Table = SURVAN_CONVERSION_FACTORS}
+\item{bio}{Select bio stats. Table = UNION_FSCS_SVBIO}
 }
 \description{
 Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA
