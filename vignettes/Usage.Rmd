@@ -1,0 +1,74 @@
+---
+title: "Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(survdat)
+```
+
+## Connect to the database
+
+Once you are granted permission to access the database and have Oracle's instantClient installed you can make a connection as follows:
+
+```channel <- dbutils::connect_database(server="sole",uid="yourUsername")```
+
+`channel` is an object inherited from the DBIConnection-class. This object is passed as an argument to functions in `survdat`
+
+## Pull Data
+
+Pulling the data takes up to 15 minutes to complete. see `get_survdat_data` for details. To pull the survey data with conversion corrections applied use the following:
+
+```
+data <- get_survdat_data(channel)
+```
+
+To pull biological traits of individual fish sampled on the survey cruise
+
+```
+data <- get_survdat_data(channel, bio=TRUE)
+```
+
+`data` is a list of 2 elements. The data pull and the set of sql statements made to pull the data
+
+## Swept area biomass
+
+Swept area biomass is estimated for particular regions of interest. These regions are specified via shapefiles. Two shape files are included in the package, `strata.shp` and `EPU.shp`
+
+All shapefiles are required to be an sf ([simple features](https://r-spatial.github.io/sf/index.html)) object. To read in the `EPU.shp` file:
+
+```{r epus}
+area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"), quiet=T)
+area
+
+ggplot2::ggplot(data=area) +
+  ggplot2::geom_sf(color = "Blue",alpha = .5)
+```
+
+To calculate swept area biomass for any one of these regions, say Georges Bank:
+
+``` swept_area_biomass(data=data$survdat,areaPolygon=area,areaDescription="EPU",filterByArea="GB") ```
+
+The `filterByArea` value should be one of the values found in the `areaDescription` field of the shapefile
+
+To visualize the overlap of the survey data and the regions, first define a coordinate reference system (crs) in which to project both the points and the shapefile. Convert the LAT and LON coordinates to the WGS84 reference ellipsoid (crs = 4326)
+
+```
+crs <- 4326
+points <- sf::st_as_sf(data$survdat,coords=("LON","LAT"), crs=crs)
+# plot data with regions
+plot_data_area(points=data$survdat,polygons=area,crs)
+
+```
+
