@@ -30,7 +30,6 @@ Extract STRATA information from the SVDBS SVMSTRATA table
 \section{Reference}{
 
 Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations.
-Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
 }
 
 \examples{
@@ -54,5 +53,5 @@ get_strata(channel,strata=c("06940","06400","06380"))
 
 }
 \seealso{
-\code{\link{connect_to_database}}
+\code{\link[dbutils]{connect_to_database}}
 }

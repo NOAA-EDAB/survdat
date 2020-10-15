@@ -14,8 +14,7 @@ get_survdat_data(
 )
 }
 \arguments{
-\item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
-to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
+\item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
 
 \item{all.season}{Boolean. Spring and Fall only (F) otherwise T. (Default = F)}
 

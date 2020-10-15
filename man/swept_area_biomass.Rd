@@ -16,7 +16,8 @@ swept_area_biomass(
   merge.sex = T,
   poststrat = F,
   q = NULL,
-  a = 0.0384
+  a = 0.0384,
+  tidy = F
 )
 }
 \arguments{
@@ -28,14 +29,14 @@ swept_area_biomass(
 
 \item{filterByArea}{Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea}}
 
-\item{filterBySeason}{Character Vector. Vecor of season names. Names found in the SEASON column of \code{data}}
+\item{filterBySeason}{Character Vector. Vector of season names. Names found in the SEASON column of \code{data}}
 
 \item{species}{Character Vector. Vector of species SVSPP codes.}
 
-\item{merge.sex}{Logical value to merge sexed species such as dogfish.'}
+\item{merge.sex}{Boolean. Merge sexed species such as dogfish. (Default = T)}
 
-\item{poststrat}{Logical value indicating whether the original strata design was
-used or not.  Changes the calculation for variance.}
+\item{poststrat}{Boolean. Indicating whether the original strata design was
+used or not.  Changes the calculation for variance. (Default = F)}
 
 \item{q}{Table of survey catchability with a column of group names and a column of
 catchabilities.  If not provided, assumes a q of 1 for each group (Minimum swept area
@@ -43,6 +44,8 @@ estimates).}
 
 \item{a}{The average swept area of the trawl.  Default value is the swept area of a
 standard NOAA Ship Albatross IV tow.}
+
+\item{tidy}{Boolean. Return output in long format (Default = F)}
 }
 \value{
 
