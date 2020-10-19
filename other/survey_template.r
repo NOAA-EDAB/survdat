@@ -1,118 +1,66 @@
-#survey_template.r
-#template to get from survdat.Rdata to swept area biomass estimates
-#8/14
+#New Survey Template for use with Survdat package
 #SML
 
 #User parameters
 if(Sys.info()['sysname']=="Windows"){
-  data.dir <- "L:\\EcoAP\\Data\\survey\\"
-  out.dir  <- "L:\\EcoAP\\misc\\"
-  r.dir    <- "L:\\Rworkspace\\Survey\\"
+  r.dir    <- "L:\\Rworkspace\\RSurvey"
+  data.dir <- "L:\\EcoAP\\Data\\survey"
   gis.dir  <- "L:\\Rworkspace\\GIS_files"
+  out.dir  <- "L:\\EcoAP\\Data\\survey"
+  memory.limit(4000)
 }
-
 if(Sys.info()['sysname']=="Linux"){
-  data.dir <- "slucey/EcoAP/Data/survey/"
-  out.dir  <- "slucey/EcoAP/misc/"
-  r.dir    <- "slucey/Rworkspace/RSurvey/"
-  gis.dir  <- "slucey/Rworkspace/GIS_files"
-  uid <- 'slucey'
-  cat('Oracle Password:')
-  pwd <- readLines(n=1)
+  r.dir    <- "/home/slucey/slucey/Rworkspace/RSurvey"
+  data.dir <- "/home/slucey/slucey/EcoAP/Data/survey"
+  gis.dir  <- "/home/slucey/slucey/Rworkspace/GIS_files"
+  out.dir  <- "/home/slucey/slucey/EcoAP/Data/survey"
 }
 
 #-------------------------------------------------------------------------------
 #Required packages
-library(data.table); library(rgdal)
+#May need to download Survdat package from GitHub
+#devtools::install_github('slucey/RSurvey/Survdat')
+library(data.table); library(rgdal); library(Survdat)
 
 #-------------------------------------------------------------------------------
 #User created functions
-source(paste(r.dir, "Poststrat.r", sep = ''))
-source(paste(r.dir, "getarea.r",   sep = ''))
-source(paste(r.dir, "Prestrat.r",  sep = ''))
-source(paste(r.dir, "Stratmean.r", sep = ''))
-source(paste(r.dir, "Sweptarea.r", sep = ''))
-    
+
 #-------------------------------------------------------------------------------
-#Run Survdat.r to generate Survdat.RData
-#Load Survdat.RData
-load(paste(data.dir, "Survdat.RData", sep = ''))
+#Grab survdat.r
+load(file.path(data.dir, 'Survdat.RData'))
 
-#Step 1 - Remove length data
-setkey(survdat, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
-survdat <- unique(survdat)
-survdat[, c('LENGTH', 'NUMLEN') := NULL]
+#Grab strata
+strata <- readOGR(gis.dir, 'strata')
 
-#Step 2 - change stratification
-#Grab shapefile for new strata
-EPU <- readOGR(gis.dir, 'EPU')
+#Generate area table
+strat.area <- getarea(strata, 'STRATA')
+setnames(strat.area, 'STRATA', 'STRATUM')
 
-#Use only station data
-setkey(survdat, CRUISE6, STRATUM, STATION)
-stations <- unique(survdat)
-stations <- stations[, list(CRUISE6, STRATUM, STATION, LAT, LON)]
+#Post stratify data if necessary
+#survdat.epu <- poststrat(survdat, strata)
+#setnames(survdat.epu, 'newstrata', 'EPU')
 
-#Poststratify
-stations.epu <- poststrat(stations, stratum = 'EPU', strata.col = 'EPU')
-setnames(stations.epu, "newstrata", "EPU")
-stations.epu[, c('LON', 'LAT') := NULL]
+#Subset by season/ strata set
+fall.GOM <- survdat[SEASON == 'FALL' & STRATUM %in% c(1220, 1240, 1260:1290,
+                                                      1360:1400), ]
 
-#Merge back to survdat
-survdat.epu <- merge(survdat, stations.epu, by = key(survdat)) 
+#Run stratification prep
+GOM.prep <- stratprep(fall.GOM, strat.area, strat.col = 'STRATUM',
+                      area.col = 'Area')
 
-#Step 3 - Generate stratum area table
-epu.area <- getarea(EPU, strat.col = 'EPU')
-#If using survey:
-# #Add in connection to oracle to get species areas
-# if(window == T)channel <- odbcDriverConnect()
-# if(window == F)channel <- odbcConnect('sole', uid, pwd)
-# 
-# stratum <- as.data.table(sqlQuery(channel, "select STRATUM, STRATUM_AREA 
-#                                             from SVMSTRATA"))
-# odbcClose(channel)
-# 
-# #Convert from nm to km
-# stratum[, STRATUM_AREA := STRATUM_AREA * 3.429904]
+#Calculate stratified means - can do multiple species at once (i.e. groups =
+#c(72, 73, 75))
+#You can also aggregate species here
+#GOM.prep[SVSPP %in% 72:76, Group := 'Gadid']
+#then use groups = 'Gadid' and group.col = 'Group' in stratmean
+#Note: The function will merge aggregated groups for you
+lob.mean <- stratmean(GOM.prep, groups = 301, group.col = 'SVSPP',
+                      strat.col = 'STRATUM')
 
+#Calculate total biomass/abundance estimates
+total.biomass <- sweptarea(GOM.prep, lob.mean, strat.col = 'STRATUM',
+                           area.col = 'Area')
 
-#Step 4 - Segregate by season
-fall <- survdat.epu[SEASON == 'FALL', ]
-
-#Step 5 - Preprocess the data for stratified means
-#Need to combine sexed species or generate a new species code - This is 
-#no longer done as part of prestrat
-setkey(fall, CRUISE6, STRATUM, STATION, SVSPP)
-fall[, BIOMASS   := sum(BIOMASS),   by = key(fall)]
-fall[, ABUNDANCE := sum(ABUNDANCE), by = key(fall)]
-fall <- unique(fall)
-
-fall.pre <- prestrat(fall, epu.area, strat.col = 'EPU', area.col = 'Area')
-
-#Step 6 - reduce or aggregate species
-fall.pre.gadids <- fall.pre[SVSPP %in% c(72:74, 76), ]
-#could alternatively do - but make sure to aggregate the group
-#fall.pre[SVSPP %in% c(72:74, 76), Group := 'Gadid"]
-# setkey(fall.pre, CRUISE6, STRATUM, STATION, Group)
-# fall.pre[, biomass.new   := sum(BIOMASS),   by = key(fall.pre)]
-# fall.pre[, abundance.new := sum(ABUNDANCE), by = key(fall.pre)]
-# fall.pre <- unique(fall.pre)
-# fall.pre[, c('BIOMASS', 'ABUNDANCE') := NULL]
-# setnames(fall.pre, c('biomass.new', 'abundance.new'), c('BIOMASS', 'ABUNDANCE'))
-# fall.pre <- fall.pre[!is.na(Group), ]
-#And run stratmean off group.col = 'Group' instead of 'SVSPP'
-
-#Step 7 - Calculate stratified mean
-#You can now use an aggregate biomass or abundance by specifying weight/number parameter
-strat.mean.gadid <- stratmean(fall.pre.gadids, group.col = 'SVSPP', strat.col = 'EPU')
-
-#Step 8 - Calculate swept area
-gadid.totbiomass <- sweptarea(fall.pre.gadids, strat.mean.gadid, strat.col = 'EPU', 
-                              area.col = 'Area', group.col = 'SVSPP')
-
-#Output - either RData or csv
-save(     gadid.totbiomass, file = paste(out.dir, "Gadid_Fall_Biomass.RData", sep = ''))
-write.csv(gadid.totbiomass, file = paste(out.dir, "Gadid_Fall_Biomass.csv",   sep = ''), row.names = F)
-
-
-
-
+#Output results either to a flat .csv file or .RData set
+write.csv(total.biomass, file = file.path(out.dir, 'Lobster_GoM.csv'), row.names = F)
+save(     total.biomass, file = file.path(out.dir, 'Lobster_GOM.RData'))

@@ -56,7 +56,7 @@ bio.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, ind
                 indwt, sex, maturity, age, stom_volume
                 from UNION_FSCS_SVBIO
                 where cruise6 in (", cruise6, ")", sep = '')
-                
+
 bio <- as.data.table(sqlQuery(channel, bio.qry))
 
 #Fix catch sex prior to 2001
