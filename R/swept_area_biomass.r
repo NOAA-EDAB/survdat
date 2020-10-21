@@ -6,16 +6,17 @@
 #' @param areaPolygon sf object. Defining the areas by which to estimate biomass.
 #' @param areaDescription Character string. The name of the column in areaPolygon that describes the area (eg. "EPU","STRATA")
 #' @param filterByArea Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea}
-#' @param filterBySeason Character Vector. Vecor of season names. Names found in the SEASON column of \code{data}
+#' @param filterBySeason Character Vector. Vector of season names. Names found in the SEASON column of \code{data}
 #' @param species Character Vector. Vector of species SVSPP codes.
-#' @param merge.sex Logical value to merge sexed species such as dogfish.'
-#' @param poststrat Logical value indicating whether the original strata design was
-#'used or not.  Changes the calculation for variance.
+#' @param merge.sex Boolean. Merge sexed species such as dogfish. (Default = T)
+#' @param poststrat Boolean. Indicating whether the original strata design was
+#'used or not.  Changes the calculation for variance. (Default = F)
 #' @param q Table of survey catchability with a column of group names and a column of
 #'catchabilities.  If not provided, assumes a q of 1 for each group (Minimum swept area
 #'estimates).
 #' @param a The average swept area of the trawl.  Default value is the swept area of a
 #'standard NOAA Ship Albatross IV tow.
+#' @param tidy Boolean. Return output in long format (Default = F)
 #'
 #' @return
 #'
@@ -39,7 +40,7 @@
 
 swept_area_biomass <- function(data,areaPolygon,areaDescription,filterByArea,filterBySeason,species="all",
                                crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0",
-                               merge.sex=T,poststrat=F,q=NULL,a=0.0384) {
+                               merge.sex=T, poststrat=F, q=NULL, a=0.0384, tidy = F) {
 
 
   strat.area <- survdat::get_area(areaPolygon,areaDescription,crs=crs)
@@ -62,6 +63,7 @@ swept_area_biomass <- function(data,areaPolygon,areaDescription,filterByArea,fil
   total.biomass <- survdat::swept_area(survdat=survdatPrep, stratmean=stratGroupMean,
                                        q = q, strat.col = 'REGION')
 
+  # create tidy data
 
   return(total.biomass)
 }
