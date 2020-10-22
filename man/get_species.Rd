@@ -34,6 +34,7 @@ Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
 }
 
 \examples{
+
 \dontrun{
 # extracts complete species table based on custom sql statement
 channel <- connect_to_database(server="name_of_server",uid="individuals_username")
@@ -54,6 +55,7 @@ get_species(channel,"COD")
 channel <- connect_to_database(server="name_of_server",uid="individuals_username")
 sqlStatement <- "select * from cfdbs.cfspp"
 get_species(channel,species= c("73","135"))
+
 }
 
 }

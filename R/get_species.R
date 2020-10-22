@@ -25,6 +25,7 @@
 #' @seealso \code{\link{connect_to_database}}
 #'
 #' @examples
+#'
 #' \dontrun{
 #' # extracts complete species table based on custom sql statement
 #' channel <- connect_to_database(server="name_of_server",uid="individuals_username")
@@ -45,7 +46,8 @@
 #' channel <- connect_to_database(server="name_of_server",uid="individuals_username")
 #' sqlStatement <- "select * from cfdbs.cfspp"
 #' get_species(channel,species= c("73","135"))
-#'}
+#'
+#' }
 #'
 #' @export
 
