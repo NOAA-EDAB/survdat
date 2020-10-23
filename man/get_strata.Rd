@@ -34,21 +34,19 @@ Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field n
 
 \examples{
 \dontrun{
-extracts complete strata table
-channel <- connect_to_database(server="name_of_server",uid="individuals_username")
+# extracts complete strata table
+channel <- dbutils::connect_to_database(server="name_of_server",uid="individuals_username")
 get_strata(channel)
 
-extracts single stratum table
-channel <- connect_to_database(server="name_of_server",uid="individuals_username")
+# extracts info for a single stratum
 get_strata(channel,strata=6940)
 get_strata(channel,strata="6940")
-get_strata(channel,strata="SNE BLOCK ISLAND")
-get_strata(channel,strata="SNE Block island")
+get_strata(channel,"SNE BLOCK ISLAND")
+get_strata(channel,"SNE Block Island")
 
-extracts multiple strata
-get_strata(channel,strata=c(6940,6400,6380))
-get_strata(channel,strata=c("06940","06400","06380"))
-
+# extracts multiple strata
+get_strata(channel,strata= c(6940,6400,6380))
+get_strata(channel,strata=c("6940","6400","6380"))
 }
 
 }
