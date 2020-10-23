@@ -84,10 +84,10 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
 
   cruise <- data.table::as.data.table(DBI::dbGetQuery(channel, cruise.qry))
   cruise <- na.omit(cruise)
-  setkey(cruise, CRUISE6, SVVESSEL)
+  data.table::setkey(cruise, CRUISE6, SVVESSEL)
 
   #Use cruise codes to select other data
-  cruise6 <- sqltext(cruise$CRUISE6)
+  cruise6 <- survdat:::sqltext(cruise$CRUISE6)
 
 
 
@@ -167,9 +167,11 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
     bio.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, indid,
                   indwt, sex, maturity, age, stom_volume, stom_wgt
                   from UNION_FSCS_SVBIO
-                  where cruise6 in (", cruise6, ")
-                  and stratum not like 'YT%'" , sep = '')
+                  where cruise6 in (", cruise6, ")" , sep = '')
     bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
+
+    #Remove YT Stratum
+    bio <- bio[!STRATUM %like% 'YT', ]
 
     # fix bugs in SVDBS for character sex values
     bio[SEX %in% c("M","m"), SEX :=1L]
@@ -181,8 +183,10 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
     bio[SVSPP %in% c(15, 301) & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2L]
 
     data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
-
     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
+
+#    data.table::setkey(bio, CRUISE6, STATION, STRATUM, TOW, SVSPP)
+#    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP)
     survdat <- merge(survdat, bio, by = key(survdat))
     sql <- c(sql,bio.qry)
   }
