@@ -20,7 +20,7 @@ apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
 
   survdat <- survdat.raw
 
-#Conversion Factors
+  #Conversion Factors
   #need to make abundance column a double instead of an integer
   survdat[, ABUNDANCE := as.double(ABUNDANCE)]
 
@@ -69,7 +69,7 @@ apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
   #Bigelow >2008 Vessel Conversion
   #Use Bigelow conversions for Pisces as well (PC)
   #Tables 53-55 from Miller et al. 2010 - number estimators
-  big.abund <- data.table(svspp = c(12, 22, 24, 27, 28, 31, 33, 34, 73, 76, 106, 107,
+  big.abund <- data.table::data.table(svspp = c(12, 22, 24, 27, 28, 31, 33, 34, 73, 76, 106, 107,
                                     109, 121, 135, 136, 141, 143, 145, 149, 155, 164,
                                     171, 181, 193, 197, 502, 512, 15, 23, 26, 32, 72,
                                     74, 77, 78, 102, 103, 104, 105, 108, 131, 163, 301,
@@ -87,7 +87,7 @@ apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
                                   3.166, 0.84))
 
   #Tables 56-58 from Miller et al. 2010 Biomass estimators
-  big.bio <- data.table(svspp = c(12, 22, 24, 27, 28, 31, 33, 34, 73, 76, 106, 107,
+  big.bio <- data.table::data.table(svspp = c(12, 22, 24, 27, 28, 31, 33, 34, 73, 76, 106, 107,
                                   109, 121, 135, 136, 141, 143, 145, 149, 155, 164,
                                   171, 181, 193, 197, 502, 512, 15, 23, 26, 32, 72,
                                   74, 77, 78, 102, 103, 104, 105, 108, 131, 163, 301,
@@ -144,7 +144,7 @@ apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
 
     sad <- data.table::as.data.table(DBI::dbGetQuery(channel, sad.qry))
 
-    setkey(sad, CRUISE6, STRATUM, TOW, STATION, SVSPP, CATCHSEX, LENGTH)
+    data.table::setkey(sad, CRUISE6, STRATUM, TOW, STATION, SVSPP, CATCHSEX, LENGTH)
     sad <- unique(sad)
     survdat <- merge(survdat, sad, by = key(sad), all.x = T)
 

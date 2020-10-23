@@ -6,3 +6,5 @@ inst/doc
 
 #files
 *.rds
+#folder
+testing

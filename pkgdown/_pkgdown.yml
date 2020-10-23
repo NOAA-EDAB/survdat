@@ -16,7 +16,7 @@ reference:
 - title: "Get Data"
   desc: "Functions that pull data from the SVDBS database"
 - contents:
-  - get_survey_data
+  - get_survdat_data
   - apply_conversion_factors
   - get_maturity
   - get_species
@@ -25,6 +25,10 @@ reference:
   - get_sex_fscs
   - get_vessel
   - get_conversion_factors
+- title: "Plotting"
+  desc: "Basic plotting functions to visualize data"
+- contents:
+  - plot_data_area
 - title: "Close to depreciation"
   desc: "Will be depreciated soon"
 - contents:
