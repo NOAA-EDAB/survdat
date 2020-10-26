@@ -75,5 +75,5 @@ The list of sql statements:
 \item{bio}{Select bio stats. Table = UNION_FSCS_SVBIO}
 }
 \description{
-Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA
+Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
 }

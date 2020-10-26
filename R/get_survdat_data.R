@@ -1,6 +1,6 @@
 #' Extracts Survey data  from Database
 #'
-#'Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA
+#'Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
 #' @param all.season Boolean. Spring and Fall only (F) otherwise T. (Default = F)

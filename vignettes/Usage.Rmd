@@ -20,7 +20,7 @@ library(survdat)
 
 ## Connect to the database
 
-Once you are granted permission to access the database and have Oracle's instantClient installed you can make a connection as follows:
+Once you are granted permission to access the database and have Oracle's instant Client installed you can make a connection as follows:
 
 ```channel <- dbutils::connect_database(server="sole",uid="yourUsername")```
 
