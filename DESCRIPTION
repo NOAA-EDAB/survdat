@@ -22,7 +22,8 @@ Imports:
     sf,
     units,
     dplyr,
-    magrittr
+    magrittr,
+    ggplot2
 Remotes:
     andybeet/dbutils
 RoxygenNote: 7.1.0
