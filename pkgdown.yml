@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   methodology: methodology.html
   survdat: survdat.html
-last_built: 2020-10-27T23:26Z
+last_built: 2020-10-27T23:38Z
 urls:
   reference: https://noaa-edab.github.io/survdat//reference
   article: https://noaa-edab.github.io/survdat//articles
