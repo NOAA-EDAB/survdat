@@ -2,9 +2,9 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  Usage: Usage.html
   methodology: methodology.html
-last_built: 2020-10-27T23:14Z
+  survdat: survdat.html
+last_built: 2020-10-27T23:26Z
 urls:
   reference: https://noaa-edab.github.io/survdat//reference
   article: https://noaa-edab.github.io/survdat//articles
