@@ -10,7 +10,7 @@ Authors@R: c(person(given = "Sean",
             person(given = "Andy", 
                    family = "Beet", 
                    email = "andrew.beet@NOAA.gov",
-                   role = c("aut"),
+                   role = c("aut","cre"),
                    comment = c(ORCID = "0000-0001-8270-7090")))
 License: GPL-2
 Encoding: UTF-8
