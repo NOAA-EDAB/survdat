@@ -11,7 +11,7 @@ Authors@R: c(person(given = "Sean",
                    family = "Beet", 
                    email = "andrew.beet@NOAA.gov",
                    role = c("aut"),
-                   comment = c(ORCHID = "0000-0001-8270-7090")))
+                   comment = c(ORCID = "0000-0001-8270-7090")))
 License: GPL-2
 Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
