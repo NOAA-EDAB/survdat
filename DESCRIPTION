@@ -3,15 +3,21 @@ Type: Package
 Title: Tools for working with NEFSC survey data
 Version: 1.0
 Date: 2015-03-03
-Authors@R: c(person("Sean", "Lucey", email = "Sean.Lucey@NOAA.gov",
-  role = c("aut", "cre")),
-  person("Andy", "Beet", email = "andrew.beet@NOAA.gov",
-  role = c("aut")))
-Maintainer: Sean Lucey <Sean.Lucey@NOAA.gov>
+Authors@R: c(person(given = "Sean",
+                    family = "Lucey",
+                    email = "Sean.Lucey@NOAA.gov",
+                    role = c("aut", "cre")),
+            person(given = "Andy", 
+                   family = "Beet", 
+                   email = "andrew.beet@NOAA.gov",
+                   role = c("aut"),
+                   comment = c(ORCHID = "0000-0001-8270-7090")))
 License: GPL-2
 Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
+URL: https://github.com/NOAA-EDAB/survdat
+BugReports: https://github.com/NOAA-EDAB/survdat/issues
 Imports: 
     rgdal,
     data.table,
