@@ -4,12 +4,12 @@
 \alias{plot_shapefile}
 \title{Plots shapefile}
 \usage{
-plot_shapefile(polygons, crs)
+plot_shapefile(polygons, crs = 4269)
 }
 \arguments{
 \item{polygons}{sf object. The polygons (shapefile)}
 
-\item{crs}{Character string. Defines the coordinate reference system for projection}
+\item{crs}{Character string. Defines the coordinate reference system for projection. Default = 4269 (NAD83)}
 }
 \value{
 A figure

@@ -12,10 +12,11 @@ plot_shapefile <- function(polygons,crs=4269) {
   # transform crs
   sf::st_transform(polygons,crs)
 
-#  d <- polygons %>% dplyr::filter(STRATA == 99999)
-
-  ggplot2::ggplot() +
+  # plot shapefile
+  p <- ggplot2::ggplot() +
     ggplot2::geom_sf(data=polygons,color = "Grey",alpha = .5)
 
+  print(p)
+  return(p)
 
 }
