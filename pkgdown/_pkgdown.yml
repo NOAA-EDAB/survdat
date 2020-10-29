@@ -29,6 +29,7 @@ reference:
   desc: "Basic plotting functions to visualize data"
 - contents:
   - plot_data_area
+  - plot_shapefile
 - title: "Close to depreciation"
   desc: "Will be depreciated soon"
 - contents:
