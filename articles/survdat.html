@@ -99,7 +99,7 @@
 <h2 class="hasAnchor">
 <a href="#connect-to-the-database" class="anchor"></a>Connect to the database</h2>
 <p>Once you are granted permission to access the database and have Oracle’s instant Client installed you can make a connection as follows:</p>
-<p><code>channel &lt;- dbutils::connect_database(server="sole",uid="yourUsername")</code></p>
+<p><code>channel &lt;- dbutils::connect_to_database(server="sole",uid="yourUsername")</code></p>
 <p><code>channel</code> is an object inherited from the DBIConnection-class. This object is passed as an argument to functions in <code>survdat</code></p>
 </div>
 <div id="pull-data" class="section level2">
