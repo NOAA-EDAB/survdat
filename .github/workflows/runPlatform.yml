@@ -9,8 +9,8 @@
 name: Install package on different platforms
 
 on:
-  #push:
-  #  branches: [ master ]
+  push:
+    branches: [ master ]
   #pull_request:
   #  branches: [ master ]
 
