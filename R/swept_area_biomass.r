@@ -5,7 +5,7 @@
 #' @param data Data frame. Survey data pull from svdbs with applied conversion factors
 #' @param areaPolygon sf object. Defining the areas by which to estimate biomass.
 #' @param areaDescription Character string. The name of the column in areaPolygon that describes the area (eg. "EPU","STRATA")
-#' @param filterByArea Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea}
+#' @param filterByArea Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea} (Default = "all")
 #' @param filterBySeason Character Vector. Vector of season names. Names found in the SEASON column of \code{data}
 #' @param species Character Vector. Vector of species SVSPP codes.
 #' @param merge.sex Boolean. Merge sexed species such as dogfish. (Default = T)
@@ -38,9 +38,7 @@
 #' @export
 
 
-swept_area_biomass <- function(data,areaPolygon,areaDescription,filterByArea,filterBySeason,species="all",
-                               crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0",
-                               merge.sex=T, poststrat=F, q=NULL, a=0.0384, tidy = F) {
+swept_area_biomass <- function(data, areaPolygon, areaDescription, filterByArea="all", filterBySeason, species="all", crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0", merge.sex=T, poststrat=F, q=NULL, a=0.0384, tidy = F) {
 
 
   strat.area <- survdat::get_area(areaPolygon,areaDescription,crs=crs)
@@ -48,7 +46,19 @@ swept_area_biomass <- function(data,areaPolygon,areaDescription,filterByArea,fil
   message("Post stratifying ...")
   survdata <- survdat::post_strat(data, areaPolygon, strata.col=areaDescription,crs=crs)
 
-  #if length((filterByArea)
+  # check to create all areas
+  if (length(filterByArea)==1) {
+    if (filterByArea == "all") {
+      filterByArea <- areaPolygon %>%
+        sf::st_drop_geometry() %>%
+        dplyr::select(areaDescription) %>%
+        unlist() %>%
+        unique() %>%
+        as.numeric()
+    }
+  }
+  print(filterByArea)
+
   filteredData <- survdata[SEASON == filterBySeason & get(areaDescription) %in% filterByArea, ]
 
   #Run stratification prep
