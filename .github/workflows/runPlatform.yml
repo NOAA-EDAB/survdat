@@ -20,7 +20,7 @@ jobs:
     strategy: 
       matrix:
         os: [windows-latest]
-        r-version: [3.6]
+        r-version: [3.6, 4]
     steps:
       - uses: actions/checkout@v2
       - name: Set up R ${{ matrix.r-version }}
