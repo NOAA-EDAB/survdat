@@ -73,5 +73,7 @@ swept_area <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, gro
   data.table::setnames(swept.area, 'V2', group.col)
   if(length(which(names(stratmean.x) == 'sex')) == 0) swept.area[, sex := NULL]
 
+  swept.area <- swept.area %>% units::drop_units()
+
   return(swept.area)
 }
