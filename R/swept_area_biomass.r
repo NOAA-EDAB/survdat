@@ -53,8 +53,10 @@ swept_area_biomass <- function(data, areaPolygon, areaDescription, filterByArea=
         sf::st_drop_geometry() %>%
         dplyr::select(areaDescription) %>%
         unlist() %>%
-        unique() %>%
-        as.numeric()
+        unique()
+      if (is.factor(filterByArea)){ # convert to levels
+        filterByArea <- levels(filterByArea)
+      }
     }
   }
   print(filterByArea)
