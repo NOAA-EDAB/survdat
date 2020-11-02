@@ -10,9 +10,9 @@ name: Install package on different platforms
 
 on:
   push:
-    branches: [ master ]
-  #pull_request:
-  #  branches: [ master ]
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
 
 jobs:
   build:
