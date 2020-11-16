@@ -38,10 +38,15 @@
 #' @export
 
 
-swept_area_biomass <- function(data, areaPolygon, areaDescription, filterByArea="all", filterBySeason, species="all", crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0", merge.sex=T, poststrat=F, q=NULL, a=0.0384, tidy = F) {
+swept_area_biomass <- function(data, areaPolygon, areaDescription, 
+                               filterByArea = "all", filterBySeason, 
+                               species = "all", crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0", 
+                               merge.sex = T, poststrat = F, q = NULL, a =0.0384, 
+                               tidy = F) {
 
 
-  strat.area <- survdat::get_area(areaPolygon,areaDescription,crs=crs)
+  strat.area <- survdat::get_area(areaPolygon, areaDescription, crs = crs)
+  
   # post stratify
   message("Post stratifying ...")
   survdata <- survdat::post_strat(data, areaPolygon, strata.col=areaDescription,crs=crs)
