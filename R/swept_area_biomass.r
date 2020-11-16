@@ -48,8 +48,11 @@ swept_area_biomass <- function(data, areaPolygon, areaDescription,
   strat.area <- survdat::get_area(areaPolygon, areaDescription, crs = crs)
   
   # post stratify
-  message("Post stratifying ...")
-  survdata <- survdat::post_strat(data, areaPolygon, strata.col=areaDescription,crs=crs)
+  if(poststrat){
+    message("Post stratifying ...")
+    survdata <- survdat::post_strat(data, areaPolygon, strata.col = areaDescription,
+                                    crs = crs)
+  } else {survdata <- data}
 
   # check to create all areas
   if (length(filterByArea)==1) {
