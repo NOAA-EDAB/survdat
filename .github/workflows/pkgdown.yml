@@ -1,4 +1,4 @@
-name: deploy pkgdown to github pages
+name: deploy to github pages
 
 on:
   push:
