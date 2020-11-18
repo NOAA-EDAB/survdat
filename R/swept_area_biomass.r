@@ -60,7 +60,7 @@ swept_area_biomass <- function(data, areaPolygon = NA, areaDescription,
                                     crs = crs)
   } else {
     survdata <- data %>%
-      dplyr::rename(areaDescription = 'STRATUM')
+      dplyr::rename(!!areaDescription := 'STRATUM')
     }
 
   # check to create all areas
