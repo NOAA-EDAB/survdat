@@ -48,6 +48,7 @@ swept_area_biomass <- function(data, areaPolygon = NA, areaDescription,
   if(is.na(areaPolygon)){
     areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp", 
                                                  package = "survdat"), quiet = T)
+    data$STRATUM <- as.numeric(data$STRATUM)
     poststrat <- F
   } else {poststrat <- T} #Not using original stratification
   
