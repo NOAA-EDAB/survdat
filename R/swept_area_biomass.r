@@ -38,8 +38,9 @@
 #' @export
 
 
-swept_area_biomass <- function(data, areaPolygon, areaDescription, 
-                               filterByArea = "all", filterBySeason, 
+swept_area_biomass <- function(data, 
+                               areaPolygon = system.file("extdata","strata.shp",package="survdat"), 
+                               areaDescription, filterByArea = "all", filterBySeason, 
                                species = "all", crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0", 
                                merge.sex = T, poststrat = F, q = NULL, a =0.0384, 
                                tidy = F) {
