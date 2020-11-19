@@ -86,14 +86,13 @@ swept_area_biomass <- function(data, areaPolygon = NA, areaDescription,
   survdatPrep <- survdat::strat_prep(filteredData, strat.area, strat.col = areaDescription)
 
 
-#SML - need to un hard code the strat.col here and in swept_area call
   stratGroupMean <- survdat::strat_mean(survdatPrep, groups = species, 
-                                        group.col = 'SVSPP', strat.col = 'STRATUM',
+                                        group.col = 'SVSPP', strat.col = areaDescription,
                                         poststrat = poststrat, merge.sex = merge.sex)
 
   #Calculate total biomass/abundance estimates
   total.biomass <- survdat::swept_area(survdat=survdatPrep, stratmean=stratGroupMean,
-                                       q = q, strat.col = 'STRATUM')
+                                       q = q, strat.col = areaDescription)
 
   # create tidy data
 
