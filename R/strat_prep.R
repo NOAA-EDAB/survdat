@@ -48,6 +48,7 @@ strat_prep <- function (survdata, areas, strat.col) {
   strat.year <- unique(stations, by = key(stations))
   strat.year[, c('CRUISE6', 'STATION', 'ntows') := NULL]
   strat.year[, W.h := S.AREA / sum(S.AREA, na.rm = T), by = YEAR]
+  strat.year[, W.h := as.vector(W.h)] #Drops the units from the area
   strat.year[is.na(W.h), W.h := 0]
   strat.year[, S.AREA := NULL]
 
