@@ -58,7 +58,7 @@ strat_prep <- function (survdata, areas, strat.col) {
   strat.survdat <- merge(x, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
 
   data.table::setnames(strat.survdat, c('STRAT', 'S.AREA'),
-           c("STRATUM", "Area"))
+           c(areaDescription, "Area"))
 
   if(strat.col != 'STRATA'){
     data.table::setnames(strat.survdat, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
