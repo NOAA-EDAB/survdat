@@ -85,12 +85,14 @@ swept_area_biomass <- function(data, areaPolygon = NULL, areaDescription,
   message("Prepping  ...")
   survdatPrep <- survdat::strat_prep(filteredData, strat.area, strat.col = areaDescription)
 
-
+  #Calculate stratified mean
+  message("Calculating Stratified Mean  ...")
   stratGroupMean <- survdat::strat_mean(survdatPrep, groups = species, 
                                         group.col = 'SVSPP', strat.col = areaDescription,
                                         poststrat = poststrat, merge.sex = merge.sex)
 
   #Calculate total biomass/abundance estimates
+  message("Calculating Swept Area Estimate  ...")
   total.biomass <- survdat::swept_area(survdat=survdatPrep, stratmean=stratGroupMean,
                                        q = q, strat.col = areaDescription)
 
