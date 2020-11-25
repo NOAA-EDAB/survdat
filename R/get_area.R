@@ -23,9 +23,12 @@
 #'@export
 
 
-get_area <- function(stratum, col.name, crs=crs){
+get_area <- function(stratum, col.name){
 
-  # Find area of polygons based on coordinate reference system supplied
+  # Find area of polygons based on a lambert conformal conic coordinate reference
+  # system 
+  crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
+  
   Area <- units::set_units(sf::st_area(stratum,crs),km^2)
 
   strata <- stratum %>%
