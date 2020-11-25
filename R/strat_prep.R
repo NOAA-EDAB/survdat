@@ -17,22 +17,44 @@
 #'@export
 
 
-strat_prep <- function (survdata, areas, strat.col) {
-  x <- data.table::copy(survdata)
-  y <- data.table::copy(areas)
+strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL) {
+  
+  # Calculate the proportional areas
+  # Use original stratified design and built-in shapefile
+  if(is.null(areaPolygon)){
+    areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp", 
+                                                 package = "survdat"), quiet = T)
+    areaDescription <- "STRATA"
+    poststratFlag <- F
+  } else {poststratFlag <- T} #Not using original stratification
+  
+  # Calculate area of the polygons
+  polygonArea <- survdat::get_area(areaPolygon, areaDescription)
+  
+  # post stratify if necessary
+  if(poststratFlag){
+    message("Post stratifying ...")
+    surveyData <- survdat::post_strat(surveyData, areaPolygon, areaDescription)
+  } else {
+    #Add extra column to original data to mimic what happens when post-stratifying
+    surveyData <- surveyData[, areaDescription := STRATUM]
+    data.table::setnames(surveyData, 'areaDescription', areaDescription)
+  }
+  
+  #Change to generic names for calculations
+  data.table::setnames(surveyData, areaDescription, 'STRAT')
+  data.table::setnames(polygonArea, c("STRATUM", "Area"), c('STRAT', 'S.AREA'))
 
-  data.table::setnames(x, strat.col, 'STRAT')
-  data.table::setnames(y, c("STRATUM", "Area"), c('STRAT',   'S.AREA'))
-
-  # if using not using survey strata shapefile
-  if(strat.col != 'STRATA'){
-    x[, STATION2 := as.numeric(paste0(STRATUM, STATION))][]
-    data.table::setnames(x, c('STATION', 'STATION2'), c('ORIGSTATION', 'STATION'))
+  # if not using original stratification need to preserve unique key
+  if(!is.null(areaPolygon)){
+    surveyData[, STATION2 := as.numeric(paste0(STRATUM, STATION))]
+    data.table::setnames(surveyData, c('STATION', 'STATION2'), 
+                         c('ORIGSTATION', 'STATION'))
   }
 
   #Station data - Finds list of distinct stations sampled through time
-  data.table::setkey(x, CRUISE6, STRAT, STATION)
-  stations <- unique(x, by = key(x))
+  data.table::setkey(surveyData, CRUISE6, STRAT, STATION)
+  stations <- unique(surveyData, by = key(surveyData))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
 
   #x %>% dplyr::distinct(YEAR,CRUISE6,STRAT,STATION)
@@ -41,7 +63,7 @@ strat_prep <- function (survdata, areas, strat.col) {
   stations[, ntows := length(STATION), by = key(stations)]
 
   #Merge stations and area
-  stations <- base::merge(stations, y, by = 'STRAT', all.x = T)
+  stations <- base::merge(stations, polygonArea, by = 'STRAT', all.x = T)
 
   #Calculate stratum weight
   data.table::setkey(stations, 'YEAR', 'STRAT')
@@ -56,12 +78,13 @@ strat_prep <- function (survdata, areas, strat.col) {
   stations <- merge(stations, strat.year, by = key(stations))
 
   #Merge catch with station data
-  strat.survdat <- merge(x, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
+  strat.survdat <- merge(surveyData, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
 
   data.table::setnames(strat.survdat, c('STRAT', 'S.AREA'),
-           c(strat.col, "Area"))
+           c(areaDescription, "Area"))
 
-  if(strat.col != 'STRATA'){
+  # Restore original station number if not using the original stratified design
+  if(!is.null(areaPolygon)){
     data.table::setnames(strat.survdat, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
     strat.survdat[, STATION2 := NULL]
   }
