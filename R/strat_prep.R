@@ -101,16 +101,16 @@ strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL,
   stations <- merge(stations, strat.year, by = key(stations))
 
   #Merge catch with station data
-  strat.survdat <- merge(filteredData, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
+  prepData <- merge(filteredData, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
 
-  data.table::setnames(strat.survdat, c('STRAT', 'S.AREA'),
+  data.table::setnames(prepData, c('STRAT', 'S.AREA'),
            c(areaDescription, "Area"))
 
   # Restore original station number if not using the original stratified design
   if(!is.null(areaPolygon)){
-    data.table::setnames(strat.survdat, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
-    strat.survdat[, STATION2 := NULL]
+    data.table::setnames(prepData, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
+    prepData[, STATION2 := NULL]
   }
 
-  return(strat.survdat)
+  return(prepData)
 }
