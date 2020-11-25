@@ -48,13 +48,13 @@ calc_stratified_mean <- function(surveyData, areaPolygon = NULL,
   if(is.null(areaPolygon)) poststratFlag <- F else poststratFlag <- T
   
   #Run stratification prep
-  message("Prepping  ...")
-  survdatPrep <- survdat::strat_prep(surveyData, areaPolygon, areaDescription,
-                                     filterByArea, filterBySeason)
+  message("Prepping data ...")
+  prepData <- survdat::strat_prep(surveyData, areaPolygon, areaDescription,
+                                  filterByArea, filterBySeason)
 
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
-  stratGroupMean <- survdat::strat_mean(survdatPrep, groups = species, 
+  stratGroupMean <- survdat::strat_mean(prepData, groups = species, 
                                         group.col = 'SVSPP', strat.col = areaDescription,
                                         poststrat = poststrat, merge.sex = merge.sex)
 
