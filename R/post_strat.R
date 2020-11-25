@@ -19,9 +19,11 @@
 #'@export
 
 
-post_strat <- function (surveyData, areaPolygon, areaDescription, crs = crs, na.keep = F) {
+post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
 
-  # transform Regional Shape file crs
+  # transform Regional Shape file using lambert conformal conic coordinate ref system
+  crs <- "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
+  
   areas <- areaPolygon %>%
     dplyr::rename(areaDescription = areaDescription) %>%
     sf::st_transform(., crs)
