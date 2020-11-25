@@ -17,7 +17,8 @@
 #'@export
 
 
-strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL) {
+strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL,
+                        filterByArea = "all", filterBySeason = "all") {
   
   # Calculate the proportional areas
   # Use original stratified design and built-in shapefile
@@ -41,20 +42,42 @@ strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL) {
     data.table::setnames(surveyData, 'areaDescription', areaDescription)
   }
   
+  #FilterData
+  if(filterByArea != "all" | filterBySeason != "all") message("Filtering data ...")
+  
+  if(filterBySeason == 'all') filterBySeason <- c('FALL', 'SPRING')
+  
+  # check to create all areas
+  if (length(filterByArea)==1) {
+    if (filterByArea == "all") {
+      filterByArea <- areaPolygon %>%
+        sf::st_drop_geometry() %>%
+        dplyr::select(areaDescription) %>%
+        unlist() %>%
+        unique()
+      if (is.factor(filterByArea)){ # convert to levels
+        filterByArea <- levels(filterByArea)
+      }
+    }
+  }
+  print(filterByArea)
+  
+  filteredData <- surveyData[SEASON %in% filterBySeason & get(areaDescription) %in% filterByArea, ]
+  
   #Change to generic names for calculations
-  data.table::setnames(surveyData, areaDescription, 'STRAT')
+  data.table::setnames(filteredData, areaDescription, 'STRAT')
   data.table::setnames(polygonArea, c("STRATUM", "Area"), c('STRAT', 'S.AREA'))
 
   # if not using original stratification need to preserve unique key
   if(!is.null(areaPolygon)){
-    surveyData[, STATION2 := as.numeric(paste0(STRATUM, STATION))]
-    data.table::setnames(surveyData, c('STATION', 'STATION2'), 
+    filteredData[, STATION2 := as.numeric(paste0(STRATUM, STATION))]
+    data.table::setnames(filteredData, c('STATION', 'STATION2'), 
                          c('ORIGSTATION', 'STATION'))
   }
 
   #Station data - Finds list of distinct stations sampled through time
-  data.table::setkey(surveyData, CRUISE6, STRAT, STATION)
-  stations <- unique(surveyData, by = key(surveyData))
+  data.table::setkey(filteredData, CRUISE6, STRAT, STATION)
+  stations <- unique(filteredData, by = key(filteredData))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
 
   #x %>% dplyr::distinct(YEAR,CRUISE6,STRAT,STATION)
@@ -78,7 +101,7 @@ strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL) {
   stations <- merge(stations, strat.year, by = key(stations))
 
   #Merge catch with station data
-  strat.survdat <- merge(surveyData, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
+  strat.survdat <- merge(filteredData, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
 
   data.table::setnames(strat.survdat, c('STRAT', 'S.AREA'),
            c(areaDescription, "Area"))
