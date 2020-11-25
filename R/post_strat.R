@@ -19,36 +19,37 @@
 #'@export
 
 
-post_strat <- function (survdata, stratum, strata.col, crs = crs, na.keep = F) {
+post_strat <- function (surveyData, areaPolygon, areaDescription, crs = crs, na.keep = F) {
 
   # transform Regional Shape file crs
-  areas <- stratum %>%
-    dplyr::rename(strata.col = strata.col) %>%
-    sf::st_transform(.,crs)
+  areas <- areaPolygon %>%
+    dplyr::rename(areaDescription = areaDescription) %>%
+    sf::st_transform(., crs)
 
   # find unique stations and transform to required crs
-    stations <- survdata %>%
+    stations <- surveyData %>%
     dplyr::select(CRUISE6, STRATUM, STATION, LAT, LON) %>%
     dplyr::distinct() %>%
-    sf::st_as_sf(.,coords = c("LON","LAT"),crs=4326) %>%
-    sf::st_transform(.,crs)
+    sf::st_as_sf(., coords = c("LON","LAT"), crs=4326) %>%
+    sf::st_transform(., crs)
 
 
   # Intersect the stations with the polygon
   # Assigns stations with polygons
-  station_area <- sf::st_join(stations,areas,join = sf::st_intersects) %>%
-    dplyr::select(names(stations),strata.col) %>%
+  station_area <- sf::st_join(stations, areas, join = sf::st_intersects) %>%
+    dplyr::select(names(stations), areaDescription) %>%
     sf::st_drop_geometry() %>%
-    dplyr::arrange(CRUISE6,STRATUM,STATION)
+    dplyr::arrange(CRUISE6, STRATUM, STATION)
 
   # Join survey data with stations (which now are assigned to an area based on the shape file)
-  master <- base::merge(survdata,station_area,by = c("CRUISE6","STRATUM","STATION")) %>%
-    dplyr::rename(!!strata.col := strata.col)
+  master <- base::merge(surveyData, station_area, 
+                        by = c("CRUISE6","STRATUM","STATION")) %>%
+    dplyr::rename(!!areaDescription := areaDescription)
 
   # check to see if we want to keep points that fall outside of all o fthe polygons found in the shape file
   if (!(na.keep)) { # removes all points that fall outside of the areas defined by the polygons in stratum
     master <- master %>%
-      dplyr::filter(!is.na(get(strata.col))) %>%
+      dplyr::filter(!is.na(get(areaDescription))) %>%
       data.table::as.data.table()
   }
 
