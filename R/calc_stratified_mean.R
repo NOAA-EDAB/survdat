@@ -49,7 +49,8 @@ calc_stratified_mean <- function(surveyData, areaPolygon = NULL,
   
   #Run stratification prep
   message("Prepping  ...")
-  survdatPrep <- survdat::strat_prep(filteredData, strat.area, strat.col = areaDescription)
+  survdatPrep <- survdat::strat_prep(surveyData, areaPolygon, areaDescription,
+                                     filterByArea, filterBySeason)
 
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
