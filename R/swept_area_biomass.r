@@ -38,13 +38,31 @@
 #' @export
 
 
-swept_area_biomass <- function(data, areaPolygon, areaDescription, filterByArea="all", filterBySeason, species="all", crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0", merge.sex=T, poststrat=F, q=NULL, a=0.0384, tidy = F) {
+swept_area_biomass <- function(data, areaPolygon = NULL, areaDescription, 
+                               filterByArea = "all", filterBySeason, species = "all", 
+                               crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0", 
+                               merge.sex = T, q = NULL, a =0.0384, 
+                               tidy = F) {
 
-
-  strat.area <- survdat::get_area(areaPolygon,areaDescription,crs=crs)
+  #Use original stratified design and built-in shapefile
+  if(is.null(areaPolygon)){
+    areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp", 
+                                                 package = "survdat"), quiet = T)
+    data$STRATUM <- as.numeric(data$STRATUM)
+    poststrat <- F
+  } else {poststrat <- T} #Not using original stratification
+  
+  strat.area <- survdat::get_area(areaPolygon, areaDescription, crs = crs)
+  
   # post stratify
-  message("Post stratifying ...")
-  survdata <- survdat::post_strat(data, areaPolygon, strata.col=areaDescription,crs=crs)
+  if(poststrat){
+    message("Post stratifying ...")
+    survdata <- survdat::post_strat(data, areaPolygon, strata.col = areaDescription,
+                                    crs = crs)
+  } else {
+    survdata <- data[, areaDescription := STRATUM]
+    data.table::setnames(survdata, 'areaDescription', areaDescription)
+    }
 
   # check to create all areas
   if (length(filterByArea)==1) {
@@ -67,13 +85,16 @@ swept_area_biomass <- function(data, areaPolygon, areaDescription, filterByArea=
   message("Prepping  ...")
   survdatPrep <- survdat::strat_prep(filteredData, strat.area, strat.col = areaDescription)
 
-
-  stratGroupMean <- survdat::strat_mean(survdatPrep, groups = species, group.col = 'SVSPP',strat.col = 'REGION',
-                                   poststrat = poststrat, merge.sex = merge.sex)
+  #Calculate stratified mean
+  message("Calculating Stratified Mean  ...")
+  stratGroupMean <- survdat::strat_mean(survdatPrep, groups = species, 
+                                        group.col = 'SVSPP', strat.col = areaDescription,
+                                        poststrat = poststrat, merge.sex = merge.sex)
 
   #Calculate total biomass/abundance estimates
+  message("Calculating Swept Area Estimate  ...")
   total.biomass <- survdat::swept_area(survdat=survdatPrep, stratmean=stratGroupMean,
-                                       q = q, strat.col = 'REGION')
+                                       q = q, strat.col = areaDescription)
 
   # create tidy data
 

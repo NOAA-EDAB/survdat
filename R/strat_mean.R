@@ -31,7 +31,7 @@
 
 strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
                        merge.sex = T, sex.col = 'CATCHSEX',
-                       strat.col = 'REGION', poststrat = F, nsta.col = 'ntows',
+                       strat.col = 'STRATUM', poststrat = F, nsta.col = 'ntows',
                        area.wgt = 'W.h', weight = 'BIOMASS', number = 'ABUNDANCE') {
 
   x <- data.table::copy(survdat)
