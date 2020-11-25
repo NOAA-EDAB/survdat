@@ -45,43 +45,8 @@ calc_stratified_mean <- function(surveyData, areaPolygon = NULL,
                                  q = NULL, a =0.0384, tidy = F) {
 
   # Use original stratified design and built-in shapefile
-  if(is.null(areaPolygon)){
-    areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp", 
-                                                 package = "survdat"), quiet = T)
-    areaDescription <- "STRATA"
-    poststratFlag <- F
-  } else {poststratFlag <- T} #Not using original stratification
+  if(is.null(areaPolygon)) poststratFlag <- F else poststratFlag <- T
   
-  # Calculate area of the polygons
-  polygon.area <- survdat::get_area(areaPolygon, areaDescription)
-  
-  # post stratify if necessary
-  if(poststratFlag){
-    message("Post stratifying ...")
-    surveyData <- survdat::post_strat(surveyData, areaPolygon, areaDescription)
-  } else {
-    surveyData <- surveyData[, areaDescription := STRATUM]
-    data.table::setnames(surveydata, 'areaDescription', areaDescription)
-    }
-
-  # check to create all areas
-  if (length(filterByArea)==1) {
-    if (filterByArea == "all") {
-      filterByArea <- areaPolygon %>%
-        sf::st_drop_geometry() %>%
-        dplyr::select(areaDescription) %>%
-        unlist() %>%
-        unique()
-      if (is.factor(filterByArea)){ # convert to levels
-        filterByArea <- levels(filterByArea)
-      }
-    }
-  }
-  print(filterByArea)
-
-  filteredData <- surveyData[SEASON == filterBySeason & get(areaDescription) %in% filterByArea, ]
-
-  #Coded through to here...
   #Run stratification prep
   message("Prepping  ...")
   survdatPrep <- survdat::strat_prep(filteredData, strat.area, strat.col = areaDescription)
