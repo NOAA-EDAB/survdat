@@ -30,7 +30,7 @@
 
 
 strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "all", 
-                        filterBySex = "all") {
+                        filterBySex = "all", areaDescription) {
 
   stratmeanData <- data.table::copy(prepData)
 
@@ -39,8 +39,8 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
   stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
 
-  data.table::setnames(stratmeanData, c(group.col, sex.col, strat.col, nsta.col, area.wgt, weight, number),
-           c('group', 'sex', 'strat', 'ntows', 'W.h', 'BIO', 'NUM'))
+  data.table::setnames(stratmeanData, c(groupDescription, areaDescription),
+                       c('group', 'strat'))
 
   #Merge sex or keep seperate
   if(merge.sex == F) stratmeanData[, group := paste(group, sex, sep = '')]
