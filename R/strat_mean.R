@@ -30,7 +30,7 @@
 
 
 strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "all", 
-                        mergesexFlag = T, areaDescription) {
+                        mergesexFlag = T, areaDescription, poststratFlag) {
 
   stratmeanData <- data.table::copy(prepData)
 
