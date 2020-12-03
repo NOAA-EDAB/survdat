@@ -55,12 +55,11 @@ calc_stratified_mean <- function(surveyData, areaPolygon = NULL,
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
   #Pick up here...
-  stratGroupMean <- survdat::strat_mean(prepData, groups = species, 
-                                        group.col = 'SVSPP', strat.col = areaDescription,
-                                        poststrat = poststrat, merge.sex = merge.sex)
+  stratGroupMean <- survdat::strat_mean(prepData, groupDescription, filterByGroup,
+                                        mergesexFlag, areaDescription, poststratFlag)
 
   # create tidy data
 
-  return(total.biomass)
+  return(stratGroupMean)
 }
 
