@@ -29,36 +29,34 @@
 #'@export
 
 
-strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
-                       merge.sex = T, sex.col = 'CATCHSEX',
-                       strat.col = 'STRATUM', poststrat = F, nsta.col = 'ntows',
-                       area.wgt = 'W.h', weight = 'BIOMASS', number = 'ABUNDANCE') {
+strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "all", 
+                        filterBySex = "all") {
 
-  x <- data.table::copy(survdat)
+  stratmeanData <- data.table::copy(prepData)
 
   #Remove length data if present
-  data.table::setkey(x, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
-  x <- unique(x, by = key(x))
-  x[, c('LENGTH', 'NUMLEN') := NULL]
+  data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+  stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
 
-  data.table::setnames(x, c(group.col, sex.col, strat.col, nsta.col, area.wgt, weight, number),
+  data.table::setnames(stratmeanData, c(group.col, sex.col, strat.col, nsta.col, area.wgt, weight, number),
            c('group', 'sex', 'strat', 'ntows', 'W.h', 'BIO', 'NUM'))
 
   #Merge sex or keep seperate
-  if(merge.sex == F) x[, group := paste(group, sex, sep = '')]
+  if(merge.sex == F) stratmeanData[, group := paste(group, sex, sep = '')]
 
-  data.table::setkey(x, CRUISE6, strat, STATION, group)
-  x[, BIO := sum(BIO), by = key(x)]
-  x[, NUM := sum(NUM), by = key(x)]
-  x <- unique(x, by = key(x))
+  data.table::setkey(stratmeanData, CRUISE6, strat, STATION, group)
+  stratmeanData[, BIO := sum(BIO), by = key(stratmeanData)]
+  stratmeanData[, NUM := sum(NUM), by = key(stratmeanData)]
+  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
 
   #Fix Na's
-  x[is.na(BIO), BIO := 0]
-  x[is.na(NUM), NUM := 0]
+  stratmeanData[is.na(BIO), BIO := 0]
+  stratmeanData[is.na(NUM), NUM := 0]
 
   #Calculate total number of stations per year
-  data.table::setkey(x, strat, YEAR)
-  N <- unique(x, by = key(x))
+  data.table::setkey(stratmeanData, strat, YEAR)
+  N <- unique(stratmeanData, by = key(stratmeanData))
   N <- N[, sum(ntows), by = 'YEAR']
   data.table::setnames(N, 'V1', 'N')
 
@@ -66,33 +64,33 @@ strat_mean <- function (survdat, groups = 'all', group.col = 'SVSPP',
   if(groups[1] != 'all'){
     if(merge.sex == F) groups <- c(paste(groups, 0, sep = ''), paste(groups, 1, sep = ''),
                                    paste(groups, 2, sep = ''), paste(groups, 3, sep = ''))
-    x <- x[group %in% groups, ]
+    stratmeanData <- stratmeanData[group %in% groups, ]
   }
 
   #Calculate weight per tow and number per tow
-  data.table::setkey(x, group, strat, YEAR)
+  data.table::setkey(stratmeanData, group, strat, YEAR)
 
-  x[, biomass.tow   := sum(BIO) / ntows, by = key(x)]
-  x[, abundance.tow := sum(NUM) / ntows, by = key(x)]
+  stratmeanData[, biomass.tow   := sum(BIO) / ntows, by = key(stratmeanData)]
+  stratmeanData[, abundance.tow := sum(NUM) / ntows, by = key(stratmeanData)]
 
   #Calculated stratified means
-  x[, weighted.biomass   := biomass.tow   * W.h]
-  x[, weighted.abundance := abundance.tow * W.h]
+  stratmeanData[, weighted.biomass   := biomass.tow   * W.h]
+  stratmeanData[, weighted.abundance := abundance.tow * W.h]
 
   #Variance - need to account for zero catch
-  x[, n.zero     := ntows - length(BIO), by = key(x)]
+  stratmeanData[, n.zero     := ntows - length(BIO), by = key(stratmeanData)]
 
-  x[, zero.var.b := n.zero * (0 - biomass.tow)^2]
-  x[, vari.b := (BIO - biomass.tow)^2]
-  x[, Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1), by = key(x)]
-  x[is.nan(Sh.2.b), Sh.2.b := 0]
+  stratmeanData[, zero.var.b := n.zero * (0 - biomass.tow)^2]
+  stratmeanData[, vari.b := (BIO - biomass.tow)^2]
+  stratmeanData[, Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1), by = key(stratmeanData)]
+  stratmeanData[is.nan(Sh.2.b), Sh.2.b := 0]
 
-  x[, zero.var.a := n.zero * (0 - abundance.tow)^2]
-  x[, vari.a := (NUM - abundance.tow)^2]
-  x[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = key(x)]
-  x[is.nan(Sh.2.a), Sh.2.a := 0]
+  stratmeanData[, zero.var.a := n.zero * (0 - abundance.tow)^2]
+  stratmeanData[, vari.a := (NUM - abundance.tow)^2]
+  stratmeanData[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = key(stratmeanData)]
+  stratmeanData[is.nan(Sh.2.a), Sh.2.a := 0]
 
-  stratified <- unique(x, by = key(x))
+  stratified <- unique(stratmeanData, by = key(stratmeanData))
 
   stratified <- merge(stratified, N, by = 'YEAR')
 
