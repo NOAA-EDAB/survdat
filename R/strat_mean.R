@@ -46,13 +46,13 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   if(merge.sex == F) stratmeanData[, group := paste(group, sex, sep = '')]
 
   data.table::setkey(stratmeanData, CRUISE6, strat, STATION, group)
-  stratmeanData[, BIO := sum(BIO), by = key(stratmeanData)]
-  stratmeanData[, NUM := sum(NUM), by = key(stratmeanData)]
+  stratmeanData[, BIOMASS   := sum(BIOMASS),   by = key(stratmeanData)]
+  stratmeanData[, ABUNDANCE := sum(ABUNDANCE), by = key(stratmeanData)]
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
 
   #Fix Na's
-  stratmeanData[is.na(BIO), BIO := 0]
-  stratmeanData[is.na(NUM), NUM := 0]
+  stratmeanData[is.na(BIOMASS),   BIOMASS := 0]
+  stratmeanData[is.na(ABUNDANCE), ABUNDANCE := 0]
 
   #Calculate total number of stations per year
   data.table::setkey(stratmeanData, strat, YEAR)
@@ -70,23 +70,23 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   #Calculate weight per tow and number per tow
   data.table::setkey(stratmeanData, group, strat, YEAR)
 
-  stratmeanData[, biomass.tow   := sum(BIO) / ntows, by = key(stratmeanData)]
-  stratmeanData[, abundance.tow := sum(NUM) / ntows, by = key(stratmeanData)]
+  stratmeanData[, biomass.tow   := sum(BIOMASS) / ntows, by = key(stratmeanData)]
+  stratmeanData[, abundance.tow := sum(ABUNDANCE) / ntows, by = key(stratmeanData)]
 
   #Calculated stratified means
   stratmeanData[, weighted.biomass   := biomass.tow   * W.h]
   stratmeanData[, weighted.abundance := abundance.tow * W.h]
 
   #Variance - need to account for zero catch
-  stratmeanData[, n.zero     := ntows - length(BIO), by = key(stratmeanData)]
+  stratmeanData[, n.zero     := ntows - length(BIOMASS), by = key(stratmeanData)]
 
   stratmeanData[, zero.var.b := n.zero * (0 - biomass.tow)^2]
-  stratmeanData[, vari.b := (BIO - biomass.tow)^2]
+  stratmeanData[, vari.b := (BIOMASS - biomass.tow)^2]
   stratmeanData[, Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1), by = key(stratmeanData)]
   stratmeanData[is.nan(Sh.2.b), Sh.2.b := 0]
 
   stratmeanData[, zero.var.a := n.zero * (0 - abundance.tow)^2]
-  stratmeanData[, vari.a := (NUM - abundance.tow)^2]
+  stratmeanData[, vari.a := (ABUNDANCE - abundance.tow)^2]
   stratmeanData[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = key(stratmeanData)]
   stratmeanData[is.nan(Sh.2.a), Sh.2.a := 0]
 
