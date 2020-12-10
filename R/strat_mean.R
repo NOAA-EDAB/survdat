@@ -139,6 +139,10 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   }
 
   data.table::setnames(stratmeanData, 'group', groupDescription)
-
+  
+  #Weird quirk with data.table needs this so the results will be displayed the
+  #first time you look at the R object
+  stratmeanData[]
+  
   return(stratmeanData)
 }
