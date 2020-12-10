@@ -33,7 +33,11 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
                         mergesexFlag = T, areaDescription, poststratFlag) {
 
   stratmeanData <- data.table::copy(prepData)
-
+  
+  #areaDescription may be NULL if passed from calc_stratified_mean so need to assign
+  #default within this function
+  if(is.null(areaDescription)) areaDescription <- 'STRATA'
+  
   #Remove length data if present
   data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
