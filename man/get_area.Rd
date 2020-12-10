@@ -4,7 +4,7 @@
 \alias{get_area}
 \title{Generate a table of stratum areas}
 \usage{
-get_area(stratum, col.name, crs = crs)
+get_area(areaPolygon, areaDescription)
 }
 \arguments{
 \item{stratum}{sf object. Name of the object containing the shapefile.}
