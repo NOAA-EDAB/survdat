@@ -42,7 +42,7 @@ calc_stratified_mean <- function(surveyData, areaPolygon = NULL,
                                  areaDescription = NULL, filterByArea = "all", 
                                  filterBySeason, groupDescription = "SVSPP", 
                                  filterByGroup = "all", mergesexFlag = T, 
-                                 q = NULL, a =0.0384, tidy = F) {
+                                 tidy = F) {
 
   # Use original stratified design and built-in shapefile
   if(is.null(areaPolygon)) poststratFlag <- F else poststratFlag <- T
