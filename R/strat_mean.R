@@ -98,7 +98,7 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
 
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
 
-  stratmeanData <- merge(stratified, N, by = 'YEAR')
+  stratmeanData <- merge(stratmeanData, N, by = 'YEAR')
 
   #Stratified mean
   setkey(stratmeanData, group, YEAR)
