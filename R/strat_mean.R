@@ -124,9 +124,9 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
 
   #Delete extra rows/columns
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
-  stratmeanData <- stratmeanData.means[, list(YEAR, group, CATCHSEX, N, 
-                                              strat.biomass, biomass.var, biomass.SE, 
-                                              strat.abund, abund.var, abund.SE)]
+  stratmeanData <- stratmeanData[, list(YEAR, group, CATCHSEX, N, strat.biomass, 
+                                        biomass.var, biomass.SE, strat.abund, 
+                                        abund.var, abund.SE)]
   if(mergesexFlag == T) stratmeanData[, CATCHSEX := NULL]
 
   if(mergesexFlag == F){
