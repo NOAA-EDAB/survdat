@@ -134,7 +134,7 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
 
   #merge with survdat
   data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW)
-  survdat <- merge(survdat, catch, by = key(survdat))
+  survdat <- merge(survdat, catch, by = data.table::key(survdat))
 
 
 
