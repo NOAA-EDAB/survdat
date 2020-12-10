@@ -17,7 +17,7 @@
 #'@export
 
 
-strat_prep <- function (survdata, areaPolygon = NULL, areaDescription = NULL,
+strat_prep <- function (surveyData, areaPolygon = NULL, areaDescription = NULL,
                         filterByArea = "all", filterBySeason = "all") {
   
   # Calculate the proportional areas
