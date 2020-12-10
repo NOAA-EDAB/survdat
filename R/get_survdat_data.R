@@ -194,6 +194,10 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
     survdat <- survdatConv$survdat
   }
 
+  #Convert number fields from chr to num
+  numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
+  survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols]
+  
   return(list(survdat=survdat,sql=sql))
 
 }
