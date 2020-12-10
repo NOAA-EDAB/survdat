@@ -2,7 +2,7 @@
 #'
 #' Calculates the biomass
 #'
-#' @param data Data frame. Survey data pull from svdbs with applied conversion factors
+#' @param surveyData Data frame. Survey data pull from svdbs with applied conversion factors
 #' @param areaPolygon sf object. Defining the areas by which to estimate biomass.
 #' @param areaDescription Character string. The name of the column in areaPolygon that describes the area (eg. "EPU","STRATA")
 #' @param filterByArea Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea} (Default = "all")
@@ -41,7 +41,7 @@
 calc_stratified_mean <- function(surveyData, areaPolygon = NULL, 
                                  areaDescription = NULL, filterByArea = "all", 
                                  filterBySeason, groupDescription = "SVSPP", 
-                                 filterByGroup = "all", filterBySex = "all", 
+                                 filterByGroup = "all", mergesexFlag = T, 
                                  q = NULL, a =0.0384, tidy = F) {
 
   # Use original stratified design and built-in shapefile
