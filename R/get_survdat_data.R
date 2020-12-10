@@ -103,11 +103,8 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
                                and (SHG <= 136 and cruise6 <= 200900)
                                or (TOGA <= 1324 and cruise6 > 200900)
                                order by cruise6, station", sep='')
-
-    # pull data
-    station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
-
-  } else if(shg.check == F){
+  } 
+  if(shg.check == F){
     station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
                          decdeg_beglat as lat, decdeg_beglon as lon,
                          begin_est_towdate as est_towdate, avgdepth as depth,
@@ -115,10 +112,10 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
                          from UNION_FSCS_SVSTA
                          where cruise6 in (", cruise6, ")
                          order by cruise6, station", sep='')
-    # pull data
-    station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
   }
-
+  # pull data
+  station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
+  
   data.table::setkey(station, CRUISE6, SVVESSEL)
   #merge cruise and station
   survdat <- merge(cruise, station)
