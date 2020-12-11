@@ -45,7 +45,9 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
                                  tidy = F) {
 
   # Use original stratified design and built-in shapefile
-  if(areaPolygon == 'NEFSC strata') poststratFlag <- F else poststratFlag <- T
+  if(!is(areaPolygon, 'sf')){
+    if(areaPolygon == 'NEFSC strata') poststratFlag <- F
+  } else poststratFlag <- T
   
   #Run stratification prep
   message("Prepping data ...")

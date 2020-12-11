@@ -22,17 +22,21 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
                         filterBySeason = "all") {
   
   # Calculate the proportional areas
-  # Use original stratified design and built-in shapefile
-  if(areaPolygon == 'NEFSC strata'){
-    areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp", 
-                                                 package = "survdat"), quiet = T)
-  }
+  # Use original stratified design and built-in shapefile or flag for post 
+  # stratification
+  if(!is(areaPolygon, 'sf')){
+    if(areaPolygon == 'NEFSC strata'){
+      areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp", 
+                                                   package = "survdat"), quiet = T)
+      poststratFlag <- F
+    }
+  } else poststratFlag <- T
   
   # Calculate area of the polygons
   polygonArea <- survdat::get_area(areaPolygon, areaDescription)
   
   # post stratify if necessary
-  if(areaPolygon != 'NEFSC strata'){
+  if(poststratFlag){
     message("Post stratifying ...")
     surveyData <- survdat::post_strat(surveyData, areaPolygon, areaDescription)
   } else {
