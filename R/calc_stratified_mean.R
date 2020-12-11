@@ -38,14 +38,14 @@
 #' @export
 
 
-calc_stratified_mean <- function(surveyData, areaPolygon = NULL, 
-                                 areaDescription = NULL, filterByArea = "all", 
+calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata', 
+                                 areaDescription = 'STRATA', filterByArea = "all", 
                                  filterBySeason, groupDescription = "SVSPP", 
                                  filterByGroup = "all", mergesexFlag = T, 
                                  tidy = F) {
 
   # Use original stratified design and built-in shapefile
-  if(is.null(areaPolygon)) poststratFlag <- F else poststratFlag <- T
+  if(areaPolygon == 'NEFSC strata') poststratFlag <- F else poststratFlag <- T
   
   #Run stratification prep
   message("Prepping data ...")
