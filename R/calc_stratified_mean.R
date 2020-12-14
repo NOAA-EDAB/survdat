@@ -57,11 +57,27 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
   #Pick up here...
-  stratGroupMean <- survdat::strat_mean(prepData, groupDescription, filterByGroup,
-                                        mergesexFlag, areaDescription, poststratFlag)
+  stratmeanData <- survdat::strat_mean(prepData, groupDescription, filterByGroup,
+                                       mergesexFlag, areaDescription, poststratFlag)
 
   # create tidy data
-
-  return(stratGroupMean)
+  if(tidy){
+    message("Tidying data  ...")
+    tidyData <- data.table::melt.data.table(stratmeanData, id.vars = c('YEAR', 
+                                                                       'SVSPP'),
+                                            measure.vars = c('strat.biomass', 
+                                                             'biomass.var',
+                                                             'strat.abund',
+                                                             'abund.var'))
+    tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
+    tidyData[variable == 'biomass.var',   units := '(kg tow^-1)^2']
+    tidyData[variable == 'strat.abund',   units := 'number']
+    tidyData[variable == 'abund.var',     units := 'numbers^2']
+    stratmeanData <- tidyData
+  }
+  
+  stratmeanData[]
+  
+  return(stratmeanData)
 }
 
