@@ -56,6 +56,33 @@ calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
                                          q = q, areaDescription = areaDescription, 
                                          groupDescription = groupDescription)
     
+    #create tidy data set
+    if(tidy){
+        message("Tidying data  ...")
+        tidyData <- data.table::melt.data.table(sweptareaData, id.vars = c('YEAR', 
+                                                                           'SVSPP'),
+                                                measure.vars = c('strat.biomass', 
+                                                                 'biomass.var',
+                                                                 'strat.abund',
+                                                                 'abund.var',
+                                                                 'tot.biomass',
+                                                                 'tot.bio.var',
+                                                                 'tot.abundance',
+                                                                 'tot.abund.var'))
+        tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
+        tidyData[variable == 'biomass.var',   units := '(kg tow^-1)^2']
+        tidyData[variable == 'strat.abund',   units := 'number']
+        tidyData[variable == 'abund.var',     units := 'numbers^2']
+        tidyData[variable == 'tot.biomass',   units := 'kg']
+        tidyData[variable == 'tot.bio.var',   units := 'kg^2']
+        tidyData[variable == 'tot.abundance', units := 'number']
+        tidyData[variable == 'tot.abund.var', units := 'numbers^2']
+        
+        sweptareaData <- tidyData
+    }
+    
+    sweptareaData[]
+    
     return(sweptareaData)
 }
     
