@@ -42,7 +42,7 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
                                  areaDescription = 'STRATA', filterByArea = "all", 
                                  filterBySeason, groupDescription = "SVSPP", 
                                  filterByGroup = "all", mergesexFlag = T, 
-                                 tidy = F) {
+                                 tidy = F, returnPrepData = F) {
 
   # Use original stratified design and built-in shapefile
   if(!is(areaPolygon, 'sf')){
@@ -77,6 +77,9 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
   }
   
   stratmeanData[]
+  
+  if(returnPrepData) stratmeanData <- list(stratmeanData = stratmeanData, 
+                                           prepData = prepData)
   
   return(stratmeanData)
 }
