@@ -44,14 +44,20 @@ calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
                             tidy = F) {
     
     #Run stratified mean
-    calc_stratified_mean(surveyData, areaPolygon, areaDescription, filterByArea,
-                         filterBySeason, groupDescription, filterByGroup, 
-                         mergesexFlag)
+    stratmeanData <- calc_stratified_mean(surveyData, areaPolygon, areaDescription, 
+                                          filterByArea, filterBySeason, 
+                                          groupDescription, filterByGroup, 
+                                          mergesexFlag, returnPrepData = T)
     
     #Calculate total biomass/abundance estimates
     message("Calculating Swept Area Estimate  ...")
-    sweptareaData <- survdat::swept_area(survdat=survdatPrep, stratmean=stratGroupMean,
-                                         q = q, strat.col = areaDescription)
+    sweptareaData <- survdat::swept_area(prepData = stratmeanData$prepData, 
+                                         stratmeanData = stratmeanData$stratmeanData,
+                                         q = q, areaDescription = areaDescription, 
+                                         groupDescription = groupDescription)
+    
+    return(sweptareaData)
+}
     
     
     
