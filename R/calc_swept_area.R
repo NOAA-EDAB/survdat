@@ -41,7 +41,7 @@ calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
                             areaDescription = 'STRATA', filterByArea = "all", 
                             filterBySeason, groupDescription = "SVSPP", 
                             filterByGroup = "all", mergesexFlag = T, 
-                            tidy = F) {
+                            tidy = F, q = NULL, a = 0.0384) {
     
     #Run stratified mean
     stratmeanData <- calc_stratified_mean(surveyData, areaPolygon, areaDescription, 
