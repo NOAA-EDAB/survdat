@@ -1,22 +1,12 @@
 #' Calculate swept area biomass
 #'
 #' Calculates the biomass
-#'
-#' @param surveyData Data frame. Survey data pull from svdbs with applied conversion factors
-#' @param areaPolygon sf object. Defining the areas by which to estimate biomass.
-#' @param areaDescription Character string. The name of the column in areaPolygon that describes the area (eg. "EPU","STRATA")
-#' @param filterByArea Character Vector. Vecor of area names. Names found in the \code{areaPolygon} in \code{areaDescription} Column. Biomass estimates will be aggregated over all areas specified in \code{filterByArea} (Default = "all")
-#' @param filterBySeason Character Vector. Vector of season names. Names found in the SEASON column of \code{data}
-#' @param species Character Vector. Vector of species SVSPP codes.
-#' @param merge.sex Boolean. Merge sexed species such as dogfish. (Default = T)
-#' @param poststrat Boolean. Indicating whether the original strata design was
-#'used or not.  Changes the calculation for variance. (Default = F)
-#' @param q Table of survey catchability with a column of group names and a column of
-#'catchabilities.  If not provided, assumes a q of 1 for each group (Minimum swept area
-#'estimates).
-#' @param a The average swept area of the trawl.  Default value is the swept area of a
-#'standard NOAA Ship Albatross IV tow.
-#' @param tidy Boolean. Return output in long format (Default = F)
+#' @inheritParams strat_prep
+#' @inheritParams strat_mean
+#' @param tidy Boolean. Return output in long format (Default = F).
+#' @param returnPrepData Boolean. Return both \code{stratmeanData} and \code{prepData}
+#'   as a list object. The default (F) returns only the \code{stratmeanData} as a
+#'   \code{data.table}.
 #'
 #' @return
 #'

@@ -5,9 +5,9 @@
 #'
 #'@family Survdat
 #'
-#'@param stratum sf object. Name of the object containing the shapefile.
-#'@param col.name Character String. Column name from \code{stratum} that contains the strata designations.
-#'@param crs Character string. Specifiy the coordinate refernce system.
+#'@param areaPolygon sf object. Name of the object containing the shapefile.
+#'@param areaDescription Character String. Column name from \code{areaPolygon} 
+#'                       that contains the strata designations.
 #'
 #'@return Returns a data.table (nx2).
 #'
