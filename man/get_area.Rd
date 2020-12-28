@@ -7,11 +7,10 @@
 get_area(areaPolygon, areaDescription)
 }
 \arguments{
-\item{stratum}{sf object. Name of the object containing the shapefile.}
+\item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{col.name}{Character String. Column name from \code{stratum} that contains the strata designations.}
-
-\item{crs}{Character string. Specifiy the coordinate refernce system.}
+\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+that contains the strata designations.}
 }
 \value{
 Returns a data.table (nx2).
