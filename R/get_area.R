@@ -33,7 +33,7 @@ get_area <- function(areaPolygon, areaDescription){
 
   strata <- areaPolygon %>%
     as.data.frame() %>%
-    dplyr::select(all_of(areaDescription)) %>%
+    dplyr::select(areaDescription) %>%
     dplyr::rename(STRATUM = areaDescription) %>%
     cbind(.,Area) %>%
     data.table::as.data.table()
