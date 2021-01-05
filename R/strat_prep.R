@@ -49,7 +49,7 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
   }
   
   #FilterData
-  if(filterByArea != "all" | filterBySeason != "all") message("Filtering data ...")
+  if(filterByArea[1] != "all" | filterBySeason[1] != "all") message("Filtering data ...")
   
   if(filterBySeason == 'all') filterBySeason <- c('FALL', 'SPRING')
   
