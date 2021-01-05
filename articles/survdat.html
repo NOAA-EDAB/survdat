@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -65,7 +65,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/NOAA-EDAB/survdat/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,8 +79,7 @@
 
       
 
-      </header><script src="survdat_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="survdat_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="survdat_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="survdat_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Usage</h1>
@@ -99,7 +98,7 @@
 <h2 class="hasAnchor">
 <a href="#connect-to-the-database" class="anchor"></a>Connect to the database</h2>
 <p>Once you are granted permission to access the database and have Oracle’s instant Client installed you can make a connection as follows:</p>
-<p><code>channel &lt;- dbutils::connect_to_database(server="sole",uid="yourUsername")</code></p>
+<p><code>channel &lt;- dbutils::connect_to_database(server="servername",uid="yourUsername")</code></p>
 <p><code>channel</code> is an object inherited from the DBIConnection-class. This object is passed as an argument to functions in <code>survdat</code></p>
 </div>
 <div id="pull-data" class="section level2">
