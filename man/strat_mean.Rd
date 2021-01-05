@@ -10,7 +10,7 @@ strat_mean(
   group.col = "SVSPP",
   merge.sex = T,
   sex.col = "CATCHSEX",
-  strat.col = "REGION",
+  strat.col = "STRATUM",
   poststrat = F,
   nsta.col = "ntows",
   area.wgt = "W.h",

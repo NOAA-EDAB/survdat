@@ -50,7 +50,6 @@
 #-------------------------------------------------------------------------------
 #User parameters
 
-#channel <- dbutils::connect_to_database("sole","abeet")
 get_survdat_clam_data <- function(channel,
                                   shg.check=T,
                                   clam.only=T,

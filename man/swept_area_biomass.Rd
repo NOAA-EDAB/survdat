@@ -6,7 +6,7 @@
 \usage{
 swept_area_biomass(
   data,
-  areaPolygon,
+  areaPolygon = NULL,
   areaDescription,
   filterByArea = "all",
   filterBySeason,
@@ -14,7 +14,6 @@ swept_area_biomass(
  
     crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0",
   merge.sex = T,
-  poststrat = F,
   q = NULL,
   a = 0.0384,
   tidy = F
@@ -35,9 +34,6 @@ swept_area_biomass(
 
 \item{merge.sex}{Boolean. Merge sexed species such as dogfish. (Default = T)}
 
-\item{poststrat}{Boolean. Indicating whether the original strata design was
-used or not.  Changes the calculation for variance. (Default = F)}
-
 \item{q}{Table of survey catchability with a column of group names and a column of
 catchabilities.  If not provided, assumes a q of 1 for each group (Minimum swept area
 estimates).}
@@ -46,6 +42,9 @@ estimates).}
 standard NOAA Ship Albatross IV tow.}
 
 \item{tidy}{Boolean. Return output in long format (Default = F)}
+
+\item{poststrat}{Boolean. Indicating whether the original strata design was
+used or not.  Changes the calculation for variance. (Default = F)}
 }
 \value{
 
