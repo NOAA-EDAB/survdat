@@ -171,13 +171,13 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
     bio <- bio[!STRATUM %like% 'YT', ]
 
     # fix bugs in SVDBS for character sex values
-    bio[SEX %in% c("M","m"), SEX :=1L]
-    bio[SEX %in% c("F","f"), SEX :=2L]
+    bio[SEX %in% c("M","m"), SEX := 1]
+    bio[SEX %in% c("F","f"), SEX := 2]
 
     #Fix catch sex prior to 2001
-    bio[is.na(CATCHSEX), CATCHSEX := 0L]
-    bio[SVSPP %in% c(15, 301) & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1L]
-    bio[SVSPP %in% c(15, 301) & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2L]
+    bio[is.na(CATCHSEX), CATCHSEX := 0]
+    bio[SVSPP %in% c('015', '301') & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1]
+    bio[SVSPP %in% c('015', '301') & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2]
 
     data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
