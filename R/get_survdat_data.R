@@ -103,11 +103,8 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
                                and (SHG <= 136 and cruise6 <= 200900)
                                or (TOGA <= 1324 and cruise6 > 200900)
                                order by cruise6, station", sep='')
-
-    # pull data
-    station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
-
-  } else if(shg.check == F){
+  } 
+  if(shg.check == F){
     station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
                          decdeg_beglat as lat, decdeg_beglon as lon,
                          begin_est_towdate as est_towdate, avgdepth as depth,
@@ -115,10 +112,10 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
                          from UNION_FSCS_SVSTA
                          where cruise6 in (", cruise6, ")
                          order by cruise6, station", sep='')
-    # pull data
-    station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
   }
-
+  # pull data
+  station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
+  
   data.table::setkey(station, CRUISE6, SVVESSEL)
   #merge cruise and station
   survdat <- merge(cruise, station)
@@ -137,7 +134,7 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
 
   #merge with survdat
   data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW)
-  survdat <- merge(survdat, catch, by = key(survdat))
+  survdat <- merge(survdat, catch, by = data.table::key(survdat))
 
 
 
@@ -174,13 +171,13 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
     bio <- bio[!STRATUM %like% 'YT', ]
 
     # fix bugs in SVDBS for character sex values
-    bio[SEX %in% c("M","m"), SEX :=1L]
-    bio[SEX %in% c("F","f"), SEX :=2L]
+    bio[SEX %in% c("M","m"), SEX := 1]
+    bio[SEX %in% c("F","f"), SEX := 2]
 
     #Fix catch sex prior to 2001
-    bio[is.na(CATCHSEX), CATCHSEX := 0L]
-    bio[SVSPP %in% c(15, 301) & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1L]
-    bio[SVSPP %in% c(15, 301) & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2L]
+    bio[is.na(CATCHSEX), CATCHSEX := 0]
+    bio[SVSPP %in% c('015', '301') & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1]
+    bio[SVSPP %in% c('015', '301') & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2]
 
     data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
@@ -197,6 +194,10 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
     survdat <- survdatConv$survdat
   }
 
+  #Convert number fields from chr to num
+  numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
+  survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols]
+  
   return(list(survdat=survdat,sql=sql))
 
 }

@@ -13,11 +13,11 @@
 #'estimates).
 #'@param a The average swept area of the trawl.  Default value is the swept area of a
 #'standard NOAA Ship Albatross IV tow.
-#'@param strat.col Column of survdat containing strata designations.
-#'@param group.col Column of survdat upon which the totals are based (i.e. SVSPP).
+#'@param areaDescription Column of survdat containing strata designations.
+#'@param groupDescription Column of survdat upon which the totals are based (i.e. SVSPP).
 #'
 #'@return Returns a table with the estimates of total biomass and abundance as well as
-#'the stratified mean biomass and abundance for each group indicated by the group.col
+#'the stratified mean biomass and abundance for each group indicated by the groupDescription
 #'parameter.  In addition, the variance of the totals and variance and standard error
 #'for both means are provided.
 #'
@@ -26,27 +26,28 @@
 #'@export
 
 
-swept_area <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, group.col = 'SVSPP') {
+swept_area <- function (prepData, stratmeanData, q = NULL, a = 0.0384, 
+                        areaDescription, groupDescription = 'SVSPP') {
   #This is necessary to break the link with the original data table
-  stratprep.x  <- data.table::copy(survdat)
-  stratmean.x  <- data.table::copy(stratmean)
+  prepData.x  <- data.table::copy(prepData)
+  stratmeanData.x  <- data.table::copy(stratmeanData)
 
   #Calculate A (Total area)
-  data.table::setnames(stratprep.x, c(strat.col, "Area"),
+  data.table::setnames(prepData.x, c(areaDescription, "Area"),
            c('STRAT', 'S.AREA'))
 
-  data.table::setkey(stratprep.x, YEAR, STRAT)
-  stratum <- unique(stratprep.x, by = key(stratprep.x))
+  data.table::setkey(prepData.x, YEAR, STRAT)
+  stratum <- unique(prepData.x, by = key(prepData.x))
   stratum <- stratum[, sum(S.AREA, na.rm = T), by = 'YEAR']
   data.table::setnames(stratum, "V1", "A")
 
   #Merge A
-  swept.area <- base::merge(stratmean.x, stratum, by = 'YEAR')
+  swept.area <- base::merge(stratmeanData.x, stratum, by = 'YEAR')
 
   #Merge q
-  if(is.null(q)) q <- data.table::data.table(groups = unique(swept.area[, get(group.col)]), q = 1)
-  data.table::setnames(q, names(q), c(group.col, 'q'))
-  swept.area <- base::merge(swept.area, q, by = group.col, all.x = T)
+  if(is.null(q)) q <- data.table::data.table(groups = unique(swept.area[, get(groupDescription)]), q = 1)
+  data.table::setnames(q, names(q), c(groupDescription, 'q'))
+  swept.area <- base::merge(swept.area, q, by = groupDescription, all.x = T)
   swept.area[is.na(q), q := 1]
 
   #Calculate swept area biomass
@@ -64,14 +65,14 @@ swept_area <- function (survdat, stratmean, q = NULL, a = 0.0384, strat.col, gro
 
   #remove extra columns - need to add sex column if stratmean object does not have one
   #then remove before output
-  if(length(which(names(stratmean.x) == 'sex')) == 0) swept.area[, sex := 0]
-  swept.area <- swept.area[, list(YEAR, get(group.col), sex, N,
+  if(length(which(names(stratmeanData.x) == 'sex')) == 0) swept.area[, sex := 0]
+  swept.area <- swept.area[, list(YEAR, get(groupDescription), sex, N,
                                   strat.biomass, biomass.var,   biomass.SE,
                                   strat.abund,   abund.var,     abund.SE,
                                   tot.biomass,   tot.bio.var,   tot.bio.SE,
                                   tot.abundance, tot.abund.var, tot.abund.SE)]
-  data.table::setnames(swept.area, 'V2', group.col)
-  if(length(which(names(stratmean.x) == 'sex')) == 0) swept.area[, sex := NULL]
+  data.table::setnames(swept.area, 'V2', groupDescription)
+  if(length(which(names(stratmeanData.x) == 'sex')) == 0) swept.area[, sex := NULL]
 
   swept.area <- swept.area %>% units::drop_units()
 

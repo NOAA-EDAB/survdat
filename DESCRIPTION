@@ -19,7 +19,6 @@ Description: A collection of functions for use with NEFSC survey data.  Function
 URL: https://github.com/NOAA-EDAB/survdat
 BugReports: https://github.com/NOAA-EDAB/survdat/issues
 Imports: 
-    rgdal,
     data.table,
     here,
     DBI,
@@ -32,9 +31,8 @@ Imports:
     ggplot2
 Remotes:
     andybeet/dbutils
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-
