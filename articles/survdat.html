@@ -61,6 +61,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -110,41 +113,34 @@
 <pre><code>data &lt;- get_survdat_data(channel, bio=TRUE)</code></pre>
 <p><code>data</code> is a list of 2 elements. The data pull and the set of sql statements made to pull the data</p>
 </div>
+<div id="plot-the-shapefiles" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plot-the-shapefiles" class="anchor"></a>Plot the shapefiles</h2>
+<p>Two shape files are included in the package, <code>strata.shp</code> and <code>EPU.shp</code></p>
+<p>To read and plot the <code>EPU.shp</code> file:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">areaPolygon</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"EPU.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
+<span class="fu"><a href="../reference/plot_shapefile.html">plot_shapefile</a></span><span class="op">(</span><span class="va">areaPolygon</span><span class="op">)</span></code></pre></div>
+<p><img src="survdat_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+</div>
+<div id="stratified-mean" class="section level2">
+<h2 class="hasAnchor">
+<a href="#stratified-mean" class="anchor"></a>Stratified Mean</h2>
+</div>
 <div id="swept-area-biomass" class="section level2">
 <h2 class="hasAnchor">
 <a href="#swept-area-biomass" class="anchor"></a>Swept area biomass</h2>
-<p>Swept area biomass is estimated for particular regions of interest. These regions are specified via shapefiles. Two shape files are included in the package, <code>strata.shp</code> and <code>EPU.shp</code></p>
-<p>All shapefiles are required to be an sf (<a href="https://r-spatial.github.io/sf/index.html">simple features</a>) object. To read in the <code>EPU.shp</code> file:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html">st_read</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"EPU.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
-<span class="va">area</span>
-<span class="co">#&gt; Simple feature collection with 4 features and 15 fields</span>
-<span class="co">#&gt; geometry type:  POLYGON</span>
-<span class="co">#&gt; dimension:      XY</span>
-<span class="co">#&gt; bbox:           xmin: -335938.5 ymin: -431253.3 xmax: 495019.5 ymax: 479069.2</span>
-<span class="co">#&gt; projected CRS:  North_America_Lambert_Conformal_Conic</span>
-<span class="co">#&gt;   FID_MAB_fu ID GRIDCODE FID_GoM_fu ID_1 GRIDCODE_1 FID_SS_ful ID_12 GRIDCODE_2</span>
-<span class="co">#&gt; 1          0  4        4         -1    0          0         -1     0          0</span>
-<span class="co">#&gt; 2         -1  0        0          0    2          7         -1     0          0</span>
-<span class="co">#&gt; 3         -1  0        0         -1    0          0          0     1          6</span>
-<span class="co">#&gt; 4         -1  0        0         -1    0          0         -1     0          0</span>
-<span class="co">#&gt;   FID_GB_ful ID_12_13 GRIDCODE_3 EPU Shape_Leng  Shape_Area</span>
-<span class="co">#&gt; 1         -1        0          0 MAB    2352719 88136085839</span>
-<span class="co">#&gt; 2         -1        0          0 GOM    1240777 53932445554</span>
-<span class="co">#&gt; 3         -1        0          0  SS    1169825 25498577991</span>
-<span class="co">#&gt; 4          0        3          5  GB    1231414 49147394228</span>
-<span class="co">#&gt;                         geometry</span>
-<span class="co">#&gt; 1 POLYGON ((118236 122711.5, ...</span>
-<span class="co">#&gt; 2 POLYGON ((350083.7 217668.7...</span>
-<span class="co">#&gt; 3 POLYGON ((469008.1 189996.5...</span>
-<span class="co">#&gt; 4 POLYGON ((469008.1 189996.5...</span>
-
-<span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">area</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Blue"</span>,alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></code></pre></div>
-<p><img src="survdat_files/figure-html/epus-1.png" width="700"></p>
-<p>To calculate swept area biomass for any one of these regions, say Georges Bank:</p>
-<p><code><a href="../reference/swept_area_biomass.html">swept_area_biomass(data=data$survdat,areaPolygon=area,areaDescription="EPU",filterByArea="GB")</a></code></p>
+<p>Swept area biomass is estimated for particular regions of interest. These regions are specified via shape files.</p>
+<p>All shapefiles are required to be an sf (<a href="https://r-spatial.github.io/sf/index.html">simple features</a>) object.</p>
+<ul>
+<li>To calculate swept area biomass for any one of these regions, say Georges Bank in the Spring:</li>
+</ul>
+<p><code><a href="../reference/calc_swept_area.html">calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING")</a></code></p>
 <p>The <code>filterByArea</code> value should be one of the values found in the <code>areaDescription</code> field of the shapefile</p>
+<ul>
+<li>To return the values in TIDY format add the tidy=T argument:</li>
+</ul>
+<p><code><a href="../reference/calc_swept_area.html">calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING",tidy=T)</a></code></p>
 <p>To visualize the overlap of the survey data and the regions, first define a coordinate reference system (crs) in which to project both the points and the shapefile. Convert the LAT and LON coordinates to the WGS84 reference ellipsoid (crs = 4326)</p>
 <pre><code>crs &lt;- 4326
 points &lt;- sf::st_as_sf(data$survdat,coords=("LON","LAT"), crs=crs)
