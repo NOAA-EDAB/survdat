@@ -134,7 +134,7 @@
 
     <pre class="usage"><span class='fu'>swept_area_biomass</span><span class='op'>(</span>
   <span class='va'>data</span>,
-  <span class='va'>areaPolygon</span>,
+  areaPolygon <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>areaDescription</span>,
   filterByArea <span class='op'>=</span> <span class='st'>"all"</span>,
   <span class='va'>filterBySeason</span>,
@@ -142,7 +142,6 @@
  
     crs <span class='op'>=</span> <span class='st'>"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"</span>,
   merge.sex <span class='op'>=</span> <span class='cn'>T</span>,
-  poststrat <span class='op'>=</span> <span class='cn'>F</span>,
   q <span class='op'>=</span> <span class='cn'>NULL</span>,
   a <span class='op'>=</span> <span class='fl'>0.0384</span>,
   tidy <span class='op'>=</span> <span class='cn'>F</span>
@@ -180,11 +179,6 @@
       <td><p>Boolean. Merge sexed species such as dogfish. (Default = T)</p></td>
     </tr>
     <tr>
-      <th>poststrat</th>
-      <td><p>Boolean. Indicating whether the original strata design was
-used or not.  Changes the calculation for variance. (Default = F)</p></td>
-    </tr>
-    <tr>
       <th>q</th>
       <td><p>Table of survey catchability with a column of group names and a column of
 catchabilities.  If not provided, assumes a q of 1 for each group (Minimum swept area
@@ -198,6 +192,11 @@ standard NOAA Ship Albatross IV tow.</p></td>
     <tr>
       <th>tidy</th>
       <td><p>Boolean. Return output in long format (Default = F)</p></td>
+    </tr>
+    <tr>
+      <th>poststrat</th>
+      <td><p>Boolean. Indicating whether the original strata design was
+used or not.  Changes the calculation for variance. (Default = F)</p></td>
     </tr>
     </table>
 
