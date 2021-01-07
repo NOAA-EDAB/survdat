@@ -24,7 +24,7 @@ Extract a list of conversion factors from the SVDBS SURVAN_CONVERSION_FACTORS ta
 }
 \section{Reference}{
 
-Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations#'
+Use the data dictionary for field name explanations
 }
 
 \examples{

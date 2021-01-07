@@ -17,6 +17,6 @@ plot_shapefile <- function(polygons,crs=4269) {
     ggplot2::geom_sf(data=polygons,color = "Grey",alpha = .5)
 
   print(p)
-  return(p)
+  #return(p)
 
 }

@@ -19,7 +19,8 @@
 #'The default sql statement "\code{select * from svdbs.svspecies_list}" is used
 #'
 #'@section Reference:
-#'Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations.
+#'Use the data dictionary for field name explanations
+#'
 #'Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
 #'
 #' @seealso \code{\link{connect_to_database}}

@@ -29,7 +29,8 @@ Extract a list of speices names, code, market category, etc from the SVDBS SVSPE
 }
 \section{Reference}{
 
-Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations.
+Use the data dictionary for field name explanations
+
 Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
 }
 

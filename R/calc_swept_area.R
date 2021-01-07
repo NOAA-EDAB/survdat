@@ -1,14 +1,14 @@
 #' Calculate swept area biomass
 #'
-#' Calculates the biomass
+#' Calculates the biomass. Details found here ...
 #'
 #' @inheritParams calc_stratified_mean
 #' @param q Data frame. Table of survey catchabilities with a column corresponding
-#'  to \code{groupDescription} and a column of catchabilities.  If NULL, assumes 
+#'  to \code{groupDescription} and a column of catchabilities.  If NULL, assumes
 #'  a \code{q} of 1 for each \code{groupDescription} (Minimum swept area estimates).
-#' @param a Numeric. The average swept area of the trawl.  Default value is the 
+#' @param a Numeric. The average swept area of the trawl.  Default value is the
 #'  swept area of a standard NOAA Ship Albatross IV tow.
-#' 
+#'
 #' @return
 #'
 #'
@@ -28,31 +28,31 @@
 #'
 #' @export
 
-calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata', 
-                            areaDescription = 'STRATA', filterByArea = "all", 
-                            filterBySeason, groupDescription = "SVSPP", 
-                            filterByGroup = "all", mergesexFlag = T, 
+calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
+                            areaDescription = 'STRATA', filterByArea = "all",
+                            filterBySeason, groupDescription = "SVSPP",
+                            filterByGroup = "all", mergesexFlag = T,
                             tidy = F, q = NULL, a = 0.0384) {
-    
+
     #Run stratified mean
-    stratmeanData <- calc_stratified_mean(surveyData, areaPolygon, areaDescription, 
-                                          filterByArea, filterBySeason, 
-                                          groupDescription, filterByGroup, 
+    stratmeanData <- calc_stratified_mean(surveyData, areaPolygon, areaDescription,
+                                          filterByArea, filterBySeason,
+                                          groupDescription, filterByGroup,
                                           mergesexFlag, returnPrepData = T)
-    
+
     #Calculate total biomass/abundance estimates
     message("Calculating Swept Area Estimate  ...")
-    sweptareaData <- survdat::swept_area(prepData = stratmeanData$prepData, 
+    sweptareaData <- survdat::swept_area(prepData = stratmeanData$prepData,
                                          stratmeanData = stratmeanData$stratmeanData,
-                                         q = q, areaDescription = areaDescription, 
+                                         q = q, areaDescription = areaDescription,
                                          groupDescription = groupDescription)
-    
+
     #create tidy data set
     if(tidy){
         message("Tidying data  ...")
-        tidyData <- data.table::melt.data.table(sweptareaData, id.vars = c('YEAR', 
+        tidyData <- data.table::melt.data.table(sweptareaData, id.vars = c('YEAR',
                                                                            'SVSPP'),
-                                                measure.vars = c('strat.biomass', 
+                                                measure.vars = c('strat.biomass',
                                                                  'biomass.var',
                                                                  'strat.abund',
                                                                  'abund.var',
@@ -68,18 +68,17 @@ calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
         tidyData[variable == 'tot.bio.var',   units := 'kg^2']
         tidyData[variable == 'tot.abundance', units := 'number']
         tidyData[variable == 'tot.abund.var', units := 'numbers^2']
-        
+
         sweptareaData <- tidyData
     }
-    
+
     sweptareaData[]
-    
+
     return(sweptareaData)
 }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+

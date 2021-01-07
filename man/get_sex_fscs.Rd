@@ -24,7 +24,7 @@ Extract a list of sex codes and descriptions from the SVDBS FSCS_SEX_CODES table
 }
 \section{Reference}{
 
-Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations#'
+Use the data dictionary for field name explanations
 }
 
 \examples{

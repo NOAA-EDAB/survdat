@@ -19,7 +19,8 @@
 #'The default sql statement "\code{select * from svdbs.svspecies_list}" is used
 #'
 #'@section Reference:
-#'Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations.
+#'Use the data dictionary for field name explanations
+#'
 #'
 #' @seealso \code{\link[dbutils]{connect_to_database}}
 #'

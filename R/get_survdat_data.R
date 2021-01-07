@@ -12,7 +12,7 @@
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 #'
-#' The data frame (Description taken from Data dictionary \url{http://nova.nefsc.noaa.gov/datadict/})
+#' The data frame (Descriptions taken from NEFSC Data dictionary)
 #'
 #' \item{CRUISE6}{Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)}
 #' \item{STATION}{Unique sequential order in which stations have been completed. Hangups and short tows each receive a non-repeated consecutive number.}
@@ -103,7 +103,7 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
                                and (SHG <= 136 and cruise6 <= 200900)
                                or (TOGA <= 1324 and cruise6 > 200900)
                                order by cruise6, station", sep='')
-  } 
+  }
   if(shg.check == F){
     station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
                          decdeg_beglat as lat, decdeg_beglon as lon,
@@ -115,7 +115,7 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
   }
   # pull data
   station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
-  
+
   data.table::setkey(station, CRUISE6, SVVESSEL)
   #merge cruise and station
   survdat <- merge(cruise, station)
@@ -197,7 +197,7 @@ get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=
   #Convert number fields from chr to num
   numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
   survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols]
-  
+
   return(list(survdat=survdat,sql=sql))
 
 }

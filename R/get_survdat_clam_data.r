@@ -10,7 +10,7 @@
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 #'
-#' The data frame (Description taken from Data dictionary \url{http://nova.nefsc.noaa.gov/datadict/})
+#' The data frame (Descriptions taken from NEFSC Data dictionary)
 #'
 #' \item{clam.region}{One of 7 identified Regions, 'SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB'}
 #' \item{CRUISE6}{Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)}

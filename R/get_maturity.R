@@ -15,7 +15,8 @@
 #'   \item{colNames}{a vector of the table's column names}
 #'
 #'@section Reference:
-#'Use the data dictionary (\url{http://nova.nefsc.noaa.gov/datadict/}) for field name explanations#'
+#'Use the data dictionary for field name explanations
+#'
 #' @seealso \code{\link[dbutils]{connect_to_database}}
 #'
 #' @examples

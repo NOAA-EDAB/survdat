@@ -1,6 +1,7 @@
-#' Calculate swept area biomass
+#' Calculate stratified mean
 #'
-#' Calculates the biomass
+#' Calculates the stratified mean. Details of method found here ...
+#'
 #' @inheritParams strat_prep
 #' @inheritParams strat_mean
 #' @param tidy Boolean. Return output in long format (Default = F).
@@ -28,17 +29,17 @@
 #' @export
 
 
-calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata', 
-                                 areaDescription = 'STRATA', filterByArea = "all", 
-                                 filterBySeason, groupDescription = "SVSPP", 
-                                 filterByGroup = "all", mergesexFlag = T, 
+calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
+                                 areaDescription = 'STRATA', filterByArea = "all",
+                                 filterBySeason, groupDescription = "SVSPP",
+                                 filterByGroup = "all", mergesexFlag = T,
                                  tidy = F, returnPrepData = F) {
 
   # Use original stratified design and built-in shapefile
   if(!is(areaPolygon, 'sf')){
     if(areaPolygon == 'NEFSC strata') poststratFlag <- F
   } else poststratFlag <- T
-  
+
   #Run stratification prep
   message("Prepping data ...")
   prepData <- survdat::strat_prep(surveyData, areaPolygon, areaDescription,
@@ -53,9 +54,9 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
   # create tidy data
   if(tidy){
     message("Tidying data  ...")
-    tidyData <- data.table::melt.data.table(stratmeanData, id.vars = c('YEAR', 
+    tidyData <- data.table::melt.data.table(stratmeanData, id.vars = c('YEAR',
                                                                        'SVSPP'),
-                                            measure.vars = c('strat.biomass', 
+                                            measure.vars = c('strat.biomass',
                                                              'biomass.var',
                                                              'strat.abund',
                                                              'abund.var'))
@@ -65,12 +66,12 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
     tidyData[variable == 'abund.var',     units := 'numbers^2']
     stratmeanData <- tidyData
   }
-  
+
   stratmeanData[]
-  
-  if(returnPrepData) stratmeanData <- list(stratmeanData = stratmeanData, 
+
+  if(returnPrepData) stratmeanData <- list(stratmeanData = stratmeanData,
                                            prepData = prepData)
-  
+
   return(stratmeanData)
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_stratified_mean.R
 \name{calc_stratified_mean}
 \alias{calc_stratified_mean}
-\title{Calculate swept area biomass}
+\title{Calculate stratified mean}
 \usage{
 calc_stratified_mean(
   surveyData,
@@ -49,7 +49,7 @@ as a list object. The default (F) returns only the \code{stratmeanData} as a
 
 }
 \description{
-Calculates the biomass
+Calculates the stratified mean. Details of method found here ...
 }
 \examples{
 \dontrun{
