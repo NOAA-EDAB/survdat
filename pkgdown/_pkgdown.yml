@@ -1,23 +1,26 @@
 url: https://noaa-edab.github.io/survdat/
 
 reference:
-- title: "Estimating Biomass"
-  desc: "Main function for estimating swept area biomass"
+- title: "Estimation"
+  desc: "Main functions for estimating swept area biomass and stratified mean"
 - contents:
-  - swept_area_biomass
+  - calc_swept_area
+  - calc_stratified_mean
 - title: "Intermediate Functions"
-  desc: "Functions used in estimation of biomass"
+  desc: "Functions used in estimation"
 - contents:
   - get_area
   - post_strat
   - strat_prep
   - strat_mean
   - swept_area
+  - apply_conversion_factors
 - title: "Get Data"
   desc: "Functions that pull data from the SVDBS database"
 - contents:
   - get_survdat_data
-  - apply_conversion_factors
+  - get_survdat_clam_data
+  - get_cruise_purpose
   - get_maturity
   - get_species
   - get_strata
@@ -38,5 +41,6 @@ reference:
   - stratprep
   - sweptarea
   - getarea
+  - swept_area_biomass
 
 

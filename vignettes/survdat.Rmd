@@ -42,25 +42,40 @@ data <- get_survdat_data(channel, bio=TRUE)
 
 `data` is a list of 2 elements. The data pull and the set of sql statements made to pull the data
 
-## Swept area biomass
 
-Swept area biomass is estimated for particular regions of interest. These regions are specified via shapefiles. Two shape files are included in the package, `strata.shp` and `EPU.shp`
+## Plot the shapefiles
 
-All shapefiles are required to be an sf ([simple features](https://r-spatial.github.io/sf/index.html)) object. To read in the `EPU.shp` file:
+Two shape files are included in the package, `strata.shp` and `EPU.shp`
 
-```{r epus}
-area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"), quiet=T)
-area
+To read and plot the `EPU.shp` file:
 
-ggplot2::ggplot(data=area) +
-  ggplot2::geom_sf(color = "Blue",alpha = .5)
+``` {r}
+areaPolygon <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"), quiet=T)
+plot_shapefile(areaPolygon)
+
 ```
 
-To calculate swept area biomass for any one of these regions, say Georges Bank:
 
-``` swept_area_biomass(data=data$survdat,areaPolygon=area,areaDescription="EPU",filterByArea="GB") ```
+## Stratified Mean
+
+
+
+## Swept area biomass
+
+Swept area biomass is estimated for particular regions of interest. These regions are specified via shape files. 
+
+All shapefiles are required to be an sf ([simple features](https://r-spatial.github.io/sf/index.html)) object. 
+
+
+* To calculate swept area biomass for any one of these regions, say Georges Bank in the Spring:
+
+``` calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING") ```
 
 The `filterByArea` value should be one of the values found in the `areaDescription` field of the shapefile
+
+* To return the values in TIDY format add the tidy=T argument:
+
+``` calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING",tidy=T) ```
 
 To visualize the overlap of the survey data and the regions, first define a coordinate reference system (crs) in which to project both the points and the shapefile. Convert the LAT and LON coordinates to the WGS84 reference ellipsoid (crs = 4326)
 
