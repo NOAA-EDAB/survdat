@@ -5,3 +5,4 @@
 #folders
 other
 testing
+^data-raw$
