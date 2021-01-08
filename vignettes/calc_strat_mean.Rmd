@@ -10,7 +10,9 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 6, 
+  fig.height = 4
 )
 
 library(diagram)
@@ -22,13 +24,13 @@ The `get_survdat_data` function will query the NEFSC survey database (SVSDBS) an
 
 To facilitate the calculation of these stratified means, the `survdat` package has the function `calc_stratified_mean`.  This function is actually a wrapper of several intermediate functions.
 
-```{r functions}
+```{r functions, echo = FALSE, fig.cap = "Subfunction and data flow for the `calc_stratified_mean` function."}
 par(mar = rep(1, 4))
 openplotmat(main = '')
 pos <- coordinates(c(5, 5, 5, 5))
 
 #Arrows
-apos <- 0.65
+apos <- 0.75
 #Boxes
 text_size <- 0.7
 edge      <- 0.07
@@ -43,15 +45,15 @@ straightarrow(from = pos[1, ], to = pos[2, ]  - c(0.06, 0), arr.pos = apos)
 straightarrow(from = pos[2, ], to = pos[3, ]  - c(0.06, 0), arr.pos = apos)
 straightarrow(from = pos[3, ], to = pos[4, ]  - c(0.06, 0), arr.pos = apos)
 straightarrow(from = pos[4, ], to = pos[5, ]  - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[5, ], to = pos[10, ] - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[5, ], to = pos[10, ],              arr.pos = apos)
 
 #Polygon/area flow
 straightarrow(from = pos[12, ], to = pos[13, ] - c(0.06, 0), arr.pos = apos)
 straightarrow(from = pos[13, ], to = pos[14, ] - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[14, ], to = pos[3, ] - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[14, ], to = pos[3, ]  - c(0, 0.06), arr.pos = apos)
 
 #Optional post stratify
-straightarrow(from = pos[2, ],  to = pos[7, ] - c(0, 0.06), arr.pos = apos, lty = 3)
+straightarrow(from = pos[2, ],  to = pos[7, ],              arr.pos = apos, lty = 3)
 straightarrow(from = pos[12, ], to = pos[7, ] - c(0, 0.06), arr.pos = apos, lty = 3)
 straightarrow(from = pos[7, ],  to = pos[8, ] - c(0.06, 0), arr.pos = apos, lty = 3)
 straightarrow(from = pos[8, ],  to = pos[3, ] - c(0, 0.06), arr.pos = apos, lty = 3)
