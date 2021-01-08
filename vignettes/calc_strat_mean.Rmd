@@ -1,0 +1,103 @@
+---
+title: "Calculating stratified mean biomass/abundance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Calculating stratified mean biomass/abundance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(diagram)
+```
+
+The `survdat` package is designed to work with the Northeast Fisheries Science Center's (NEFSC) bottom trawl surveys. The NEFSC has been conducting standardized bottom trawl surveys in the fall since 1963 and spring since 1968.  The surveys follow a stratified random design.  Fish species and several invertebrate species are enumerated on a tow by tow basis [@Azarovitz_1981]. The data are housed in the NEFSC's survey database (SVDBS) maintained by the Ecosystem Survey Branch.
+
+The `get_survdat_data` function will query the NEFSC survey database (SVSDBS) and apply the appropriate calibration factors associated with gear or vessel differences throughout the time series.  However, end users are usually interested in more derived estimates of biomass or abundance that the tow by tow data retrieved via `get_survdat_data`. The stratified random design of the survey allows for the calculation of a stratified mean biomass or abundance for a species or group of species.
+
+To facilitate the calculation of these stratified means, the `survdat` package has the function `calc_stratified_mean`.  This function is actually a wrapper of several intermediate functions.
+
+```{r functions}
+par(mar = rep(1, 4))
+openplotmat(main = '')
+pos <- coordinates(c(5, 5, 5, 5))
+
+#Arrows
+apos <- 0.65
+#Boxes
+text_size <- 0.7
+edge      <- 0.07
+
+#Colors
+data.col <- 'grey'
+fun.col <- 'light grey'
+obj.col <- 'white'
+
+#Main Flow
+straightarrow(from = pos[1, ], to = pos[2, ]  - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[2, ], to = pos[3, ]  - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[3, ], to = pos[4, ]  - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[4, ], to = pos[5, ]  - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[5, ], to = pos[10, ] - c(0.06, 0), arr.pos = apos)
+
+#Polygon/area flow
+straightarrow(from = pos[12, ], to = pos[13, ] - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[13, ], to = pos[14, ] - c(0.06, 0), arr.pos = apos)
+straightarrow(from = pos[14, ], to = pos[3, ] - c(0.06, 0), arr.pos = apos)
+
+#Optional post stratify
+straightarrow(from = pos[2, ],  to = pos[7, ] - c(0, 0.06), arr.pos = apos, lty = 3)
+straightarrow(from = pos[12, ], to = pos[7, ] - c(0, 0.06), arr.pos = apos, lty = 3)
+straightarrow(from = pos[7, ],  to = pos[8, ] - c(0.06, 0), arr.pos = apos, lty = 3)
+straightarrow(from = pos[8, ],  to = pos[3, ] - c(0, 0.06), arr.pos = apos, lty = 3)
+
+#Boxes
+#Functions
+textrect(mid = pos[1, ],  radx = edge, rady = edge, lab = 'get_survdat\n_data',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+textrect(mid = pos[3, ],  radx = edge, rady = edge, lab = 'strat_prep',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+textrect(mid = pos[5, ],  radx = edge, rady = edge, lab = 'strat_mean',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+textrect(mid = pos[7, ],  radx = edge, rady = edge, lab = 'post_strat',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+textrect(mid = pos[13, ], radx = edge, rady = edge, lab = 'get_area',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+
+#Data objects
+textround(mid = pos[2, ],  radx = edge - .08, rady = edge, lab = 'survdat', 
+          cex = text_size, shadow.size = 0, box.col = data.col)
+textround(mid = pos[12, ], radx = edge - .08, rady = edge, lab = 'areaPolygon',
+          cex = text_size, shadow.size = 0, box.col = data.col)
+
+#R Objects
+texthexa(mid = pos[4, ],  radx = edge, rady = edge, lab = 'prepData',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+texthexa(mid = pos[8, ],  radx = edge, rady = edge, lab = 'poststratData',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+texthexa(mid = pos[10, ], radx = edge, rady = edge, lab = 'stratmeanData',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+texthexa(mid = pos[14, ], radx = edge, rady = edge, lab = 'strataArea',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+
+#Legend
+straightarrow(from = pos[16, ] + c(0, 0.04) - c(0.08, 0), to = pos[16, ] + c(0, 0.04), lty = 1, arr.pos = 1)
+straightarrow(from = pos[16, ] - c(0.08, 0.04), to = pos[16, ] - c(0, 0.04), lty = 3, arr.pos = 1)
+textempty(mid = pos[16, ] + c(0, 0.04), lab = 'primary \npathway', cex = text_size)
+textempty(mid = pos[16, ] - c(0, 0.04) + c(0, 0), lab = 'optional \npathway', cex = text_size)
+textround(mid = pos[17, ], radx = 0.02, rady = 0.04, lab = 'data',
+         cex = text_size, shadow.size = 0, box.col = data.col)
+textrect(mid = pos[18, ], radx = 0.04, rady = 0.04, lab = 'function',
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+texthexa(mid = pos[19, ], radx = 0.04, rady = 0.04, lab = 'R object',
+         cex = text_size, shadow.size = 0, box.col = obj.col)
+```
+
+
+
+
