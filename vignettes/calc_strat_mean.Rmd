@@ -24,10 +24,10 @@ The `get_survdat_data` function will query the NEFSC survey database (SVSDBS) an
 
 To facilitate the calculation of these stratified means, the `survdat` package has the function `calc_stratified_mean`.  This function is actually a wrapper of several intermediate functions.
 
-```{r functions, echo = FALSE, fig.cap = "Subfunctions and data flow for the `calc_stratified_mean` function."}
+```{r functions, echo = FALSE, fig.cap = "Work flow of the `calc_stratified_mean` function with associated intermediate functions."}
 par(mar = rep(1, 4))
 openplotmat(main = '')
-pos <- coordinates(c(4, 4, 4, 4))
+pos <- coordinates(c(5, 5, 5, 5))
 
 #Arrows
 apos <- 0.75
@@ -39,64 +39,73 @@ edge      <- 0.07
 data.col <- 'grey'
 fun.col <- 'light grey'
 obj.col <- 'white'
+big.col <- 'grey'
 
 #Main Flow
-straightarrow(from = pos[1, ], to = pos[2, ]  - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[2, ], to = pos[3, ]  - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[3, ], to = pos[4, ]  - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[4, ], to = pos[8, ],               arr.pos = apos)
+straightarrow(from = pos[1, ] - c(0, 0.04), to = pos[2, ] - c(0.06, 0.04), 
+              arr.pos = apos)
+straightarrow(from = pos[8, ],  to = pos[9, ]  - c(0.04, 0), arr.pos = apos)
+straightarrow(from = pos[9, ],  to = pos[10, ] - c(0.04, 0), arr.pos = apos)
+straightarrow(from = pos[10, ], to = pos[15, ], arr.pos = apos)
+
+#Strata_prep box in background
+textrect(mid = pos[7, ] + c(0.095, 0),  radx = .18, rady = .32, lab = '', 
+         shadow.size = 0, box.col = big.col)
+text(pos[2, ][1], pos[2, ][2], 'strat_prep', cex = text_size)
 
 #Polygon/area flow
-straightarrow(from = pos[9, ], to = pos[10, ]  - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[10, ], to = pos[11, ] - c(0.06, 0), arr.pos = apos)
-straightarrow(from = pos[11, ], to = pos[2, ]  - c(0, 0.06), arr.pos = apos)
+bentarrow(from = pos[11, ] + c(0, 0.14), to = pos[12, ] + c(0, 0.01))
+straightarrow(from = pos[12, ] + c(0, 0.01), to = pos[13, ] + c(-0.04, 0.01), 
+              arr.pos = apos)
 
 #Optional post stratify
-straightarrow(from = pos[1, ], to = pos[5, ],              arr.pos = apos, lty = 3)
-straightarrow(from = pos[9, ], to = pos[5, ] - c(0, 0.06), arr.pos = apos, lty = 3)
-straightarrow(from = pos[5, ], to = pos[6, ] - c(0.06, 0), arr.pos = apos, lty = 3)
-straightarrow(from = pos[6, ], to = pos[2, ] - c(0, 0.06), arr.pos = apos, lty = 3)
+bentarrow (from = pos[1, ]  - c(0, 0.06), to = pos[7, ] + c(0, 0.05),  
+           path = 'H', lty = 3)
+bentarrow (from = pos[11, ] + c(0, 0.16), to = pos[7, ] + c(0, 0.05),  
+           path = 'H', lty = 3)
+straightarrow(from = pos[7, ] + c(0, 0.05), to = pos[8, ] + c(-0.04, 0.05), 
+              arr.pos = apos, lty = 3)
 
 #Boxes
 #Functions
-textrect(mid = pos[2, ],  radx = edge, rady = edge, lab = 'strat_prep',   
+textrect(mid = pos[10, ], radx = edge, rady = edge, lab = 'strat_mean',   
          cex = text_size, shadow.size = 0, box.col = fun.col)
-textrect(mid = pos[4, ],  radx = edge, rady = edge, lab = 'strat_mean',   
+textrect(mid = pos[7, ]  + c(0, 0.05), radx = edge, rady = edge, lab = 'post_strat',   
          cex = text_size, shadow.size = 0, box.col = fun.col)
-textrect(mid = pos[5, ],  radx = edge, rady = edge, lab = 'post_strat',   
-         cex = text_size, shadow.size = 0, box.col = fun.col)
-textrect(mid = pos[10, ], radx = edge, rady = edge, lab = 'get_area',   
+textrect(mid = pos[12, ] + c(0, 0.01), radx = edge, rady = edge, lab = 'get_area',   
          cex = text_size, shadow.size = 0, box.col = fun.col)
 
 #Data objects
-textround(mid = pos[1, ], radx = edge - .08, rady = edge, lab = 'survdat', 
-          cex = text_size, shadow.size = 0, box.col = data.col)
-textround(mid = pos[9, ], radx = edge - .08, rady = edge, lab = 'areaPolygon',
-          cex = text_size, shadow.size = 0, box.col = data.col)
+textround(mid = pos[1, ] - c(0, 0.05), radx = edge - .08, rady = edge, 
+          lab = 'survdat', cex = text_size, shadow.size = 0, box.col = data.col)
+textround(mid = pos[11, ] + c(0, 0.15), radx = edge - .08, rady = edge, 
+          lab = 'areaPolygon', cex = text_size, shadow.size = 0, box.col = data.col)
 
 #R Objects
-texthexa(mid = pos[3, ],  radx = edge, rady = edge, lab = 'prepData',
+texthexa(mid = pos[9, ], radx = edge, rady = edge, lab = 'prepData',
           cex = text_size, shadow.size = 0, box.col = obj.col)
-texthexa(mid = pos[6, ],  radx = edge, rady = edge, lab = 'poststratData',
+texthexa(mid = pos[8, ] + c(0, 0.05),  radx = edge, rady = edge, lab = 'poststratData',
           cex = text_size, shadow.size = 0, box.col = obj.col)
-texthexa(mid = pos[8, ],  radx = edge, rady = edge, lab = 'stratmeanData',
+texthexa(mid = pos[15, ], radx = edge, rady = edge, lab = 'stratmeanData',
           cex = text_size, shadow.size = 0, box.col = obj.col)
-texthexa(mid = pos[11, ], radx = edge, rady = edge, lab = 'strataArea',
+texthexa(mid = pos[13, ] + c(0, 0.01), radx = edge, rady = edge, lab = 'strataArea',
           cex = text_size, shadow.size = 0, box.col = obj.col)
 
 #Legend
-straightarrow(from = pos[13, ] + c(0, 0.04) - c(0.08, 0), to = pos[13, ] + c(0, 0.04), lty = 1, arr.pos = 1)
-straightarrow(from = pos[13, ] - c(0.08, 0.04), to = pos[13, ] - c(0, 0.04), lty = 3, arr.pos = 1)
-textempty(mid = pos[13, ] + c(0, 0.04), lab = 'primary \npathway', cex = text_size)
-textempty(mid = pos[13, ] - c(0, 0.04) + c(0, 0), lab = 'optional \npathway', cex = text_size)
-textround(mid = pos[14, ], radx = 0.02, rady = 0.04, lab = 'data',
+straightarrow(from = pos[16, ] + c(0, 0.04) - c(0.08, 0), 
+              to   = pos[16, ] + c(0, 0.04), lty = 1, arr.pos = 1)
+straightarrow(from = pos[16, ] - c(0.08, 0.04), 
+              to   = pos[16, ] - c(0, 0.04), lty = 3, arr.pos = 1)
+textempty(mid = pos[16, ] + c(0, 0.04), lab = 'primary \npathway', cex = text_size)
+textempty(mid = pos[16, ] - c(0, 0.04) + c(0, 0), lab = 'optional \npathway', cex = text_size)
+textround(mid = pos[17, ], radx = 0.02, rady = 0.04, lab = 'data',
          cex = text_size, shadow.size = 0, box.col = data.col)
-textrect(mid = pos[15, ], radx = 0.04, rady = 0.04, lab = 'function',
+textrect(mid = pos[18, ], radx = 0.04, rady = 0.04, lab = 'function',
          cex = text_size, shadow.size = 0, box.col = fun.col)
-texthexa(mid = pos[16, ], radx = 0.05, rady = 0.04, lab = 'R object',
+texthexa(mid = pos[19, ], radx = 0.05, rady = 0.04, lab = 'R object',
          cex = text_size, shadow.size = 0, box.col = obj.col)
 ```
 
-
+The first function that is called is `strat_prep`.  As the name implies, `strat_prep` does some of the leg work necessary to calculate the stratified means.  Nested within `strat_prep` is the `post_strat` and `get_area` functions.
 
 
