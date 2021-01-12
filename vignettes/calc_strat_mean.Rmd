@@ -1,0 +1,226 @@
+---
+title: "Calculating stratified mean biomass/abundance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Calculating stratified mean biomass/abundance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6, 
+  fig.height = 4
+)
+
+library(diagram)
+```
+
+## Background
+
+The `survdat` package is designed to work with the Northeast Fisheries Science Center's (NEFSC) bottom trawl surveys. The NEFSC has been conducting standardized bottom trawl surveys in the fall since 1963 and spring since 1968.  The surveys follow a stratified random design.  Fish species and several invertebrate species are enumerated on a tow by tow basis [@Azarovitz_1981]. The data are housed in the NEFSC's survey database (SVDBS) maintained by the Ecosystem Survey Branch.
+
+The `get_survdat_data` function will query the NEFSC survey database (SVSDBS) and apply the appropriate calibration factors associated with gear or vessel differences throughout the time series.  However, end users are usually interested in more derived estimates of biomass or abundance that the tow by tow data retrieved via `get_survdat_data`. The stratified random design of the survey allows for the calculation of a stratified mean biomass or abundance for a species or group of species.
+
+To facilitate the calculation of these stratified means, the `survdat` package has the function `calc_stratified_mean`.  This function is actually a wrapper of several intermediate functions.
+
+```{r functions, echo = FALSE, fig.cap = "Work flow of the `calc_stratified_mean` function with associated intermediate functions."}
+par(mar = rep(1, 4))
+openplotmat(main = '')
+pos <- coordinates(c(5, 5, 5, 5))
+
+#Arrows
+apos <- 0.75
+#Boxes
+text_size <- 0.7
+edge      <- 0.07
+
+#Colors
+data.col <- 'grey'
+fun.col <- 'light grey'
+obj.col <- 'white'
+big.col <- 'grey'
+
+#Main Flow
+straightarrow(from = pos[1, ] - c(0, 0.04), to = pos[2, ] - c(0.06, 0.04), 
+              arr.pos = apos)
+straightarrow(from = pos[8, ],  to = pos[9, ]  - c(0.04, 0), arr.pos = apos)
+straightarrow(from = pos[9, ],  to = pos[10, ] - c(0.04, 0), arr.pos = apos)
+straightarrow(from = pos[10, ], to = pos[15, ], arr.pos = apos)
+
+#Strata_prep box in background
+textrect(mid = pos[7, ] + c(0.095, 0),  radx = .18, rady = .32, lab = '', 
+         shadow.size = 0, box.col = big.col)
+text(pos[2, ][1], pos[2, ][2], 'strat_prep', cex = text_size)
+
+#Polygon/area flow
+bentarrow(from = pos[11, ] + c(0, 0.14), to = pos[12, ] + c(0, 0.01))
+straightarrow(from = pos[12, ] + c(0, 0.01), to = pos[13, ] + c(-0.04, 0.01), 
+              arr.pos = apos)
+
+#Optional post stratify
+bentarrow (from = pos[1, ]  - c(0, 0.06), to = pos[7, ] + c(0, 0.05),  
+           path = 'H', lty = 3)
+bentarrow (from = pos[11, ] + c(0, 0.16), to = pos[7, ] + c(0, 0.05),  
+           path = 'H', lty = 3)
+straightarrow(from = pos[7, ] + c(0, 0.05), to = pos[8, ] + c(-0.04, 0.05), 
+              arr.pos = apos, lty = 3)
+
+#Boxes
+#Functions
+textrect(mid = pos[10, ], radx = edge, rady = edge, lab = 'strat_mean',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+textrect(mid = pos[7, ]  + c(0, 0.05), radx = edge, rady = edge, lab = 'post_strat',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+textrect(mid = pos[12, ] + c(0, 0.01), radx = edge, rady = edge, lab = 'get_area',   
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+
+#Data objects
+textround(mid = pos[1, ] - c(0, 0.05), radx = edge - .08, rady = edge, 
+          lab = 'survdat', cex = text_size, shadow.size = 0, box.col = data.col)
+textround(mid = pos[11, ] + c(0, 0.15), radx = edge - .08, rady = edge, 
+          lab = 'areaPolygon', cex = text_size, shadow.size = 0, box.col = data.col)
+
+#R Objects
+texthexa(mid = pos[9, ], radx = edge, rady = edge, lab = 'prepData',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+texthexa(mid = pos[8, ] + c(0, 0.05),  radx = edge, rady = edge, lab = 'poststratData',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+texthexa(mid = pos[15, ], radx = edge, rady = edge, lab = 'stratmeanData',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+texthexa(mid = pos[13, ] + c(0, 0.01), radx = edge, rady = edge, lab = 'strataArea',
+          cex = text_size, shadow.size = 0, box.col = obj.col)
+
+#Legend
+straightarrow(from = pos[16, ] + c(0, 0.04) - c(0.08, 0), 
+              to   = pos[16, ] + c(0, 0.04), lty = 1, arr.pos = 1)
+straightarrow(from = pos[16, ] - c(0.08, 0.04), 
+              to   = pos[16, ] - c(0, 0.04), lty = 3, arr.pos = 1)
+textempty(mid = pos[16, ] + c(0, 0.04), lab = 'primary \npathway', cex = text_size)
+textempty(mid = pos[16, ] - c(0, 0.04) + c(0, 0), lab = 'optional \npathway', cex = text_size)
+textround(mid = pos[17, ], radx = 0.02, rady = 0.04, lab = 'data',
+         cex = text_size, shadow.size = 0, box.col = data.col)
+textrect(mid = pos[18, ], radx = 0.04, rady = 0.04, lab = 'function',
+         cex = text_size, shadow.size = 0, box.col = fun.col)
+texthexa(mid = pos[19, ], radx = 0.05, rady = 0.04, lab = 'R object',
+         cex = text_size, shadow.size = 0, box.col = obj.col)
+```
+
+## `strat_prep`
+
+The first function called is `strat_prep`.  As the name implies, `strat_prep` prepares the data set so that the stratified means can be calculated.  Nested within this function are the `post_strat` and `get_area` functions.  The `post_strat` function is used if not following the stratified design of the survey.  It is automatically called if the user inputs an `sf` object rather than the specified default *'NEFSC strata'*.  When this occurs, the R object `poststratData` generated by `post_strat` will replace the `survdat` data object and is ultimately passed through to the `prepData` object.  This will also turn on the `poststratFlag` which is used by the `strat_mean` function.
+
+At this point you can also filter the data using the `filterBySeason` or `filterByArea` arguments.  The first will allow you to select one of three options: *'FALL'*, *'SPRING'*, or *'all'*.  The default option is *'all'*.  Note that selecting both the spring and fall survey will combine the two surveys.  So if you want to have separate means for both surveys you need to run them independently.  The second filter will allow you to select a subset of strata to use in your analysis.
+
+The rest of the prep work done by `strat_prep` is counting the number of tows per strata and the proportional weight of the strata.  This adds the columns `ntows` and `W.h` to the data set.  The number of tows (`ntows`) is simply the length of unique station records per stratum:
+
+```{r ntows, eval = F}
+# Count the number of stations in each year for each Region
+  data.table::setkey(stations, YEAR, STRAT)
+  stations[, ntows := length(STATION), by = key(stations)]
+```
+
+Proportional weights of the strata are based on their area.  The area of the strata are calculated using the `get_area` function which uses a Lambert Conformal Conic projection.  The `get_area` function creates a list of strata and their corresponding areas (A) which `strat_prep` uses to calculate the relative weight (W) of each strata h as:
+
+\begin{equation}
+    \label{PropArea}
+    \begin{split}
+    W_h = \frac{A_h}{\sum{A_h}}
+\end{split}
+\end{equation}
+
+After counting the number of tows and calculating the relative weight of each strata, the resulting `prepData` is then passed to the `strat_mean` function.
+
+## `strat_mean`
+
+Once the data has been prepared using `strat_prep` the real calculations are carried out in the function `strat_mean`.  This function will remove duplicate catch records that may be present due to length data, merge sexed species (or leave separate if specified), calculate the total number of stations for the year, subset the species list if desired, and calculate the stratified mean biomass and adundance along with the associated variance.
+
+The first few actions are straightforward.  Length data is removed to ensure each catch is accounted for once.
+
+```{r remove lengths, eval = F}
+#Remove length data if present
+  data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+  stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
+```
+
+Similarly, catch from sexed species such as spiny dogfish are merged or kept separate.  The default is to merge them but a user may specify to keep them separate by setting the `mergesexFlag` to *FALSE*.  Sexed species are kept separate by changing their group designation to a concatenation of their group name and catch sex.
+
+```{r merge sex, eval = F}
+#Merge sex or keep separate
+  if(mergesexFlag == F) stratmeanData[, group := paste(group, CATCHSEX, sep = '')]
+
+  data.table::setkey(stratmeanData, CRUISE6, strat, STATION, group)
+  stratmeanData[, BIOMASS   := sum(BIOMASS),   by = key(stratmeanData)]
+  stratmeanData[, ABUNDANCE := sum(ABUNDANCE), by = key(stratmeanData)]
+  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+```
+
+The total number of tows per year is the sum of `ntows` for all of the strata sampled for a given year.  
+
+```{r sum tows, eval = F}
+#Calculate total number of stations per year
+  data.table::setkey(stratmeanData, strat, YEAR)
+  N <- unique(stratmeanData, by = key(stratmeanData))
+  N <- N[, sum(ntows), by = 'YEAR']
+  data.table::setnames(N, 'V1', 'N')
+```
+
+Species or group list can be subsetted using the `filterByGroup` argument.
+
+## Stratified mean and variance calculations
+
+Finally, the stratified mean biomass is calculated as:
+
+\begin{equation}
+    \label{Stratifed}
+    \bar{B} = \sum_{h = 1}^{L}{W_h\bar{B_h}}
+\end{equation}
+
+where $\bar{B}$ is the stratified mean biomass, $W_h$ and $\bar{B_h}$ the relative weight and mean biomass from stratum $h$, and $L$ the total number of strata.  $\bar{B_h}$ is calculated as:
+
+\begin{equation}
+    \label{mean biomass}
+    \bar{B_h} = \frac{\sum_{i = 1}^n{B_i}}{n_h}
+\end{equation}
+
+where $B_i$ is the biomass at station $i$ and $n_h$ the number of stations in stratum $h$.
+
+Additionally, variance is calculated as:
+
+\begin{equation}
+    \label{stratified variance}
+    s_{\bar{B}}^2 = \sum_{h = 1}^L{\frac{W_{h}^{2} s_{h}^{2}}{n_{h}}}
+\end{equation}
+
+where $s_{\bar{B}}^2$ is the variance of the stratified mean biomass and $s_h^2$ the variance of the mean for stratum $h$.  $s_h^2$ is calculated as:
+
+\begin{equation}
+    \label{strata variance}
+    s_h^2 = \frac{{(B_i - \bar{B_h})}^2}{n_h - 1}
+\end{equation}
+
+If the `poststratFlag` was set to *TRUE* because a different stratification was used rather than the survey design, the variance calculation becomes:
+
+\begin{equation}
+    \label{penalty variance}
+    s_{\bar{B}}^2 = \frac{\sum_{h = 1}^L{s_{h}^{2} W_h}}{N} + 
+                    \sum_{h = 1}^L{\frac{(1 - W_h)s_h^2}{N^2}}
+\end{equation}
+
+where $N$ is the total number of stations for the year.
+
+The final calculation for the `calc_stratified_mean` function is the standard error of the mean which is:
+
+\begin{equation}
+    \label{standard error}
+    s_{\bar{B}} = \sqrt{s_{\bar{B}}^2}
+\end{equation}
+
+Similar calculations are carried out for abundance with numbers replacing biomass in the equations above.
+
+## Tidy data
+
+The default output from the `calc_stratified_mean` function is a wide table with a row for every year/group combination.  You can elect a tidy format (long) instead by specifying the argument `tidy` = *TRUE*.  This will melt the table down so that each year/group combo will now have a seperate row for stratified mean biomass, stratified mean abundance, variance of the stratified mean biomass, and variance of the stratified mean abundance.  The tidy data will also append a units column to the data set.  The units for the stratified mean biomass is $kg tow^-1$ while the stratified mean abundance is $numbers tow^-1$.  Note that the tidy data set does not include the standard errors.
