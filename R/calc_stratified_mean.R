@@ -62,8 +62,8 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
                                                              'abund.var'))
     tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
     tidyData[variable == 'biomass.var',   units := '(kg tow^-1)^2']
-    tidyData[variable == 'strat.abund',   units := 'number']
-    tidyData[variable == 'abund.var',     units := 'numbers^2']
+    tidyData[variable == 'strat.abund',   units := 'number tow^-1']
+    tidyData[variable == 'abund.var',     units := '(numbers tow^-1)^2']
     stratmeanData <- tidyData
   }
 
