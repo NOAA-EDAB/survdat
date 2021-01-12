@@ -131,11 +131,11 @@ Proportional weights of the strata are based on their area.  The area of the str
 \end{split}
 \end{equation}
 
-After counting the number of tows and calculating the relative weight of each strata, the resulting `prepData` is then passed to the `stratMean` function.
+After counting the number of tows and calculating the relative weight of each strata, the resulting `prepData` is then passed to the `strat_mean` function.
 
 ## `strat_mean`
 
-One the data has been prepared using `strat_prep` the real calculations are carried out in the function `strat_mean`.  This function will remove duplicate catch records that may be present due to length data, merge sexed species (or leave separate if specified), calculate the total number of stations for the year, subset the species list if desired, and calculate the stratified mean biomass and adundance along with the associated variance.
+Once the data has been prepared using `strat_prep` the real calculations are carried out in the function `strat_mean`.  This function will remove duplicate catch records that may be present due to length data, merge sexed species (or leave separate if specified), calculate the total number of stations for the year, subset the species list if desired, and calculate the stratified mean biomass and adundance along with the associated variance.
 
 The first few actions are straightforward.  Length data is removed to ensure each catch is accounted for once.
 
@@ -146,7 +146,7 @@ The first few actions are straightforward.  Length data is removed to ensure eac
   stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
 ```
 
-Similarly, catch from sexed species such as spiny dogfish are merged or kept separate.  The default is to merge them but a user may specify to keep them separate by setting the `mergeSexFlag` to *FALSE*.  Sexed species are kept separate by changing their group designation to a concatenation of their group name and catch sex.
+Similarly, catch from sexed species such as spiny dogfish are merged or kept separate.  The default is to merge them but a user may specify to keep them separate by setting the `mergesexFlag` to *FALSE*.  Sexed species are kept separate by changing their group designation to a concatenation of their group name and catch sex.
 
 ```{r merge sex, eval = F}
 #Merge sex or keep separate
