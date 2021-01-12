@@ -135,4 +135,27 @@ After counting the number of tows and calculating the relative weight of each st
 
 ## `strat_mean`
 
+One the data has been prepared using `strat_prep` the real calculations are carried out in the function `strat_mean`.  This function will remove duplicate catch records that may be present due to length data, merge sexed species (or leave separate if specified), calculate the total number of stations for the year, subset the species list if desired, and calculate the stratified mean biomass and adundance along with the associated variance.
 
+The first few actions are straightforward.  Length data is removed to ensure each catch is accounted for once.
+
+```{r remove lengths, eval = F}
+#Remove length data if present
+  data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+  stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
+```
+
+Similarly, catch from sexed species such as spiny dogfish are merged or kept separate.  The default is to merge them but a user may specify to keep them separate by setting the `mergeSexFlag` to *FALSE*.  Sexed species are kept separate by changing their group designation to a concatenation of their group name and catch sex.
+
+```{r merge sex, eval = F}
+#Merge sex or keep separate
+  if(mergesexFlag == F) stratmeanData[, group := paste(group, CATCHSEX, sep = '')]
+
+  data.table::setkey(stratmeanData, CRUISE6, strat, STATION, group)
+  stratmeanData[, BIOMASS   := sum(BIOMASS),   by = key(stratmeanData)]
+  stratmeanData[, ABUNDANCE := sum(ABUNDANCE), by = key(stratmeanData)]
+  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+```
+
+Species or group list can be subsetted using the `filterByGroup` argument.
