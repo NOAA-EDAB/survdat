@@ -13,7 +13,7 @@ to communicate with the database engine. (see \code{\link{connect_to_database}})
 \value{
 A list is returned:
 
-  \item{data}{containing the result of the executed \code{$sql} statement}
+  \item{data}{containing the result of the executed \code{sql} statement}
 
   \item{sql}{containing the sql call}
 

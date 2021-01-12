@@ -11,7 +11,7 @@ post_strat(surveyData, areaPolygon, areaDescription, na.keep = F)
 
 \item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 
 \item{na.keep}{Boolean. Logical value to indicate whether original strata names 

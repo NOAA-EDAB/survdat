@@ -25,7 +25,7 @@ contains the groups (e.g. "SVSPP") on which the means are based.}
 
 \item{mergesexFlag}{Boolean. Logical value to merge sexed species such as dogfish.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 
 \item{poststratFlag}{Boolean. Logical value indicating whether the original 

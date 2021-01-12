@@ -9,7 +9,7 @@ get_area(areaPolygon, areaDescription)
 \arguments{
 \item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 }
 \value{
@@ -25,9 +25,18 @@ a survdat file.
 \section{Coordinate reference system (CRS)}{
 
 The deafult CRS is the Lambert Conformal Conic as is denoted by :
+
 "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 }
 
+\examples{
+\dontrun{
+#Find the area of each Stratum in the strata.shp shapefile (bundled with the package)
+area <- sf::st_read(dsn=system.file("extdata","strata.shp",package="survdat"))
+get_area(areaPolygon = area, areaDescription="STRATA")
+}
+
+}
 \seealso{
 Other Survdat: 
 \code{\link{post_strat}()},

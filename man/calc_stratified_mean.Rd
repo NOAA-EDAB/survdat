@@ -22,7 +22,7 @@ calc_stratified_mean(
 
 \item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 
 \item{filterByArea}{Numeric vector. Set of areas to subset from the 
