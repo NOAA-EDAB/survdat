@@ -44,13 +44,8 @@ associated variance and standard error.
 \seealso{
 Other Survdat: 
 \code{\link{get_area}()},
-\code{\link{getarea}()},
 \code{\link{post_strat}()},
-\code{\link{poststrat}()},
 \code{\link{strat_prep}()},
-\code{\link{stratmean}()},
-\code{\link{stratprep}()},
-\code{\link{swept_area}()},
-\code{\link{sweptarea}()}
+\code{\link{swept_area}()}
 }
 \concept{Survdat}
