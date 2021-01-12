@@ -20,6 +20,9 @@ reference:
 - contents:
   - get_survdat_data
   - get_survdat_clam_data
+- title: "Helper Functions"
+  desc: "Functions that pull supporting information from the SVDBS database"
+- contents:
   - get_cruise_purpose
   - get_maturity
   - get_species
@@ -33,14 +36,5 @@ reference:
 - contents:
   - plot_data_area
   - plot_shapefile
-- title: "Close to depreciation"
-  desc: "Will be depreciated soon"
-- contents:
-  - poststrat
-  - stratmean
-  - stratprep
-  - sweptarea
-  - getarea
-  - swept_area_biomass
 
 
