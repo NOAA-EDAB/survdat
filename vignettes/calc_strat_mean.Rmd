@@ -223,3 +223,4 @@ Similar calculations are carried out for abundance with numbers replacing biomas
 
 ## Tidy data
 
+The default output from the `calc_stratified_mean` function is a wide table with a row for every year/group combination.  You can elect a tidy format (long) instead by specifying the argument `tidy` = *TRUE*.  This will melt the table down so that each year/group combo will now have a seperate row for stratified mean biomass, stratified mean abundance, variance of the stratified mean biomass, and variance of the stratified mean abundance.  The tidy data will also append a units column to the data set.  The units for the stratified mean biomass is $kg tow^-1$ while the stratified mean abundance is $numbers tow^-1$.  Note that the tidy data set does not include the standard errors.
