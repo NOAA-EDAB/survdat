@@ -158,4 +158,68 @@ Similarly, catch from sexed species such as spiny dogfish are merged or kept sep
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
 ```
 
+The total number of tows per year is the sum of `ntows` for all of the strata sampled for a given year.  
+
+```{r sum tows, eval = F}
+#Calculate total number of stations per year
+  data.table::setkey(stratmeanData, strat, YEAR)
+  N <- unique(stratmeanData, by = key(stratmeanData))
+  N <- N[, sum(ntows), by = 'YEAR']
+  data.table::setnames(N, 'V1', 'N')
+```
+
 Species or group list can be subsetted using the `filterByGroup` argument.
+
+## Stratified mean and variance calculations
+
+Finally, the stratified mean biomass is calculated as:
+
+\begin{equation}
+    \label{Stratifed}
+    \bar{B} = \sum_{h = 1}^{L}{W_h\bar{B_h}}
+\end{equation}
+
+where $\bar{B}$ is the stratified mean biomass, $W_h$ and $\bar{B_h}$ the relative weight and mean biomass from stratum $h$, and $L$ the total number of strata.  $\bar{B_h}$ is calculated as:
+
+\begin{equation}
+    \label{mean biomass}
+    \bar{B_h} = \frac{\sum_{i = 1}^n{B_i}}{n_h}
+\end{equation}
+
+where $B_i$ is the biomass at station $i$ and $n_h$ the number of stations in stratum $h$.
+
+Additionally, variance is calculated as:
+
+\begin{equation}
+    \label{stratified variance}
+    s_{\bar{B}}^2 = \sum_{h = 1}^L{\frac{W_{h}^{2} s_{h}^{2}}{n_{h}}}
+\end{equation}
+
+where $s_{\bar{B}}^2$ is the variance of the stratified mean biomass and $s_h^2$ the variance of the mean for stratum $h$.  $s_h^2$ is calculated as:
+
+\begin{equation}
+    \label{strata variance}
+    s_h^2 = \frac{{(B_i - \bar{B_h})}^2}{n_h - 1}
+\end{equation}
+
+If the `poststratFlag` was set to *TRUE* because a different stratification was used rather than the survey design, the variance calculation becomes:
+
+\begin{equation}
+    \label{penalty variance}
+    s_{\bar{B}}^2 = \frac{\sum_{h = 1}^L{s_{h}^{2} W_h}}{N} + 
+                    \sum_{h = 1}^L{\frac{(1 - W_h)s_h^2}{N^2}}
+\end{equation}
+
+where $N$ is the total number of stations for the year.
+
+The final calculation for the `calc_stratified_mean` function is the standard error of the mean which is:
+
+\begin{equation}
+    \label{standard error}
+    s_{\bar{B}} = \sqrt{s_{\bar{B}}^2}
+\end{equation}
+
+Similar calculations are carried out for abundance with numbers replacing biomass in the equations above.
+
+## Tidy data
+
