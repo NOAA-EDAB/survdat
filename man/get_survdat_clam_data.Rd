@@ -51,5 +51,27 @@ The list of sql statements:
 \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
 }
 \description{
-Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA
+Connects to svdbs and pulls Clam & Quahog data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA.
+Pulls from Cruises with purpose code = 50. (See \code{\url{get_cruise_purpose}}). Data are assigned to one of 7 regions
+('SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB') and length-to-meat weight conversions applied
 }
+\examples{
+\dontrun{
+# Recommended use:
+channel <- dbutils::connect_to_database("serverName","userName")
+get_survdat_clam_data(channel)
+
+}
+
+}
+\seealso{
+Other survdat: 
+\code{\link{calc_stratified_mean}()},
+\code{\link{calc_swept_area}()},
+\code{\link{get_area}()},
+\code{\link{get_survdat_data}()},
+\code{\link{post_strat}()},
+\code{\link{strat_mean}()},
+\code{\link{swept_area}()}
+}
+\concept{survdat}

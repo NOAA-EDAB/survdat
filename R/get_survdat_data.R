@@ -9,7 +9,7 @@
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
 #' @param bio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
 #'
-#' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
+#' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data.
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 #'
 #' The data frame (Descriptions taken from NEFSC Data dictionary)
@@ -56,7 +56,19 @@
 #' \item{conversions}{Select conversion factors. Table = SURVAN_CONVERSION_FACTORS}
 #' \item{bio}{Select bio stats. Table = UNION_FSCS_SVBIO}
 #'
+#'@family survdat
 #'
+#'@examples
+#'\dontrun{
+#'# First create a connection object to the database
+#'channel <- dbutils::connect_to_database("serverName","userName")
+#'# pull survey data, applies conversion factors (Door, net, vessel) and join with
+#'# biological data to return individual sex, age, maturity, stomach data
+#'get_survdat_data(channel,conversion.factor = T, bio=T)
+#'
+#' # Same data pull without individual biological data
+#'get_survdat_data(channel,conversion.factor = T, bio=F)
+#'}
 #'
 #'@export
 

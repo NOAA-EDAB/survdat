@@ -11,17 +11,19 @@
 #'
 #' @return
 #'
+#'@family survdat
 #'
 #' @examples
 #' \dontrun{
-#' # pull data and apply conversion corrections
-#' data <- survdatData
+#' # Pull data and apply conversion corrections
+#' data <- get_survdat_data(channel)
+#' # Calculate swept area biomass for specific survey strata for the SPRING season
+#' calc_swept_area(data=data, filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING")
 #'
-#' # read in "strata" shapefile
-#' area <- sf::st_read(dsn = system.file("extdata","strata.shp",package="survdat"),quiet=T)
-#'
-#' # estimate swept area biomass in the SPRING in STRATA = 1220, 1240, 1260:1290,1360:1400 for species = 300:310
-#' swa <-swept_area_biomass(data=data, areaPolygon = area, areaDescription="STRATA", filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING", species=c(300:310))
+#' # Calculate stratified mean for area defined by EPU regions, for all seasons ("SPRING", "FALL") and return in Tidy format
+#' # Read in EPU shapefile (loaded as part of the package)
+#' area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"),quiet=T)
+#' calc_swept_area(data=data, areaPolygon=area, areaDescription="EPU", filterByArea="all",filterBySeason = "all",tidy=T)
 #'
 #' }
 #'

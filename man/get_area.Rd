@@ -19,8 +19,7 @@ Returns a data.table (nx2).
 \item{AREA}{The area of the STRATA in square kilometers}
 }
 \description{
-Calculates the area of a stratum from a shapefile.  Necessary if post stratifying
-a survdat file.
+Calculates the area of a polygon from a shapefile.
 }
 \section{Coordinate reference system (CRS)}{
 
@@ -38,10 +37,13 @@ get_area(areaPolygon = area, areaDescription="STRATA")
 
 }
 \seealso{
-Other Survdat: 
+Other survdat: 
+\code{\link{calc_stratified_mean}()},
+\code{\link{calc_swept_area}()},
+\code{\link{get_survdat_clam_data}()},
+\code{\link{get_survdat_data}()},
 \code{\link{post_strat}()},
 \code{\link{strat_mean}()},
-\code{\link{strat_prep}()},
 \code{\link{swept_area}()}
 }
-\concept{Survdat}
+\concept{survdat}

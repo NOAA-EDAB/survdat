@@ -20,25 +20,23 @@ strat_prep(
 \item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 
-\item{filterByArea}{Numeric vector. Set of areas to subset from the 
+\item{filterByArea}{Numeric vector. Set of areas to subset from the
 \code{areaDescription} of the \code{areaPolygon}.}
 
 \item{filterBySeason}{Character string. Which seasons of the \code{surveyData}
 should be included.  Choices include "SPRING", "FALL", or "all".}
 }
 \value{
-Returns a prepSurvey data object with added columns for the number of 
+Returns a prepSurvey data object with added columns for the number of
  tows (ntows) and stratum weights (W.h).
 }
 \description{
 Calculates the number of tows per strata and strata weight.  Run before
-subsetting the data by species of interest to ensure all stations are accounted.
+sub setting the data by species of interest to ensure all stations are accounted.
 }
-\seealso{
-Other Survdat: 
-\code{\link{get_area}()},
-\code{\link{post_strat}()},
-\code{\link{strat_mean}()},
-\code{\link{swept_area}()}
-}
-\concept{Survdat}
+\concept{survdat
+
+\@examples
+\dontrun{
+# Called internally
+}}

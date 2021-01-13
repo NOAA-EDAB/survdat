@@ -2,19 +2,20 @@
 #'
 #' Assign survey data (points, lat and lon) to designated regions (polygons) from a shape file.
 #'
-#' @family Survdat
 #'
 #' @inheritParams strat_prep
-#' @param na.keep Boolean. Logical value to indicate whether original strata names 
+#' @param na.keep Boolean. Logical value to indicate whether original strata names
 #'  should be retained.
 #'
-#' @return Returns a \code{surveyData} data.table with one additional column labeled 
+#' @return Returns a \code{surveyData} data.table with one additional column labeled
 #'  with the value of \code{areaDescription}
 #'
-#' \item{areaDescription}{The name of the region (found in \code{areaPolygon}) 
+#' \item{areaDescription}{The name of the region (found in \code{areaPolygon})
 #'  that a record in \code{surveyData} is assigned to}
 #'
 #' @importFrom magrittr "%>%"
+#'
+#'@family survdat
 #'
 #' @export
 
@@ -23,7 +24,7 @@ post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
 
   # transform Regional Shape file using lambert conformal conic coordinate ref system
   crs <- "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
-  
+
   areas <- areaPolygon %>%
     dplyr::rename(areaDescription = areaDescription) %>%
     sf::st_transform(., crs)
@@ -44,7 +45,7 @@ post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
     dplyr::arrange(CRUISE6, STRATUM, STATION)
 
   # Join survey data with stations (which now are assigned to an area based on the shape file)
-  master <- base::merge(surveyData, station_area, 
+  master <- base::merge(surveyData, station_area,
                         by = c("CRUISE6","STRATUM","STATION")) %>%
     dplyr::rename(!!areaDescription := areaDescription)
 
