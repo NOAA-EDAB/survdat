@@ -35,7 +35,7 @@ Use the data dictionary for field name explanations
 \examples{
 \dontrun{
 # extracts complete strata table
-channel <- dbutils::connect_to_database(server="name_of_server",uid="individuals_username")
+channel <- dbutils::connect_to_database(server="serverName",uid="userName")
 get_strata(channel)
 
 # extracts info for a single stratum
@@ -52,4 +52,14 @@ get_strata(channel,strata=c("6940","6400","6380"))
 }
 \seealso{
 \code{\link[dbutils]{connect_to_database}}
+
+Other helper: 
+\code{\link{get_conversion_factors}()},
+\code{\link{get_cruise_purpose}()},
+\code{\link{get_maturity}()},
+\code{\link{get_sex_fscs}()},
+\code{\link{get_sex}()},
+\code{\link{get_species}()},
+\code{\link{get_vessel}()}
 }
+\concept{helper}

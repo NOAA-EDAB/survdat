@@ -21,13 +21,14 @@
 #'@section Reference:
 #'Use the data dictionary for field name explanations
 #'
+#'@family helper
 #'
 #' @seealso \code{\link[dbutils]{connect_to_database}}
 #'
 #' @examples
 #' \dontrun{
 #' # extracts complete strata table
-#' channel <- dbutils::connect_to_database(server="name_of_server",uid="individuals_username")
+#' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
 #' get_strata(channel)
 #'
 #' # extracts info for a single stratum

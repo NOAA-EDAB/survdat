@@ -10,7 +10,7 @@ get_species(channel, species = "all")
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 to communicate with the database engine. (see \code{\link{connect_to_database}})}
 
-\item{species}{a specific species code or set of codes. Either numeric or character vector. Defaults to "all" species.
+\item{species}{Numeric or character vector. a specific species code or set of codes. Defaults to "all" species.
 Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement. Character codes are short character strings.}
 }
 \value{
@@ -37,7 +37,7 @@ Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
 \examples{
 \dontrun{
 # extracts complete species table based on custom sql statement
-channel <- dbutils::connect_to_database(server="name_of_server",uid="individuals_username")
+channel <- dbutils::connect_to_database(server="serverName",uid="userName")
 get_species(channel)
 
 # extracts info for cod (73)
@@ -53,4 +53,14 @@ get_species(channel,species= c("73","135"))
 }
 \seealso{
 \code{\link{connect_to_database}}
+
+Other helper: 
+\code{\link{get_conversion_factors}()},
+\code{\link{get_cruise_purpose}()},
+\code{\link{get_maturity}()},
+\code{\link{get_sex_fscs}()},
+\code{\link{get_sex}()},
+\code{\link{get_strata}()},
+\code{\link{get_vessel}()}
 }
+\concept{helper}

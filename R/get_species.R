@@ -5,7 +5,7 @@
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 #' to communicate with the database engine. (see \code{\link{connect_to_database}})
-#' @param species a specific species code or set of codes. Either numeric or character vector. Defaults to "all" species.
+#' @param species Numeric or character vector. a specific species code or set of codes. Defaults to "all" species.
 #' Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement. Character codes are short character strings.
 #'
 #' @return A list is returned:
@@ -25,10 +25,12 @@
 #'
 #' @seealso \code{\link{connect_to_database}}
 #'
+#'@family helper
+#'
 #' @examples
 #' \dontrun{
 #' # extracts complete species table based on custom sql statement
-#' channel <- dbutils::connect_to_database(server="name_of_server",uid="individuals_username")
+#' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
 #' get_species(channel)
 #'
 #' # extracts info for cod (73)

@@ -5,12 +5,22 @@
 #'
 #'@return A figure
 #'
+#'#'@family plotting
+#'
+#'@examples
+#'\dontrun{
+#'
+#'# Read in shapefile
+#'area <- sf::st_read(dsn = system.file("extdata","strata.shp",package="survdat"),quiet=T)
+#'plot_shapefile(polygons=area)
+#'}
+#'
 #'@export
 
 plot_shapefile <- function(polygons,crs=4269) {
 
   # transform crs
-  sf::st_transform(polygons,crs)
+  polygons <- sf::st_transform(polygons,crs)
 
   # plot shapefile
   p <- ggplot2::ggplot() +

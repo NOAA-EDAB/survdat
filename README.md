@@ -9,7 +9,7 @@ To use this package you will need:
 
 1. To be behind the NEFSC firewall
 2. Permissions to access the required server : a username and password.
-3. Oracle's instantClient installed
+3. Oracle's instant Client installed
 
 ## Usage
 
