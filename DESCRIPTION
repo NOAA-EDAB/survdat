@@ -25,7 +25,6 @@ Imports:
     odbc,
     sp,
     sf,
-    rgdal,
     units,
     dplyr,
     magrittr,
