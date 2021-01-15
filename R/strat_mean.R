@@ -100,7 +100,7 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   stratmeanData <- merge(stratmeanData, N, by = 'YEAR')
 
   #Stratified mean
-  setkey(stratmeanData, group, YEAR)
+  data.table::setkey(stratmeanData, group, YEAR)
 
   stratmeanData[, strat.biomass := sum(weighted.biomass),   by = key(stratmeanData)]
   stratmeanData[, strat.abund   := sum(weighted.abundance), by = key(stratmeanData)]
