@@ -9,7 +9,7 @@ get_area(areaPolygon, areaDescription)
 \arguments{
 \item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 }
 \value{
@@ -19,25 +19,31 @@ Returns a data.table (nx2).
 \item{AREA}{The area of the STRATA in square kilometers}
 }
 \description{
-Calculates the area of a stratum from a shapefile.  Necessary if post stratifying
-a survdat file.
+Calculates the area of a polygon from a shapefile.
 }
 \section{Coordinate reference system (CRS)}{
 
 The deafult CRS is the Lambert Conformal Conic as is denoted by :
+
 "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 }
 
-\seealso{
-Other Survdat: 
-\code{\link{getarea}()},
-\code{\link{post_strat}()},
-\code{\link{poststrat}()},
-\code{\link{strat_mean}()},
-\code{\link{strat_prep}()},
-\code{\link{stratmean}()},
-\code{\link{stratprep}()},
-\code{\link{swept_area}()},
-\code{\link{sweptarea}()}
+\examples{
+\dontrun{
+#Find the area of each Stratum in the strata.shp shapefile (bundled with the package)
+area <- sf::st_read(dsn=system.file("extdata","strata.shp",package="survdat"))
+get_area(areaPolygon = area, areaDescription="STRATA")
 }
-\concept{Survdat}
+
+}
+\seealso{
+Other survdat: 
+\code{\link{calc_stratified_mean}()},
+\code{\link{calc_swept_area}()},
+\code{\link{get_survdat_clam_data}()},
+\code{\link{get_survdat_data}()},
+\code{\link{post_strat}()},
+\code{\link{strat_mean}()},
+\code{\link{swept_area}()}
+}
+\concept{survdat}

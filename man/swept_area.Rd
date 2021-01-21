@@ -40,16 +40,20 @@ Calculates the estimate of total biomass and abundance using the swept area.
 Variance of the estimate is also calculated.  Requires the outputs from both
 the stratprep and stratmean functions.
 }
-\seealso{
-Other Survdat: 
-\code{\link{get_area}()},
-\code{\link{getarea}()},
-\code{\link{post_strat}()},
-\code{\link{poststrat}()},
-\code{\link{strat_mean}()},
-\code{\link{strat_prep}()},
-\code{\link{stratmean}()},
-\code{\link{stratprep}()},
-\code{\link{sweptarea}()}
+\examples{
+\dontrun{
+# Called internally
 }
-\concept{Survdat}
+
+}
+\seealso{
+Other survdat: 
+\code{\link{calc_stratified_mean}()},
+\code{\link{calc_swept_area}()},
+\code{\link{get_area}()},
+\code{\link{get_survdat_clam_data}()},
+\code{\link{get_survdat_data}()},
+\code{\link{post_strat}()},
+\code{\link{strat_mean}()}
+}
+\concept{survdat}

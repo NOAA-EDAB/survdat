@@ -30,11 +30,21 @@ Use the data dictionary for field name explanations
 \examples{
 \dontrun{
 # extracts complete sex table
-channel <- connect_to_database(server="name_of_server",uid="individuals_username")
+channel <- dbutils::connect_to_database(server="serverName",uid="userName")
 get_cruise_purpose(channel)
 }
 
 }
 \seealso{
 \code{\link[dbutils]{connect_to_database}}
+
+Other helper: 
+\code{\link{get_conversion_factors}()},
+\code{\link{get_maturity}()},
+\code{\link{get_sex_fscs}()},
+\code{\link{get_sex}()},
+\code{\link{get_species}()},
+\code{\link{get_strata}()},
+\code{\link{get_vessel}()}
 }
+\concept{helper}

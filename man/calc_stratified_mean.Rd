@@ -22,19 +22,19 @@ calc_stratified_mean(
 
 \item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 
-\item{filterByArea}{Numeric vector. Set of areas to subset from the 
+\item{filterByArea}{Numeric vector. Set of areas to subset from the
 \code{areaDescription} of the \code{areaPolygon}.}
 
 \item{filterBySeason}{Character string. Which seasons of the \code{surveyData}
 should be included.  Choices include "SPRING", "FALL", or "all".}
 
-\item{groupDescription}{Character string. Column of \code{prepData} which 
+\item{groupDescription}{Character string. Column of \code{prepData} which
 contains the groups (e.g. "SVSPP") on which the means are based.}
 
-\item{filterByGroup}{Character or numeric vector. Set of groups to subset from 
+\item{filterByGroup}{Character or numeric vector. Set of groups to subset from
 \code{groupDescription}.  The default "all" will calculate means for all groups.}
 
 \item{mergesexFlag}{Boolean. Logical value to merge sexed species such as dogfish.}
@@ -53,16 +53,28 @@ Calculates the stratified mean. Details of method found here ...
 }
 \examples{
 \dontrun{
-# pull data and apply conversion corrections
-data <- survdatData
+# Pull data and apply conversion corrections
+data <- get_survdat_data(channel)
+# Calculate stratified mean for specific survey strata for the SPRING season
+calc_stratified_mean(surveyData=data$survdat, filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING")
 
-# read in "strata" shapefile
-area <- sf::st_read(dsn = system.file("extdata","strata.shp",package="survdat"),quiet=T)
-
-# estimate swept area biomass in the SPRING in STRATA = 1220, 1240, 1260:1290,1360:1400 for species = 300:310
-swa <-swept_area_biomass(data=data, areaPolygon = area, areaDescription="STRATA", filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING", species=c(300:310))
-
-}
-
+# Calculate stratified mean for area defined by EPU regions, for all seasons ("SPRING", "FALL")
+# Read in EPU shapefile (loaded as part of the package)
+area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"),quiet=T)
+calc_stratified_mean(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU", filterByArea="all",filterBySeason = "all")
 
 }
+
+
+}
+\seealso{
+Other survdat: 
+\code{\link{calc_swept_area}()},
+\code{\link{get_area}()},
+\code{\link{get_survdat_clam_data}()},
+\code{\link{get_survdat_data}()},
+\code{\link{post_strat}()},
+\code{\link{strat_mean}()},
+\code{\link{swept_area}()}
+}
+\concept{survdat}

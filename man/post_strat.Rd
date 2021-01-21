@@ -11,32 +11,30 @@ post_strat(surveyData, areaPolygon, areaDescription, na.keep = F)
 
 \item{areaPolygon}{sf object. Name of the object containing the shapefile.}
 
-\item{areaDescription}{Character String. Column name from \code{areaPolygon} 
+\item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
 
-\item{na.keep}{Boolean. Logical value to indicate whether original strata names 
+\item{na.keep}{Boolean. Logical value to indicate whether original strata names
 should be retained.}
 }
 \value{
-Returns a \code{surveyData} data.table with one additional column labeled 
+Returns a \code{surveyData} data.table with one additional column labeled
  with the value of \code{areaDescription}
 
-\item{areaDescription}{The name of the region (found in \code{areaPolygon}) 
+\item{areaDescription}{The name of the region (found in \code{areaPolygon})
  that a record in \code{surveyData} is assigned to}
 }
 \description{
 Assign survey data (points, lat and lon) to designated regions (polygons) from a shape file.
 }
 \seealso{
-Other Survdat: 
+Other survdat: 
+\code{\link{calc_stratified_mean}()},
+\code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
-\code{\link{getarea}()},
-\code{\link{poststrat}()},
+\code{\link{get_survdat_clam_data}()},
+\code{\link{get_survdat_data}()},
 \code{\link{strat_mean}()},
-\code{\link{strat_prep}()},
-\code{\link{stratmean}()},
-\code{\link{stratprep}()},
-\code{\link{swept_area}()},
-\code{\link{sweptarea}()}
+\code{\link{swept_area}()}
 }
-\concept{Survdat}
+\concept{survdat}

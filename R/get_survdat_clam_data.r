@@ -1,6 +1,8 @@
 #' Extracts Clam data from Survey Database
 #'
-#'Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA
+#'Connects to svdbs and pulls Clam & Quahog data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA.
+#'Pulls from Cruises with purpose code = 50. (See \code{\url{get_cruise_purpose}}). Data are assigned to one of 7 regions
+#'('SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB') and length-to-meat weight conversions applied
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
@@ -41,11 +43,18 @@
 #' \item{catch}{Select species abundance and biomass data from result of \code{station}. Table = UNION_FSCS_SVCAT}
 #' \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
 #'
+#'@family survdat
+#'
+#'@examples
+#'\dontrun{
+#'# Recommended use:
+#'channel <- dbutils::connect_to_database("serverName","userName")
+#'get_survdat_clam_data(channel)
+#'
+#'}
 #'
 #'@export
-#V1.2 - remove surveys prior to 1982 due to difference in seasons/gear
-#V1.1 - added clam regions and meat weight conversions
-#SML
+
 
 #-------------------------------------------------------------------------------
 #User parameters

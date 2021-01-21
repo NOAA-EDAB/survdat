@@ -13,7 +13,18 @@ plot_shapefile(polygons, crs = 4269)
 }
 \value{
 A figure
+
+#'@family plotting
 }
 \description{
 Plots shapefile
+}
+\examples{
+\dontrun{
+
+# Read in shapefile
+area <- sf::st_read(dsn = system.file("extdata","strata.shp",package="survdat"),quiet=T)
+plot_shapefile(polygons=area)
+}
+
 }

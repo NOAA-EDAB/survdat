@@ -8,7 +8,7 @@
 #'
 #' @return A list is returned:
 #'
-#'   \item{data}{containing the result of the executed \code{$sql} statement}
+#'   \item{data}{containing the result of the executed \code{sql} statement}
 #'
 #'   \item{sql}{containing the sql call}
 #'
@@ -19,10 +19,12 @@
 #'
 #' @seealso \code{\link[dbutils]{connect_to_database}}
 #'
+#'@family helper
+#'
 #' @examples
 #' \dontrun{
 #' # extracts complete CONVERSION FACTORS table
-#' channel <- connect_to_database(server="name_of_server",uid="individuals_username")
+#' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
 #' get_conversion_factors(channel)
 #'}
 #'
