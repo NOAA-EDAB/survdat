@@ -164,12 +164,12 @@
     </tr>
     <tr>
       <th>areaDescription</th>
-      <td><p>Character String. Column name from <code>areaPolygon</code> 
+      <td><p>Character String. Column name from <code>areaPolygon</code>
 that contains the strata designations.</p></td>
     </tr>
     <tr>
       <th>filterByArea</th>
-      <td><p>Numeric vector. Set of areas to subset from the 
+      <td><p>Numeric vector. Set of areas to subset from the
 <code>areaDescription</code> of the <code>areaPolygon</code>.</p></td>
     </tr>
     <tr>
@@ -179,12 +179,12 @@ should be included.  Choices include "SPRING", "FALL", or "all".</p></td>
     </tr>
     <tr>
       <th>groupDescription</th>
-      <td><p>Character string. Column of <code>prepData</code> which 
+      <td><p>Character string. Column of <code>prepData</code> which
 contains the groups (e.g. "SVSPP") on which the means are based.</p></td>
     </tr>
     <tr>
       <th>filterByGroup</th>
-      <td><p>Character or numeric vector. Set of groups to subset from 
+      <td><p>Character or numeric vector. Set of groups to subset from
 <code>groupDescription</code>.  The default "all" will calculate means for all groups.</p></td>
     </tr>
     <tr>
@@ -208,17 +208,28 @@ as a list object. The default (F) returns only the <code>stratmeanData</code> as
     
 
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other survdat: 
+<code><a href='calc_swept_area.html'>calc_swept_area</a>()</code>,
+<code><a href='get_area.html'>get_area</a>()</code>,
+<code><a href='get_survdat_clam_data.html'>get_survdat_clam_data</a>()</code>,
+<code><a href='get_survdat_data.html'>get_survdat_data</a>()</code>,
+<code><a href='post_strat.html'>post_strat</a>()</code>,
+<code><a href='strat_mean.html'>strat_mean</a>()</code>,
+<code><a href='swept_area.html'>swept_area</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># pull data and apply conversion corrections</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>survdatData</span>
+<span class='co'># Pull data and apply conversion corrections</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_survdat_data.html'>get_survdat_data</a></span><span class='op'>(</span><span class='va'>channel</span><span class='op'>)</span>
+<span class='co'># Calculate stratified mean for specific survey strata for the SPRING season</span>
+<span class='fu'>calc_stratified_mean</span><span class='op'>(</span>surveyData<span class='op'>=</span><span class='va'>data</span><span class='op'>$</span><span class='va'>survdat</span>, filterByArea<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1220</span>, <span class='fl'>1240</span>, <span class='fl'>1260</span><span class='op'>:</span><span class='fl'>1290</span>,<span class='fl'>1360</span><span class='op'>:</span><span class='fl'>1400</span><span class='op'>)</span>,filterBySeason <span class='op'>=</span> <span class='st'>"SPRING"</span><span class='op'>)</span>
 
-<span class='co'># read in "strata" shapefile</span>
-<span class='va'>area</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"strata.shp"</span>,package<span class='op'>=</span><span class='st'>"survdat"</span><span class='op'>)</span>,quiet<span class='op'>=</span><span class='cn'>T</span><span class='op'>)</span>
-
-<span class='co'># estimate swept area biomass in the SPRING in STRATA = 1220, 1240, 1260:1290,1360:1400 for species = 300:310</span>
-<span class='va'>swa</span> <span class='op'>&lt;-</span><span class='fu'><a href='swept_area_biomass.html'>swept_area_biomass</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='va'>data</span>, areaPolygon <span class='op'>=</span> <span class='va'>area</span>, areaDescription<span class='op'>=</span><span class='st'>"STRATA"</span>, filterByArea<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1220</span>, <span class='fl'>1240</span>, <span class='fl'>1260</span><span class='op'>:</span><span class='fl'>1290</span>,<span class='fl'>1360</span><span class='op'>:</span><span class='fl'>1400</span><span class='op'>)</span>,filterBySeason <span class='op'>=</span> <span class='st'>"SPRING"</span>, species<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>300</span><span class='op'>:</span><span class='fl'>310</span><span class='op'>)</span><span class='op'>)</span>
+<span class='co'># Calculate stratified mean for area defined by EPU regions, for all seasons ("SPRING", "FALL")</span>
+<span class='co'># Read in EPU shapefile (loaded as part of the package)</span>
+<span class='va'>area</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"EPU.shp"</span>,package<span class='op'>=</span><span class='st'>"survdat"</span><span class='op'>)</span>,quiet<span class='op'>=</span><span class='cn'>T</span><span class='op'>)</span>
+<span class='fu'>calc_stratified_mean</span><span class='op'>(</span>surveyData<span class='op'>=</span><span class='va'>data</span><span class='op'>$</span><span class='va'>survdat</span>, areaPolygon<span class='op'>=</span><span class='va'>area</span>, areaDescription<span class='op'>=</span><span class='st'>"EPU"</span>, filterByArea<span class='op'>=</span><span class='st'>"all"</span>,filterBySeason <span class='op'>=</span> <span class='st'>"all"</span><span class='op'>)</span>
 
 <span class='op'>}</span>
 

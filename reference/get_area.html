@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Generate a table of stratum areas — get_area" />
-<meta property="og:description" content="Calculates the area of a stratum from a shapefile.  Necessary if post stratifying
-a survdat file." />
+<meta property="og:description" content="Calculates the area of a polygon from a shapefile." />
 
 
 
@@ -136,8 +135,7 @@ a survdat file." />
     </div>
 
     <div class="ref-description">
-    <p>Calculates the area of a stratum from a shapefile.  Necessary if post stratifying
-a survdat file.</p>
+    <p>Calculates the area of a polygon from a shapefile.</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_area</span><span class='op'>(</span><span class='va'>areaPolygon</span>, <span class='va'>areaDescription</span><span class='op'>)</span></pre>
@@ -151,7 +149,7 @@ a survdat file.</p>
     </tr>
     <tr>
       <th>areaDescription</th>
-      <td><p>Character String. Column name from <code>areaPolygon</code> 
+      <td><p>Character String. Column name from <code>areaPolygon</code>
 that contains the strata designations.</p></td>
     </tr>
     </table>
@@ -166,21 +164,27 @@ that contains the strata designations.</p></td>
 
     
 
-<p>The deafult CRS is the Lambert Conformal Conic as is denoted by :
-"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "</p>
+<p>The deafult CRS is the Lambert Conformal Conic as is denoted by :</p>
+<p>"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Survdat: 
-<code><a href='getarea.html'>getarea</a>()</code>,
+    <div class='dont-index'><p>Other survdat: 
+<code><a href='calc_stratified_mean.html'>calc_stratified_mean</a>()</code>,
+<code><a href='calc_swept_area.html'>calc_swept_area</a>()</code>,
+<code><a href='get_survdat_clam_data.html'>get_survdat_clam_data</a>()</code>,
+<code><a href='get_survdat_data.html'>get_survdat_data</a>()</code>,
 <code><a href='post_strat.html'>post_strat</a>()</code>,
-<code><a href='poststrat.html'>poststrat</a>()</code>,
 <code><a href='strat_mean.html'>strat_mean</a>()</code>,
-<code><a href='strat_prep.html'>strat_prep</a>()</code>,
-<code><a href='stratmean.html'>stratmean</a>()</code>,
-<code><a href='stratprep.html'>stratprep</a>()</code>,
-<code><a href='swept_area.html'>swept_area</a>()</code>,
-<code><a href='sweptarea.html'>sweptarea</a>()</code></p></div>
+<code><a href='swept_area.html'>swept_area</a>()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'>#Find the area of each Stratum in the strata.shp shapefile (bundled with the package)</span>
+<span class='va'>area</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span>dsn<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"strata.shp"</span>,package<span class='op'>=</span><span class='st'>"survdat"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>get_area</span><span class='op'>(</span>areaPolygon <span class='op'>=</span> <span class='va'>area</span>, areaDescription<span class='op'>=</span><span class='st'>"STRATA"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

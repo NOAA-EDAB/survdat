@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Calculate stratified mean biomass and abundance — strat_mean" />
-<meta property="og:description" content="Calculates the stratified mean biomass and abundance.  Also calculates the 
+<meta property="og:description" content="Calculates the stratified mean biomass and abundance.  Also calculates the
 associated variance and standard error." />
 
 
@@ -136,7 +136,7 @@ associated variance and standard error." />
     </div>
 
     <div class="ref-description">
-    <p>Calculates the stratified mean biomass and abundance.  Also calculates the 
+    <p>Calculates the stratified mean biomass and abundance.  Also calculates the
 associated variance and standard error.</p>
     </div>
 
@@ -159,12 +159,12 @@ and modified by <code>strat_prep</code>.</p></td>
     </tr>
     <tr>
       <th>groupDescription</th>
-      <td><p>Character string. Column of <code>prepData</code> which 
+      <td><p>Character string. Column of <code>prepData</code> which
 contains the groups (e.g. "SVSPP") on which the means are based.</p></td>
     </tr>
     <tr>
       <th>filterByGroup</th>
-      <td><p>Character or numeric vector. Set of groups to subset from 
+      <td><p>Character or numeric vector. Set of groups to subset from
 <code>groupDescription</code>.  The default "all" will calculate means for all groups.</p></td>
     </tr>
     <tr>
@@ -173,13 +173,13 @@ contains the groups (e.g. "SVSPP") on which the means are based.</p></td>
     </tr>
     <tr>
       <th>areaDescription</th>
-      <td><p>Character String. Column name from <code>areaPolygon</code> 
+      <td><p>Character String. Column name from <code>areaPolygon</code>
 that contains the strata designations.</p></td>
     </tr>
     <tr>
       <th>poststratFlag</th>
-      <td><p>Boolean. Logical value indicating whether the original 
-strata design was used or not.  Changes the calculation for the variance for 
+      <td><p>Boolean. Logical value indicating whether the original
+strata design was used or not.  Changes the calculation for the variance for
 post-stratified uses of survey data.</p></td>
     </tr>
     </table>
@@ -191,17 +191,21 @@ post-stratified uses of survey data.</p></td>
  error for both means are provided.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Survdat: 
+    <div class='dont-index'><p>Other survdat: 
+<code><a href='calc_stratified_mean.html'>calc_stratified_mean</a>()</code>,
+<code><a href='calc_swept_area.html'>calc_swept_area</a>()</code>,
 <code><a href='get_area.html'>get_area</a>()</code>,
-<code><a href='getarea.html'>getarea</a>()</code>,
+<code><a href='get_survdat_clam_data.html'>get_survdat_clam_data</a>()</code>,
+<code><a href='get_survdat_data.html'>get_survdat_data</a>()</code>,
 <code><a href='post_strat.html'>post_strat</a>()</code>,
-<code><a href='poststrat.html'>poststrat</a>()</code>,
-<code><a href='strat_prep.html'>strat_prep</a>()</code>,
-<code><a href='stratmean.html'>stratmean</a>()</code>,
-<code><a href='stratprep.html'>stratprep</a>()</code>,
-<code><a href='swept_area.html'>swept_area</a>()</code>,
-<code><a href='sweptarea.html'>sweptarea</a>()</code></p></div>
+<code><a href='swept_area.html'>swept_area</a>()</code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Called internally</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

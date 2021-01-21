@@ -46,9 +46,6 @@
     <loc>https://noaa-edab.github.io/survdat//reference/get_vessel.html</loc>
   </url>
   <url>
-    <loc>https://noaa-edab.github.io/survdat//reference/getarea.html</loc>
-  </url>
-  <url>
     <loc>https://noaa-edab.github.io/survdat//reference/plot_data_area.html</loc>
   </url>
   <url>
@@ -58,31 +55,16 @@
     <loc>https://noaa-edab.github.io/survdat//reference/post_strat.html</loc>
   </url>
   <url>
-    <loc>https://noaa-edab.github.io/survdat//reference/poststrat.html</loc>
-  </url>
-  <url>
     <loc>https://noaa-edab.github.io/survdat//reference/strat_mean.html</loc>
   </url>
   <url>
     <loc>https://noaa-edab.github.io/survdat//reference/strat_prep.html</loc>
   </url>
   <url>
-    <loc>https://noaa-edab.github.io/survdat//reference/stratmean.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat//reference/stratprep.html</loc>
-  </url>
-  <url>
     <loc>https://noaa-edab.github.io/survdat//reference/survdat.html</loc>
   </url>
   <url>
     <loc>https://noaa-edab.github.io/survdat//reference/swept_area.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat//reference/swept_area_biomass.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat//reference/sweptarea.html</loc>
   </url>
   <url>
     <loc>https://noaa-edab.github.io/survdat//articles/calc_strat_mean.html</loc>

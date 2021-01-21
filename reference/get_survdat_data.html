@@ -178,7 +178,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
+    <p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data.
 Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.</p>
 <p>The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 <dt>CRUISE6</dt><dd><p>Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)</p></dd>
@@ -223,7 +223,30 @@ The list of sql statements:
 <dt>conversions</dt><dd><p>Select conversion factors. Table = SURVAN_CONVERSION_FACTORS</p></dd>
 <dt>bio</dt><dd><p>Select bio stats. Table = UNION_FSCS_SVBIO</p></dd>
 
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <div class='dont-index'><p>Other survdat: 
+<code><a href='calc_stratified_mean.html'>calc_stratified_mean</a>()</code>,
+<code><a href='calc_swept_area.html'>calc_swept_area</a>()</code>,
+<code><a href='get_area.html'>get_area</a>()</code>,
+<code><a href='get_survdat_clam_data.html'>get_survdat_clam_data</a>()</code>,
+<code><a href='post_strat.html'>post_strat</a>()</code>,
+<code><a href='strat_mean.html'>strat_mean</a>()</code>,
+<code><a href='swept_area.html'>swept_area</a>()</code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># First create a connection object to the database</span>
+<span class='va'>channel</span> <span class='op'>&lt;-</span> <span class='fu'>dbutils</span><span class='fu'>::</span><span class='fu'>connect_to_database</span><span class='op'>(</span><span class='st'>"serverName"</span>,<span class='st'>"userName"</span><span class='op'>)</span>
+<span class='co'># pull survey data, applies conversion factors (Door, net, vessel) and join with</span>
+<span class='co'># biological data to return individual sex, age, maturity, stomach data</span>
+<span class='fu'>get_survdat_data</span><span class='op'>(</span><span class='va'>channel</span>,conversion.factor <span class='op'>=</span> <span class='cn'>T</span>, bio<span class='op'>=</span><span class='cn'>T</span><span class='op'>)</span>
+
+<span class='co'># Same data pull without individual biological data</span>
+<span class='fu'>get_survdat_data</span><span class='op'>(</span><span class='va'>channel</span>,conversion.factor <span class='op'>=</span> <span class='cn'>T</span>, bio<span class='op'>=</span><span class='cn'>F</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

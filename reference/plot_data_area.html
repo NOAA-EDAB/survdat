@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Plots survey data and shapefile — plot_data_area" />
-<meta property="og:description" content="Plots survey data and shapefile" />
+<meta property="og:description" content="Quick plot of any shape file overlaid with lat, lon data." />
 
 
 
@@ -135,17 +135,17 @@
     </div>
 
     <div class="ref-description">
-    <p>Plots survey data and shapefile</p>
+    <p>Quick plot of any shape file overlaid with lat, lon data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_data_area</span><span class='op'>(</span><span class='va'>points</span>, <span class='va'>polygons</span>, <span class='va'>crs</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_data_area</span><span class='op'>(</span><span class='va'>points</span>, <span class='va'>polygons</span>, crs <span class='op'>=</span> <span class='fl'>4269</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>points</th>
-      <td><p>sf object. The data points</p></td>
+      <td><p>Data frame. Survdat data points (Must include "LAT" and "LON" fields)</p></td>
     </tr>
     <tr>
       <th>polygons</th>
@@ -161,6 +161,21 @@
 
     <p>A figure</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+
+<span class='co'># Plot 2019 bottomline survey data with EPU regions</span>
+<span class='co'># Read in shapefile</span>
+<span class='va'>area</span> <span class='op'>&lt;-</span> <span class='fu'>sf</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_read.html'>st_read</a></span><span class='op'>(</span>dsn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"EPU.shp"</span>,package<span class='op'>=</span><span class='st'>"survdat"</span><span class='op'>)</span>,quiet<span class='op'>=</span><span class='cn'>T</span><span class='op'>)</span>
+
+<span class='co'># Get data</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>get_survdat_Data</span><span class='op'>(</span><span class='va'>channel</span><span class='op'>)</span>
+<span class='co'># Filter 2019 data</span>
+<span class='va'>filteredData</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>$</span><span class='va'>survdat</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>YEAR</span> <span class='op'>==</span> <span class='fl'>2019</span><span class='op'>)</span>
+<span class='fu'>plot_data_area</span><span class='op'>(</span>points<span class='op'>=</span> <span class='va'>filteredData</span>,polygons <span class='op'>=</span> <span class='va'>area</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
