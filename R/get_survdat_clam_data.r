@@ -9,7 +9,7 @@
 #' @param clam.only Boolean. T = grab only Atl. surfclam (403) and ocean quahog (409)
 #' @param tidy Boolean. Return output in long format (Default = F)
 #'
-#' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
+#' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 #'
 #' The data frame (Descriptions taken from NEFSC Data dictionary)
@@ -43,6 +43,15 @@
 #' \item{catch}{Select species abundance and biomass data from result of \code{station}. Table = UNION_FSCS_SVCAT}
 #' \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
 #'
+#' The date:
+#'
+#'  \item{pullDate}{The date the data was pulled from the database}
+#'
+#' The expression:
+#'
+#' \item{functionCall}{The call used to create the data pul}
+#'
+#'
 #'@family survdat
 #'
 #'@examples
@@ -63,6 +72,8 @@ get_survdat_clam_data <- function(channel,
                                   shg.check=T,
                                   clam.only=T,
                                   tidy = F) {
+
+  call <- capture_function_call()
 
   #Generate cruise list
   #V1.2 - remove surveys prior to 1982 due to difference in seasons/gear
@@ -183,5 +194,5 @@ get_survdat_clam_data <- function(channel,
 
   sql <- list(cruise=cruise.qry,station=station.qry,catch=catch.qry,length=length.qry)
 
-  return(list(data=clamdat,sql=sql))
+  return(list(data=clamdat,sql=sql,pullDate=date(),functionCall = call))
 }
