@@ -16,7 +16,7 @@ get_survdat_clam_data(channel, shg.check = T, clam.only = T, tidy = F)
 \item{tidy}{Boolean. Return output in long format (Default = F)}
 }
 \value{
-A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
+A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 
 The data frame (Descriptions taken from NEFSC Data dictionary)
@@ -49,6 +49,14 @@ The list of sql statements:
 \item{station}{Select unique set of stations from result of \code{cruise}. Table = UNION_FSCS_SVSTA}
 \item{catch}{Select species abundance and biomass data from result of \code{station}. Table = UNION_FSCS_SVCAT}
 \item{length}{Select Lengths of species found in \code{catch}. Table = UNION_FSCS_SVLEN}
+
+The date:
+
+ \item{pullDate}{The date the data was pulled from the database}
+
+The expression:
+
+\item{functionCall}{The call used to create the data pul}
 }
 \description{
 Connects to svdbs and pulls Clam & Quahog data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA.

@@ -27,7 +27,8 @@ get_survdat_data(
 \item{bio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
 }
 \value{
-A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data.
+A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
+the date of the pull, and the call expression
 Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
 
 The data frame (Descriptions taken from NEFSC Data dictionary)
@@ -73,6 +74,14 @@ The list of sql statements:
 \item{sad}{Select ????? from Survey Analysis Database. Table = STOCKEFF.I_SV_MERGED_CATCH_CALIB_O}
 \item{conversions}{Select conversion factors. Table = SURVAN_CONVERSION_FACTORS}
 \item{bio}{Select bio stats. Table = UNION_FSCS_SVBIO}
+
+The date:
+
+ \item{pullDate}{The date the data was pulled from the database}
+
+The expression:
+
+\item{functionCall}{The call used to create the data pul}
 }
 \description{
 Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
