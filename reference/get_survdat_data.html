@@ -178,7 +178,8 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data.
+    <p>A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
+the date of the pull, and the call expression
 Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.</p>
 <p>The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 <dt>CRUISE6</dt><dd><p>Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)</p></dd>
@@ -222,6 +223,14 @@ The list of sql statements:
 <dt>sad</dt><dd><p>Select ????? from Survey Analysis Database. Table = STOCKEFF.I_SV_MERGED_CATCH_CALIB_O</p></dd>
 <dt>conversions</dt><dd><p>Select conversion factors. Table = SURVAN_CONVERSION_FACTORS</p></dd>
 <dt>bio</dt><dd><p>Select bio stats. Table = UNION_FSCS_SVBIO</p></dd>
+
+The date:
+
+ <dt>pullDate</dt><dd><p>The date the data was pulled from the database</p></dd>
+
+The expression:
+
+<dt>functionCall</dt><dd><p>The call used to create the data pul</p></dd>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

@@ -167,7 +167,7 @@ Pulls from Cruises with purpose code = 50. (See <code><a href='get_cruise_purpos
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data
+    <p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.</p>
 <p>The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 <dt>clam.region</dt><dd><p>One of 7 identified Regions, 'SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB'</p></dd>
@@ -198,6 +198,14 @@ The list of sql statements:
 <dt>station</dt><dd><p>Select unique set of stations from result of <code>cruise</code>. Table = UNION_FSCS_SVSTA</p></dd>
 <dt>catch</dt><dd><p>Select species abundance and biomass data from result of <code>station</code>. Table = UNION_FSCS_SVCAT</p></dd>
 <dt>length</dt><dd><p>Select Lengths of species found in <code>catch</code>. Table = UNION_FSCS_SVLEN</p></dd>
+
+The date:
+
+ <dt>pullDate</dt><dd><p>The date the data was pulled from the database</p></dd>
+
+The expression:
+
+<dt>functionCall</dt><dd><p>The call used to create the data pul</p></dd>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
