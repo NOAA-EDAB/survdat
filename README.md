@@ -2,6 +2,7 @@
 
 ![deploy to github pages](https://github.com/NOAA-EDAB/survdat/workflows/deploy%20to%20github%20pages/badge.svg)
 ![Install on windows](https://github.com/NOAA-EDAB/survdat/workflows/Install%20on%20windows/badge.svg)
+![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)
 
 Pull and process survey data
 
