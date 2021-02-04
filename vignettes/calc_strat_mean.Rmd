@@ -216,7 +216,7 @@ The final calculation for the `calc_stratified_mean` function is the standard er
 
 \begin{equation}
     \label{standard error}
-    s_{\bar{B}} = \sqrt{s_{\bar{B}}^2}
+    s_{\bar{B}} = \sqrt{\frac{s_{\bar{B}}^2}{N}}
 \end{equation}
 
 Similar calculations are carried out for abundance with numbers replacing biomass in the equations above.
