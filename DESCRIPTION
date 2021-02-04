@@ -12,7 +12,7 @@ Authors@R: c(person(given = "Sean",
                    email = "andrew.beet@NOAA.gov",
                    role = c("aut"),
                    comment = c(ORCID = "0000-0001-8270-7090")))
-License: GPL-2
+License: file LICENSE
 Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.

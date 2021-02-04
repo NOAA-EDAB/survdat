@@ -1,15 +1,24 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
 # survdat
 
-![deploy to github pages](https://github.com/NOAA-EDAB/survdat/workflows/deploy%20to%20github%20pages/badge.svg)
-![Install on windows](https://github.com/NOAA-EDAB/survdat/workflows/Install%20on%20windows/badge.svg)
+![deploy to github
+pages](https://github.com/NOAA-EDAB/survdat/workflows/deploy%20to%20github%20pages/badge.svg)
+![Install on
+windows](https://github.com/NOAA-EDAB/survdat/workflows/Install%20on%20windows/badge.svg)
+![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)
 
 Pull and process survey data
 
 To use this package you will need:
 
-1. To be behind the NEFSC firewall
-2. Permissions to access the required server : a username and password.
-3. Oracle's instant Client installed
+1.  To be behind the NEFSC firewall
+2.  Permissions to access the required server : a username and password.
+3.  Oracle's instant Client installed
 
 ## Usage
 
@@ -17,14 +26,18 @@ To use this package you will need:
 
 `remotes::install_github("NOAA-EDAB/survdat",build_vignettes = TRUE)`
 
+## Developers (in alphabetical order)
 
+| [andybeet](https://github.com/andybeet)                                                         | [slucey](https://github.com/slucey)                                                                                                    |
+|-------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| [![](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet) | [![](https://avatars.githubusercontent.com/u/5578254?s=100&u=cd59cd654cab73ea583c697145bfe062222355cd&v=4)](https://github.com/slucey) |
 
 #### Legal disclaimer
 
 *This repository is a scientific product and is not official
 communication of the National Oceanic and Atmospheric Administration, or
 the United States Department of Commerce. All NOAA GitHub project code
-is provided on an ‘as is’ basis and the user assumes responsibility for
+is provided on an 'as is' basis and the user assumes responsibility for
 its use. Any claims against the Department of Commerce or Department of
 Commerce bureaus stemming from the use of this GitHub project will be
 governed by all applicable Federal law. Any reference to specific
