@@ -29,7 +29,10 @@
 strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
                         areaDescription = "STRATA", filterByArea = "all",
                         filterBySeason = "all") {
-
+  
+  # Break link to original data set so no changes are made to original
+  surveyData <- data.table::copy(surveyData)
+  
   # Calculate the proportional areas
   # Use original stratified design and built-in shapefile or flag for post
   # stratification
