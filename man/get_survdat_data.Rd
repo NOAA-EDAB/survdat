@@ -18,7 +18,7 @@ get_survdat_data(
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
 
-\item{filterByYear}{Numeric vector. Subset of years from which to pull data. 
+\item{filterByYear}{Numeric vector. Subset of years from which to pull data.
 If not specified then all years are pulled. (Default = NA)}
 
 \item{all.season}{Boolean. Spring and Fall only (F) otherwise T. (Default = F)}
@@ -31,7 +31,7 @@ If not specified then all years are pulled. (Default = NA)}
 
 \item{getBio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
 
-\item{getLengths}{Boolean. Include length data which includes the length in 
+\item{getLengths}{Boolean. Include length data which includes the length in
 cm and the number at length. (Default = T)}
 }
 \value{

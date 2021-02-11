@@ -3,16 +3,16 @@
 #'Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
-#' @param filterByYear Numeric vector. Subset of years from which to pull data. 
+#' @param filterByYear Numeric vector. Subset of years from which to pull data.
 #'                     If not specified then all years are pulled. (Default = NA)
 #' @param all.season Boolean. Spring and Fall only (F) otherwise T. (Default = F)
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
 #' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
 #' @param getBio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
-#' @param getLengths Boolean. Include length data which includes the length in 
+#' @param getLengths Boolean. Include length data which includes the length in
 #'                   cm and the number at length. (Default = T)
-#'                   
+#'
 #' @return A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
 #' the date of the pull, and the call expression
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -85,7 +85,7 @@
 #'
 #'@export
 
-get_survdat_data <- function(channel, filterByYear = NA, all.season = F, 
+get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                              shg.check = T, conversion.factor = T, use.SAD = F,
                              getBio = F, getLengths = T) {
 
@@ -94,20 +94,20 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
   message("Getting Cruise list  ...")
-  
+
   #Create year vector
   if(is.na(filterByYear)){
     years <- ">= 1963"
   }else{
     years <- paste0("in (", survdat:::sqltext(filterByYear), ")")
   }
-  
-  
+
+
   if(all.season == F){ # Spring and Fall
     cruise.qry <- paste0("select unique year, cruise6, svvessel, season
       from mstr_cruise
       where purpose_code = 10
-      and year ", years, 
+      and year ", years,
       "and (season = 'FALL'
         or season = 'SPRING')
       order by year, cruise6")
@@ -174,6 +174,9 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW)
   survdat <- merge(survdat, catch, by = data.table::key(survdat))
 
+  # create list of all sql calls
+  sql <- list(catch=catch.qry, cruise=cruise.qry, station=station.qry)
+
 
 
   # Length Data --------------------------------------------------------------
@@ -188,14 +191,14 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                       order by cruise6, station, svspp, length")
     len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
     data.table::setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
-    
+
     #merge with survdat
     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
     survdat <- merge(survdat, len, all.x = T)
+
+    sql <- c(sql,length=length.qry)
+
   }
-  
-  # create list of all sql calls
-  sql <- list(catch=catch.qry, cruise=cruise.qry, len=length.qry, station=station.qry)
 
 
   # Biology Data --------------------------------------------------------------
@@ -225,9 +228,10 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 #    data.table::setkey(bio, CRUISE6, STATION, STRATUM, TOW, SVSPP)
 #    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP)
     survdat <- merge(survdat, bio, by = key(survdat))
-    sql <- c(sql,bio.qry)
+    sql <- c(sql,bio=bio.qry)
   }
 
+  # Apply conversion factors --------------------------------------------------
   if(conversion.factor){
     survdatConv <- apply_conversion_factors(channel,survdat,use.SAD = use.SAD)
     sql <- c(sql,survdatConv$sql)
