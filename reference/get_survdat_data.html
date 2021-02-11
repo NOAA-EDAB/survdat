@@ -140,11 +140,13 @@
 
     <pre class="usage"><span class='fu'>get_survdat_data</span><span class='op'>(</span>
   <span class='va'>channel</span>,
+  filterByYear <span class='op'>=</span> <span class='cn'>NA</span>,
   all.season <span class='op'>=</span> <span class='cn'>F</span>,
   shg.check <span class='op'>=</span> <span class='cn'>T</span>,
   conversion.factor <span class='op'>=</span> <span class='cn'>T</span>,
   use.SAD <span class='op'>=</span> <span class='cn'>F</span>,
-  bio <span class='op'>=</span> <span class='cn'>F</span>
+  getBio <span class='op'>=</span> <span class='cn'>F</span>,
+  getLengths <span class='op'>=</span> <span class='cn'>T</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -153,6 +155,11 @@
     <tr>
       <th>channel</th>
       <td><p>an Object inherited from <a href='https://dbi.r-dbi.org/reference/DBIConnection-class.html'>DBIConnection-class</a>. This object is used to communicate with the database engine. (see <code>connect_to_database</code>)</p></td>
+    </tr>
+    <tr>
+      <th>filterByYear</th>
+      <td><p>Numeric vector. Subset of years from which to pull data.
+If not specified then all years are pulled. (Default = NA)</p></td>
     </tr>
     <tr>
       <th>all.season</th>
@@ -171,8 +178,13 @@
       <td><p>Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)</p></td>
     </tr>
     <tr>
-      <th>bio</th>
+      <th>getBio</th>
       <td><p>Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity</p></td>
+    </tr>
+    <tr>
+      <th>getLengths</th>
+      <td><p>Boolean. Include length data which includes the length in
+cm and the number at length. (Default = T)</p></td>
     </tr>
     </table>
 
