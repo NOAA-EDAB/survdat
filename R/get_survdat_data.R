@@ -3,6 +3,8 @@
 #'Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
+#' @param filterByYear Numeric vector. Subset of years from which to pull data. 
+#'                     If not specified then all years are pulled. (Default = NA)
 #' @param all.season Boolean. Spring and Fall only (F) otherwise T. (Default = F)
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
 #' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
@@ -81,27 +83,38 @@
 #'
 #'@export
 
-get_survdat_data <- function(channel,all.season=F,shg.check=T,conversion.factor=T,use.SAD=F,bio=F) {
+get_survdat_data <- function(channel, filterByYear = NA, all.season = F, 
+                             shg.check = T, conversion.factor = T, use.SAD = F,
+                             bio = F) {
 
   call <- capture_function_call()
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
   message("Getting Cruise list  ...")
+  
+  #Create year vector
+  if(is.na(filterByYear)){
+    years <- ">= 1963"
+  }else{
+    years <- paste0("in (", survdat:::sqltext(filterByYear), ")")
+  }
+  
+  
   if(all.season == F){ # Spring and Fall
-    cruise.qry <- "select unique year, cruise6, svvessel, season
+    cruise.qry <- paste0("select unique year, cruise6, svvessel, season
       from mstr_cruise
       where purpose_code = 10
-      and year >= 1963
-      and (season = 'FALL'
+      and year ", years, 
+      "and (season = 'FALL'
         or season = 'SPRING')
-      order by year, cruise6"
+      order by year, cruise6")
    } else if(all.season == T){ # Everything
-    cruise.qry <- "select unique year, cruise6, svvessel, season
+    cruise.qry <- paste0("select unique year, cruise6, svvessel, season
       from mstr_cruise
       where purpose_code = 10
-      and year >= 1963
-      order by year, cruise6"
+      and year ", years,
+      "order by year, cruise6")
    }
 
 
