@@ -10,7 +10,8 @@
 #' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
 #' @param bio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
-#'
+#' @param getLengths Boolean. Include length data which includes the length in 
+#'                   cm and the number at length. (Default = T)
 #' @return A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
 #' the date of the pull, and the call expression
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -85,7 +86,7 @@
 
 get_survdat_data <- function(channel, filterByYear = NA, all.season = F, 
                              shg.check = T, conversion.factor = T, use.SAD = F,
-                             bio = F) {
+                             bio = F, getLengths = T) {
 
   call <- capture_function_call()
 
@@ -175,21 +176,23 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
 
   # Length Data --------------------------------------------------------------
-  message("Getting Length Data ...")
-  #Length data
-  length.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
+  if(getLengths){
+    message("Getting Length Data ...")
+    #Length data
+    length.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                       length, expnumlen as numlen
                       from UNION_FSCS_SVLEN
                       where cruise6 in (", cruise6, ")
                       and stratum not like 'YT%'
                       order by cruise6, station, svspp, length")
-  len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
-  data.table::setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
-
-  #merge with survdat
-  data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
-  survdat <- merge(survdat, len, all.x = T)
-
+    len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
+    data.table::setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
+    
+    #merge with survdat
+    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
+    survdat <- merge(survdat, len, all.x = T)
+  }
+  
   # create list of all sql calls
   sql <- list(catch=catch.qry, cruise=cruise.qry, len=length.qry, station=station.qry)
 
