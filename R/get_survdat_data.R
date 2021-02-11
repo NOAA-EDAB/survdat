@@ -9,9 +9,10 @@
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
 #' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
-#' @param bio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
+#' @param getBio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
 #' @param getLengths Boolean. Include length data which includes the length in 
 #'                   cm and the number at length. (Default = T)
+#'                   
 #' @return A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
 #' the date of the pull, and the call expression
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -86,7 +87,7 @@
 
 get_survdat_data <- function(channel, filterByYear = NA, all.season = F, 
                              shg.check = T, conversion.factor = T, use.SAD = F,
-                             bio = F, getLengths = T) {
+                             getBio = F, getLengths = T) {
 
   call <- capture_function_call()
 
@@ -198,7 +199,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
 
   # Biology Data --------------------------------------------------------------
-  if (bio) {
+  if (getBio) {
     message("Getting Individual Fish (Bio) Data ...")
     bio.qry <- paste0("select cruise6, station, stratum, svspp, catchsex, length, indid,
                   indwt, sex, maturity, age, stom_volume, stom_wgt

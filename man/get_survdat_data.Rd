@@ -11,7 +11,7 @@ get_survdat_data(
   shg.check = T,
   conversion.factor = T,
   use.SAD = F,
-  bio = F,
+  getBio = F,
   getLengths = T
 )
 }
@@ -29,7 +29,7 @@ If not specified then all years are pulled. (Default = NA)}
 
 \item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)}
 
-\item{bio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
+\item{getBio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
 
 \item{getLengths}{Boolean. Include length data which includes the length in 
 cm and the number at length. (Default = T)}
