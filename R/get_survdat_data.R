@@ -130,7 +130,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   # Station Data --------------------------------------------------------------
   message("Getting Station data ...")
   if(shg.check == T){
-    station.qry <- paste("select unique cruise6, svvessel, station, stratum,
+    station.qry <- paste0("select unique cruise6, svvessel, station, stratum,
                                tow, decdeg_beglat as lat, decdeg_beglon as lon,
                                begin_est_towdate as est_towdate, avgdepth as depth,
                                surftemp, surfsalin, bottemp, botsalin
@@ -138,16 +138,16 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                                where cruise6 in (", cruise6, ")
                                and (SHG <= 136 and cruise6 <= 200900)
                                or (TOGA <= 1324 and cruise6 > 200900)
-                               order by cruise6, station", sep='')
+                               order by cruise6, station")
   }
   if(shg.check == F){
-    station.qry <- paste("select unique cruise6, svvessel, station, stratum, tow,
+    station.qry <- paste0("select unique cruise6, svvessel, station, stratum, tow,
                          decdeg_beglat as lat, decdeg_beglon as lon,
                          begin_est_towdate as est_towdate, avgdepth as depth,
                          surftemp, surfsalin, bottemp, botsalin
                          from UNION_FSCS_SVSTA
                          where cruise6 in (", cruise6, ")
-                         order by cruise6, station", sep='')
+                         order by cruise6, station")
   }
   # pull data
   station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
@@ -159,12 +159,12 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   # Catch Data --------------------------------------------------------------
   message("Getting Species data ...")
-  catch.qry <- paste("select cruise6, station, stratum, tow, svspp, catchsex,
+  catch.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                      expcatchnum as abundance, expcatchwt as biomass
                      from UNION_FSCS_SVCAT
                      where cruise6 in (", cruise6, ")
                      and stratum not like 'YT%'
-                     order by cruise6, station, svspp", sep='')
+                     order by cruise6, station, svspp")
   catch <- data.table::as.data.table(DBI::dbGetQuery(channel, catch.qry))
   data.table::setkey(catch, CRUISE6, STATION, STRATUM, TOW)
 
@@ -177,12 +177,12 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   # Length Data --------------------------------------------------------------
   message("Getting Length Data ...")
   #Length data
-  length.qry <- paste("select cruise6, station, stratum, tow, svspp, catchsex,
+  length.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                       length, expnumlen as numlen
                       from UNION_FSCS_SVLEN
                       where cruise6 in (", cruise6, ")
                       and stratum not like 'YT%'
-                      order by cruise6, station, svspp, length", sep='')
+                      order by cruise6, station, svspp, length")
   len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
   data.table::setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
 
@@ -197,10 +197,10 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   # Biology Data --------------------------------------------------------------
   if (bio) {
     message("Getting Individual Fish (Bio) Data ...")
-    bio.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, indid,
+    bio.qry <- paste0("select cruise6, station, stratum, svspp, catchsex, length, indid,
                   indwt, sex, maturity, age, stom_volume, stom_wgt
                   from UNION_FSCS_SVBIO
-                  where cruise6 in (", cruise6, ")" , sep = '')
+                  where cruise6 in (", cruise6, ")")
     bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
 
     #Remove YT Stratum
