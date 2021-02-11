@@ -6,15 +6,20 @@
 \usage{
 get_survdat_data(
   channel,
+  filterByYear = NA,
   all.season = F,
   shg.check = T,
   conversion.factor = T,
   use.SAD = F,
-  bio = F
+  getBio = F,
+  getLengths = T
 )
 }
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
+
+\item{filterByYear}{Numeric vector. Subset of years from which to pull data.
+If not specified then all years are pulled. (Default = NA)}
 
 \item{all.season}{Boolean. Spring and Fall only (F) otherwise T. (Default = F)}
 
@@ -24,7 +29,10 @@ get_survdat_data(
 
 \item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)}
 
-\item{bio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
+\item{getBio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
+
+\item{getLengths}{Boolean. Include length data which includes the length in
+cm and the number at length. (Default = T)}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
