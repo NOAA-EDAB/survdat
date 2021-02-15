@@ -38,10 +38,12 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   stratmeanData <- data.table::copy(prepData)
 
   #Remove length data if present
-  data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
-  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
-  stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
-
+  if(length(which(names(stratmeanData) == "LENGTH")) == 1){
+    data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+    stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+    stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
+  }
+  
   data.table::setnames(stratmeanData, c(groupDescription, areaDescription),
                        c('group', 'strat'))
 
