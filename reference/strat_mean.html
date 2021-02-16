@@ -145,6 +145,7 @@ associated variance and standard error.</p>
   groupDescription <span class='op'>=</span> <span class='st'>"SVSPP"</span>,
   filterByGroup <span class='op'>=</span> <span class='st'>"all"</span>,
   mergesexFlag <span class='op'>=</span> <span class='cn'>T</span>,
+  <span class='va'>seasonFlag</span>,
   <span class='va'>areaDescription</span>,
   <span class='va'>poststratFlag</span>
 <span class='op'>)</span></pre>
@@ -170,6 +171,10 @@ contains the groups (e.g. "SVSPP") on which the means are based.</p></td>
     <tr>
       <th>mergesexFlag</th>
       <td><p>Boolean. Logical value to merge sexed species such as dogfish.</p></td>
+    </tr>
+    <tr>
+      <th>seasonFlag</th>
+      <td><p>Boolean. Logical value to merge seasons (F) or keep them separate (T).</p></td>
     </tr>
     <tr>
       <th>areaDescription</th>
