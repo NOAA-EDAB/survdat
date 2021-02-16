@@ -49,9 +49,12 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
 
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
-  #Pick up here...
+  #Check if calculating mean base on all station or by season
+  if(filterBySeason[1] == "all"){seasonFlag <- F}else{seasonFlag <- T}
+  
   stratmeanData <- survdat::strat_mean(prepData, groupDescription, filterByGroup,
-                                       mergesexFlag, areaDescription, poststratFlag)
+                                       mergesexFlag, seasonFlag = seasonFlag,
+                                       areaDescription, poststratFlag)
 
   # create tidy data
   if(tidy){
