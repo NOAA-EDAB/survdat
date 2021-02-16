@@ -58,9 +58,15 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
   }
 
   #FilterData
-  if(filterByArea[1] != "all" | filterBySeason[1] != "all") message("Filtering data ...")
+  if(filterByArea[1] != "all" | filterBySeason[1] != "all"){
+    message("Filtering data ...")
+    seasonFlag <- T
+  }
 
-  if(filterBySeason == 'all') filterBySeason <- c('FALL', 'SPRING')
+  if(filterBySeason[1] == 'all'){
+    filterBySeason <- unique(surveyData[, SEASON])
+    seasonFlag <- F
+  }
 
   # check to create all areas
   if (length(filterByArea)==1) {
@@ -97,21 +103,29 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
 
   #x %>% dplyr::distinct(YEAR,CRUISE6,STRAT,STATION)
   # Count the number of stations in each year for each Region
-  data.table::setkey(stations, YEAR, STRAT)
+  if(seasonFlag){
+    data.table::setkey(stations, YEAR, CRUISE6, STRAT)
+  } else { data.table::setkey(stations, YEAR, STRAT)}
   stations[, ntows := length(STATION), by = key(stations)]
 
   #Merge stations and area
   stations <- base::merge(stations, polygonArea, by = 'STRAT', all.x = T)
 
   #Calculate stratum weight
-  data.table::setkey(stations, 'YEAR', 'STRAT')
+  if(seasonFlag){
+    keyoff <- c('YEAR', 'CRUISE6')
+  } else { 
+    keyoff <- 'YEAR'
+  }
+  data.table::setkeyv(stations, c(keyoff, 'STRAT'))
   strat.year <- unique(stations, by = key(stations))
-  strat.year[, c('CRUISE6', 'STATION', 'ntows') := NULL]
-  strat.year[, W.h := S.AREA / sum(S.AREA, na.rm = T), by = YEAR]
+  strat.year[, c('STATION', 'ntows') := NULL]
+  strat.year[, W.h := S.AREA / sum(S.AREA, na.rm = T), by = keyoff]
   strat.year[, W.h := as.vector(W.h)] #Drops the units from the area
   strat.year[is.na(W.h), W.h := 0]
   strat.year[, S.AREA := NULL]
-
+  if(!seasonFlag) strat.year[, CRUISE6 := NULL]
+  
   #Merge back
   stations <- merge(stations, strat.year, by = key(stations))
 
@@ -127,5 +141,5 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
     prepData[, STATION2 := NULL]
   }
 
-  return(prepData)
+  return(prepData[])
 }

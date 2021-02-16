@@ -49,31 +49,37 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
 
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
-  #Pick up here...
+  #Check if calculating mean base on all station or by season
+  if(filterBySeason[1] == "all"){seasonFlag <- F}else{seasonFlag <- T}
+  
   stratmeanData <- survdat::strat_mean(prepData, groupDescription, filterByGroup,
-                                       mergesexFlag, areaDescription, poststratFlag)
+                                       mergesexFlag, seasonFlag = seasonFlag,
+                                       areaDescription, poststratFlag)
 
   # create tidy data
   if(tidy){
     message("Tidying data  ...")
     tidyData <- data.table::melt.data.table(stratmeanData, id.vars = c('YEAR',
-                                                                       'SVSPP'),
+                                                                       'SVSPP',
+                                                                       'SEASON'),
                                             measure.vars = c('strat.biomass',
                                                              'biomass.var',
+                                                             'biomass.SE',
                                                              'strat.abund',
-                                                             'abund.var'))
+                                                             'abund.var',
+                                                             'abund.SE'))
     tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
     tidyData[variable == 'biomass.var',   units := '(kg tow^-1)^2']
+    tidyData[variable == 'biomass.SE',    units := 'kg tow^-1']
     tidyData[variable == 'strat.abund',   units := 'number tow^-1']
     tidyData[variable == 'abund.var',     units := '(numbers tow^-1)^2']
+    tidyData[variable == 'abund.SE',      units := 'kg tow^-1']
     stratmeanData <- tidyData
   }
-
-  stratmeanData[]
 
   if(returnPrepData) stratmeanData <- list(stratmeanData = stratmeanData,
                                            prepData = prepData)
 
-  return(stratmeanData)
+  return(stratmeanData[])
 }
 

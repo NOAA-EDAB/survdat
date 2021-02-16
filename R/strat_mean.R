@@ -12,6 +12,7 @@
 #' @param filterByGroup Character or numeric vector. Set of groups to subset from
 #'  \code{groupDescription}.  The default "all" will calculate means for all groups.
 #' @param mergesexFlag Boolean. Logical value to merge sexed species such as dogfish.
+#' @param seasonFlag Boolean. Logical value to merge seasons (F) or keep them separate (T).
 #' @param poststratFlag Boolean. Logical value indicating whether the original
 #'  strata design was used or not.  Changes the calculation for the variance for
 #'  post-stratified uses of survey data.
@@ -33,15 +34,17 @@
 
 
 strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "all",
-                        mergesexFlag = T, areaDescription, poststratFlag) {
+                        mergesexFlag = T, seasonFlag, areaDescription, poststratFlag) {
 
   stratmeanData <- data.table::copy(prepData)
 
   #Remove length data if present
-  data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
-  stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
-  stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
-
+  if(length(which(names(stratmeanData) == "LENGTH")) == 1){
+    data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+    stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
+    stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
+  }
+  
   data.table::setnames(stratmeanData, c(groupDescription, areaDescription),
                        c('group', 'strat'))
 
@@ -58,9 +61,15 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   stratmeanData[is.na(ABUNDANCE), ABUNDANCE := 0]
 
   #Calculate total number of stations per year
-  data.table::setkey(stratmeanData, strat, YEAR)
-  N <- unique(stratmeanData, by = key(stratmeanData))
-  N <- N[, sum(ntows), by = 'YEAR']
+  #Determine if merging year or treating seasons separate
+  if(seasonFlag){
+    keyoff <- c('YEAR', 'SEASON')
+  } else {
+      keyoff <- 'YEAR'
+    }
+  data.table::setkey(stratmeanData, CRUISE6, strat, STATION)
+  stations <- unique(stratmeanData, by = key(stratmeanData))
+  N <- stations[, length(ntows), by = keyoff]
   data.table::setnames(N, 'V1', 'N')
 
   #Subset data if necessary
@@ -73,7 +82,7 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   }
 
   #Calculate weight per tow and number per tow
-  data.table::setkey(stratmeanData, group, strat, YEAR)
+  data.table::setkeyv(stratmeanData, c('group', 'strat', keyoff))
 
   stratmeanData[, biomass.tow   := sum(BIOMASS)   / ntows, by = key(stratmeanData)]
   stratmeanData[, abundance.tow := sum(ABUNDANCE) / ntows, by = key(stratmeanData)]
@@ -97,10 +106,10 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
 
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
 
-  stratmeanData <- merge(stratmeanData, N, by = 'YEAR')
+  stratmeanData <- merge(stratmeanData, N, by = keyoff)
 
   #Stratified mean
-  data.table::setkey(stratmeanData, group, YEAR)
+  data.table::setkeyv(stratmeanData, c('group', keyoff))
 
   stratmeanData[, strat.biomass := sum(weighted.biomass),   by = key(stratmeanData)]
   stratmeanData[, strat.abund   := sum(weighted.abundance), by = key(stratmeanData)]
@@ -123,7 +132,7 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
 
   #Delete extra rows/columns
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
-  stratmeanData <- stratmeanData[, list(YEAR, group, CATCHSEX, N, strat.biomass,
+  stratmeanData <- stratmeanData[, list(YEAR, SEASON, group, CATCHSEX, N, strat.biomass,
                                         biomass.var, biomass.SE, strat.abund,
                                         abund.var, abund.SE)]
   if(mergesexFlag == T) stratmeanData[, CATCHSEX := NULL]
@@ -136,12 +145,10 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
     stratmeanData[, glen := NULL]
     data.table::setkey(stratmeanData, YEAR, SVSPP, CATCHSEX)
   }
-
+  
+  if(seasonFlag == F) stratmeanData[, SEASON := 'ALL']
+  
   data.table::setnames(stratmeanData, 'group', groupDescription)
 
-  #Weird quirk with data.table needs this so the results will be displayed the
-  #first time you look at the R object
-  stratmeanData[]
-
-  return(stratmeanData)
+  return(stratmeanData[])
 }

@@ -96,7 +96,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   message("Getting Cruise list  ...")
 
   #Create year vector
-  if(is.na(filterByYear)){
+  if(is.na(filterByYear[1])){
     years <- ">= 1963"
   }else{
     years <- paste0("in (", survdat:::sqltext(filterByYear), ")")
@@ -240,7 +240,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   #Convert number fields from chr to num
   numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
-  survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols]
+  survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols][]
 
 
 

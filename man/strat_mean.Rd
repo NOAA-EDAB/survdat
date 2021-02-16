@@ -9,6 +9,7 @@ strat_mean(
   groupDescription = "SVSPP",
   filterByGroup = "all",
   mergesexFlag = T,
+  seasonFlag,
   areaDescription,
   poststratFlag
 )
@@ -24,6 +25,8 @@ contains the groups (e.g. "SVSPP") on which the means are based.}
 \code{groupDescription}.  The default "all" will calculate means for all groups.}
 
 \item{mergesexFlag}{Boolean. Logical value to merge sexed species such as dogfish.}
+
+\item{seasonFlag}{Boolean. Logical value to merge seasons (F) or keep them separate (T).}
 
 \item{areaDescription}{Character String. Column name from \code{areaPolygon}
 that contains the strata designations.}
