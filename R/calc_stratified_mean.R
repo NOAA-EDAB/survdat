@@ -60,7 +60,7 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
   if(tidy){
     message("Tidying data  ...")
     tidyData <- data.table::melt.data.table(stratmeanData, id.vars = c('YEAR',
-                                                                       'SVSPP',
+                                                                       groupDescription,
                                                                        'SEASON'),
                                             measure.vars = c('strat.biomass',
                                                              'biomass.var',
