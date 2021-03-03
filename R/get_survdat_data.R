@@ -69,7 +69,7 @@
 #'
 #' \item{functionCall}{The call used to create the data pul}
 #'
-#' @importFrom data.table "like"
+#' @importFrom data.table "%like%"
 #'
 #'@family survdat
 #'
