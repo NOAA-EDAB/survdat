@@ -1,16 +1,6 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # survdat
 
-![deploy to github
-pages](https://github.com/NOAA-EDAB/survdat/workflows/deploy%20to%20github%20pages/badge.svg)
-![Install on
-windows](https://github.com/NOAA-EDAB/survdat/workflows/Install%20on%20windows/badge.svg)
-![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)
+![deploy to github pages](https://github.com/NOAA-EDAB/survdat/workflows/deploy%20to%20github%20pages/badge.svg) ![Install on windows](https://github.com/NOAA-EDAB/survdat/workflows/Install%20on%20windows/badge.svg) ![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)
 
 Pull and process survey data
 
@@ -47,3 +37,7 @@ endorsement, recommendation or favoring by the Department of Commerce.
 The Department of Commerce seal and logo, or the seal and logo of a DOC
 bureau, shall not be used in any manner to imply endorsement of any
 commercial product or activity by DOC or the United States Government.*
+
+<img src="https://raw.githubusercontent.com/nmfs-general-modeling-tools/nmfspalette/main/man/figures/noaa-fisheries-rgb-2line-horizontal-small.png" height="75" alt="NOAA Fisheries">
+
+[U.S. Department of Commerce](https://www.commerce.gov/) | [National Oceanographic and Atmospheric Administration](https://www.noaa.gov) | [NOAA Fisheries](https://www.fisheries.noaa.gov/)
