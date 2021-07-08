@@ -206,8 +206,8 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   # Weight at Length Data -----------------------------------------------------
   if(getWeightLength & getLengths == F){
-    errorCondition("Can not calculate weight at length without lengths.  
-                   Set getLengths to TRUE.")
+    stop("Can not calculate weight at length without lengths...
+         Set getLengths to TRUE.")
   } 
   if(getWeightLength){
     message("Getting Weight at Length Data ...")
@@ -233,7 +233,16 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
     #Apply length-weight
     
     #Merge with survdat
-    setnames(lw, "SEX", "CATCHSEX")
+    data.table::setnames(lw, "SEX", "CATCHSEX")
+    # For some reason svdbs.length_weight_coefficients stored SVSPP as numeric
+    # Need to convert to character
+    lw[SVSPP < 10, SPPCH := paste0("00", SVSPP)]
+    lw[SVSPP < 100 & SVSPP >= 10, SPPCH := paste0("0", SVSPP)]
+    lw[SVSPP >= 100, SPPCH := as.character(SVSPP)]
+    lw[, SVSPP := NULL]
+    data.table::setnames(lw, 'SPPCH', 'SVSPP')
+    lw[, CATCHSEX := as.character(CATCHSEX)]
+    
     survdat <- merge(survdat, lw, by = c('SVSPP', 'CATCHSEX'), all.x = T)
     
     #Calculate weight at length
