@@ -32,6 +32,7 @@ Other survdat:
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
+\code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{get_survdat_data}()},
 \code{\link{strat_mean}()},

@@ -12,7 +12,8 @@ get_survdat_data(
   conversion.factor = T,
   use.SAD = F,
   getBio = F,
-  getLengths = T
+  getLengths = T,
+  getWeightLength = F
 )
 }
 \arguments{
@@ -33,6 +34,9 @@ If not specified then all years are pulled. (Default = NA)}
 
 \item{getLengths}{Boolean. Include length data which includes the length in
 cm and the number at length. (Default = T)}
+
+\item{getWeightLength}{Boolean. Include the weight at length by applying length
+weight coefficients from SVDBS. (Default = F)}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
@@ -112,6 +116,7 @@ Other survdat:
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
+\code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{post_strat}()},
 \code{\link{strat_mean}()},

@@ -75,6 +75,7 @@ calc_swept_area(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU"
 Other survdat: 
 \code{\link{calc_stratified_mean}()},
 \code{\link{get_area}()},
+\code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{get_survdat_data}()},
 \code{\link{post_strat}()},
