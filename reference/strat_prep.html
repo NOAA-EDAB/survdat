@@ -159,7 +159,8 @@ sub setting the data by species of interest to ensure all stations are accounted
     </tr>
     <tr>
       <th>areaPolygon</th>
-      <td><p>sf object. Name of the object containing the shapefile.</p></td>
+      <td><p>sf object or character string. Default = "NEFSC strata". The default option uses the survey strata shapefile bundled with the package.
+To use any other shapefile for stratification, the shapefile must be read in as an <a href='https://r-spatial.github.io/sf/reference/sf.html'>sf</a> object and the <code>areaDescription</code> argument must be specified.</p></td>
     </tr>
     <tr>
       <th>areaDescription</th>
