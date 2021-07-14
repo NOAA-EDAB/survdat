@@ -208,32 +208,14 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   if(getWeightLength & getLengths == F){
     stop("Can not calculate weight at length without lengths...
          Set getLengths to TRUE.")
-  } 
+  }
   if(getWeightLength){
     message("Getting Weight at Length Data ...")
-    #Grab survey length/weight coefficients
-    lw.qry <- "select svspp, sex, svlwexp, svlwcoeff, svlwexp_spring, svlwcoeff_spring,
-               svlwexp_fall, svlwcoeff_fall, svlwexp_winter, svlwcoeff_winter,
-               svlwexp_summer, svlwcoeff_summer
-               from svdbs.length_weight_coefficients"
-    
-    lw <- data.table::as.data.table(DBI::dbGetQuery(channel, lw.qry))
-    
-    #Clean up NAs
-    lw <- lw[!is.na(SVLWEXP), ]
-    lw[is.na(SVLWEXP_SPRING), SVLWEXP_SPRING := SVLWEXP]
-    lw[is.na(SVLWEXP_FALL),   SVLWEXP_FALL   := SVLWEXP]
-    lw[is.na(SVLWEXP_WINTER), SVLWEXP_WINTER := SVLWEXP]
-    lw[is.na(SVLWEXP_SUMMER), SVLWEXP_SUMMER := SVLWEXP]
-    lw[is.na(SVLWCOEFF_SPRING), SVLWCOEFF_SPRING := SVLWCOEFF]
-    lw[is.na(SVLWCOEFF_FALL),   SVLWCOEFF_FALL   := SVLWCOEFF]
-    lw[is.na(SVLWCOEFF_WINTER), SVLWCOEFF_WINTER := SVLWCOEFF]
-    lw[is.na(SVLWCOEFF_SUMMER), SVLWCOEFF_SUMMER := SVLWCOEFF]
-    
-    #Apply length-weight
-    
-    #Merge with survdat
-    data.table::setnames(lw, "SEX", "CATCHSEX")
+    #Grab survey length/weight coefficients using survdat function
+    lwpull <- get_length_weight(channel)
+
+    lw <- lwpull$data
+
     # For some reason svdbs.length_weight_coefficients stored SVSPP as numeric
     # Need to convert to character
     lw[SVSPP < 10, SPPCH := paste0("00", SVSPP)]
@@ -242,27 +224,27 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
     lw[, SVSPP := NULL]
     data.table::setnames(lw, 'SPPCH', 'SVSPP')
     lw[, CATCHSEX := as.character(CATCHSEX)]
-    
+
     survdat <- merge(survdat, lw, by = c('SVSPP', 'CATCHSEX'), all.x = T)
-    
+
     #Calculate weight at length
     survdat[SEASON == 'SPRING', INDWT := exp(SVLWCOEFF_SPRING + SVLWEXP_SPRING * log(LENGTH))]
     survdat[SEASON == 'FALL',   INDWT := exp(SVLWCOEFF_FALL   + SVLWEXP_FALL   * log(LENGTH))]
     survdat[SEASON == 'WINTER', INDWT := exp(SVLWCOEFF_WINTER + SVLWEXP_WINTER * log(LENGTH))]
     survdat[SEASON == 'SUMMER', INDWT := exp(SVLWCOEFF_SUMMER + SVLWEXP_SUMMER * log(LENGTH))]
-    
+
     #Calculate expanded weight at length
     survdat[, WGTLEN := INDWT * NUMLEN]
-    
+
     #drop extra columns
-    survdat[, c('SVLWEXP', 'SVLWEXP_SPRING', 'SVLWEXP_FALL', 'SVLWEXP_WINTER', 
+    survdat[, c('SVLWEXP', 'SVLWEXP_SPRING', 'SVLWEXP_FALL', 'SVLWEXP_WINTER',
                 'SVLWEXP_SUMMER', 'SVLWCOEFF', 'SVLWCOEFF_SPRING',
                 'SVLWCOEFF_FALL', 'SVLWCOEFF_WINTER', 'SVLWCOEFF_SUMMER') := NULL]
-    
-    sql <- c(sql, weightlength = lw.qry)
-    
+
+    sql <- c(sql, weightlength = lwpull$sql)
+
   }
-  
+
   # Biology Data --------------------------------------------------------------
   if (getBio) {
     message("Getting Individual Fish (Bio) Data ...")
