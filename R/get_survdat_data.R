@@ -228,13 +228,13 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
     survdat <- merge(survdat, lw, by = c('SVSPP', 'CATCHSEX'), all.x = T)
 
     #Calculate weight at length
-    survdat[SEASON == 'SPRING', INDWT := exp(SVLWCOEFF_SPRING + SVLWEXP_SPRING * log(LENGTH))]
-    survdat[SEASON == 'FALL',   INDWT := exp(SVLWCOEFF_FALL   + SVLWEXP_FALL   * log(LENGTH))]
-    survdat[SEASON == 'WINTER', INDWT := exp(SVLWCOEFF_WINTER + SVLWEXP_WINTER * log(LENGTH))]
-    survdat[SEASON == 'SUMMER', INDWT := exp(SVLWCOEFF_SUMMER + SVLWEXP_SUMMER * log(LENGTH))]
+    survdat[SEASON == 'SPRING', PREDWT := exp(SVLWCOEFF_SPRING + SVLWEXP_SPRING * log(LENGTH))]
+    survdat[SEASON == 'FALL',   PREDWT := exp(SVLWCOEFF_FALL   + SVLWEXP_FALL   * log(LENGTH))]
+    survdat[SEASON == 'WINTER', PREDWT := exp(SVLWCOEFF_WINTER + SVLWEXP_WINTER * log(LENGTH))]
+    survdat[SEASON == 'SUMMER', PREDWT := exp(SVLWCOEFF_SUMMER + SVLWEXP_SUMMER * log(LENGTH))]
 
     #Calculate expanded weight at length
-    survdat[, WGTLEN := INDWT * NUMLEN]
+    survdat[, WGTLEN := PREDWT * NUMLEN]
 
     #drop extra columns
     survdat[, c('SVLWEXP', 'SVLWEXP_SPRING', 'SVLWEXP_FALL', 'SVLWEXP_WINTER',
