@@ -1,4 +1,4 @@
-#'Generate a table of length weight coefficients 
+#'Generate a table of length weight coefficients
 #'
 #'Pulls the length-weight coefficients calculated from NOAA Tech Memo NMFS-NE-171.
 #'
@@ -23,9 +23,9 @@ get_length_weight <- function(channel){
                svlwexp_fall, svlwcoeff_fall, svlwexp_winter, svlwcoeff_winter,
                svlwexp_summer, svlwcoeff_summer
                from svdbs.length_weight_coefficients"
-  
+
   lw <- data.table::as.data.table(DBI::dbGetQuery(channel, lw.qry))
-  
+
   #Clean up NAs
   lw <- lw[!is.na(SVLWEXP), ]
   lw[is.na(SVLWEXP_SPRING), SVLWEXP_SPRING := SVLWEXP]
@@ -36,9 +36,14 @@ get_length_weight <- function(channel){
   lw[is.na(SVLWCOEFF_FALL),   SVLWCOEFF_FALL   := SVLWCOEFF]
   lw[is.na(SVLWCOEFF_WINTER), SVLWCOEFF_WINTER := SVLWCOEFF]
   lw[is.na(SVLWCOEFF_SUMMER), SVLWCOEFF_SUMMER := SVLWCOEFF]
-  
+
   #Make output amendable to survdat
   data.table::setnames(lw, "SEX", "CATCHSEX")
 
-  return(lw)
+  # get column names
+  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'LENGTH_WEIGHT_COEFFICIENTS' and owner='SVDBS';"
+  colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
+
+  return (list(data=lw,sql=lw.qry, colNames=colNames))
+
 }
