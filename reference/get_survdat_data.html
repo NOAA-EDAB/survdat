@@ -148,7 +148,8 @@
   conversion.factor <span class='op'>=</span> <span class='cn'>T</span>,
   use.SAD <span class='op'>=</span> <span class='cn'>F</span>,
   getBio <span class='op'>=</span> <span class='cn'>F</span>,
-  getLengths <span class='op'>=</span> <span class='cn'>T</span>
+  getLengths <span class='op'>=</span> <span class='cn'>T</span>,
+  getWeightLength <span class='op'>=</span> <span class='cn'>F</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -187,6 +188,11 @@ If not specified then all years are pulled. (Default = NA)</p></td>
       <th>getLengths</th>
       <td><p>Boolean. Include length data which includes the length in
 cm and the number at length. (Default = T)</p></td>
+    </tr>
+    <tr>
+      <th>getWeightLength</th>
+      <td><p>Boolean. Include the weight at length by applying length
+weight coefficients from SVDBS. (Default = F)</p></td>
     </tr>
     </table>
 
@@ -252,6 +258,7 @@ The expression:
 <code><a href='calc_stratified_mean.html'>calc_stratified_mean</a>()</code>,
 <code><a href='calc_swept_area.html'>calc_swept_area</a>()</code>,
 <code><a href='get_area.html'>get_area</a>()</code>,
+<code><a href='get_length_weight.html'>get_length_weight</a>()</code>,
 <code><a href='get_survdat_clam_data.html'>get_survdat_clam_data</a>()</code>,
 <code><a href='post_strat.html'>post_strat</a>()</code>,
 <code><a href='strat_mean.html'>strat_mean</a>()</code>,
