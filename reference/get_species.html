@@ -8,6 +8,13 @@
 
 <title>Extract SPECIES information from SVDBS — get_species • survdat</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -38,11 +45,10 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Extract SPECIES information from SVDBS — get_species" />
 <meta property="og:description" content="Extract a list of speices names, code, market category, etc from the SVDBS SVSPECIES_LIST table" />
+<meta property="og:image" content="https://noaa-edab.github.io/survdat/logo.png" />
 
 
 
@@ -190,7 +196,7 @@ The default sql statement "select * from svdbs.svspecies_list" is used
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># extracts complete species table based on custom sql statement</span>
-<span class='va'>channel</span> <span class='op'>&lt;-</span> <span class='fu'>dbutils</span><span class='fu'>::</span><span class='fu'>connect_to_database</span><span class='op'>(</span>server<span class='op'>=</span><span class='st'>"serverName"</span>,uid<span class='op'>=</span><span class='st'>"userName"</span><span class='op'>)</span>
+<span class='va'>channel</span> <span class='op'>&lt;-</span> <span class='fu'>dbutils</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/dbutils/man/connect_to_database.html'>connect_to_database</a></span><span class='op'>(</span>server<span class='op'>=</span><span class='st'>"serverName"</span>,uid<span class='op'>=</span><span class='st'>"userName"</span><span class='op'>)</span>
 <span class='fu'>get_species</span><span class='op'>(</span><span class='va'>channel</span><span class='op'>)</span>
 
 <span class='co'># extracts info for cod (73)</span>
