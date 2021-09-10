@@ -31,6 +31,6 @@ create_hex <- function() {
                       url = "noaa-edab.github.io/survdat",
                       u_size = 5.8,
                       white_around_sticker = T,
-                      filename = here::here("man/figures", "logo.png"))
+                      filename = here::here("man/figures", "logoWhiteBack.png"))
 
 }
