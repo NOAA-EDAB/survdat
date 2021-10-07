@@ -6,3 +6,4 @@
 other
 testing
 ^data-raw$
+^\.github$
