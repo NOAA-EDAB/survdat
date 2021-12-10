@@ -3,8 +3,8 @@
 ### Everything you need to pull and process the NEFSC survey data
 
 <!-- badges: start -->
-[![gh-pages](https://github.com/NOAA-EDAB/survdat/workflows/deploy%20to%20github%20pages/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
-[![Install on windows](https://github.com/NOAA-EDAB/survdat/workflows/Install%20on%20windows/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions) [![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
+[![gh-pages](https://github.com/NOAA-EDAB/survdat/workflows/gh-pages/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
+[![R-CMD-check](https://github.com/NOAA-EDAB/survdat/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions/workflows/check-standard.yaml) [![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
 <!-- badges: end -->
 
 ---
