@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_length_weight_data.R
 \name{get_length_weight_data}
 \alias{get_length_weight_data}
-\title{Extract Length and weight data from svdbs}
+\title{Extract Length and weight data from SVDBS}
 \usage{
 get_length_weight_data(channel, year = 1994, species = "all", sex = "all")
 }
@@ -25,7 +25,7 @@ The data frame (\code{data}) (Descriptions taken from NEFSC Data dictionary)
 \item{CRUISE6}{Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)}
 \item{STRATUM}{	A predefined area where a net dredge, or other piece of gear was deployed. Code consists of 2 parts: Stratum group code number (2 bytes) and stratum number (3 bytes). Stratum group refers to if area fished is inshore or offshore North or South of Cape Hatteras or the type of cruise (shellfish, State of MA, offshore deepwater). The stratum number (third and fourth digits of code) refers to area defined by depth zone. See SVDBS.SVMSTRATA. The fifth digit of the code increases the length of the stratum number for revised strata after the Hague Line was established. Stratum group code: 01 = Trawl, offshore north of Hatteras; 02 = BIOM; 03 = Trawl, inshore north of Hatteras; 04 = Shrimp; 05 = Scotian shelf; 06 = Shellfish; 07 = Trawl, inshore south of Hatteras; 08 = Trawl, Offshore south of Hatteras; 09 = MA DMF; 99 = Offshore deepwater (outside the stratified area). A change in Bottom Trawl Stratum for the Gulf of Maine-Bay of Fundy has been in effect since Spring 1987, and may be summarized as follows: Previous strata: 01350; Present strata: 01351, 01352.}
 \item{TOW}{Sequential number representing order in which station was selected within a stratum.}
-\item{STATION}{}
+\item{STATION}{Unique sequential order in which stations have been completed. Hangups and short tows each receive a non-repeated consecutive number.}
 \item{SVSPP}{A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST}
 \item{SEASON}{	Season of the year in which cruise was conducted.}
 \item{SEX}{Code indicating sex of fish or invertebrate species. See SVDBS.FSCS_SEX_CODES if using fscs data and SVDBS.SEX_CODES if using non FSCS data. Codes 0, 1, 2 and 4 are the only valid codes in fscs tables.}
