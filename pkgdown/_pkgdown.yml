@@ -32,6 +32,7 @@ reference:
   - get_vessel
   - get_conversion_factors
   - get_length_weight
+  - get_length_weight_data
 - title: "Plotting"
   desc: "Basic plotting functions to visualize data"
 - contents:
