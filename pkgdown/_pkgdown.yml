@@ -38,5 +38,9 @@ reference:
 - contents:
   - plot_data_area
   - plot_shapefile
+- title: "Package Info"
+  desc: ""
+- contents:
+  - survdat
 
 
