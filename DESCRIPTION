@@ -16,7 +16,8 @@ License: file LICENSE
 Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
-URL: https://github.com/NOAA-EDAB/survdat
+URL: https://github.com/NOAA-EDAB/survdat,
+    https://noaa-edab.github.io/survdat/
 BugReports: https://github.com/NOAA-EDAB/survdat/issues
 Imports: 
     data.table,
