@@ -44,6 +44,8 @@ get_area <- function(areaPolygon, areaDescription){
     dplyr::select(areaDescription) %>%
     dplyr::rename(STRATUM = areaDescription) %>%
     cbind(.,Area) %>%
+    group_by(STRATUM) %>%
+    summarise(sum(Area), .groups = 'keep') %>%
     data.table::as.data.table()
 
   return(strata)
