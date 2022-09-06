@@ -21,11 +21,13 @@ Pulls the length-weight coefficients calculated from NOAA Tech Memo NMFS-NE-171.
 }
 \seealso{
 Other survdat: 
+\code{\link{calc_discards}()},
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{get_survdat_data}()},
+\code{\link{get_survdat_scallop_data}()},
 \code{\link{post_strat}()},
 \code{\link{strat_mean}()},
 \code{\link{swept_area}()}

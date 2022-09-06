@@ -50,9 +50,6 @@ a \code{q} of 1 for each \code{groupDescription} (Minimum swept area estimates).
 \item{a}{Numeric. The average swept area of the trawl.  Default value is the
 swept area of a standard NOAA Ship Albatross IV tow.}
 }
-\value{
-
-}
 \description{
 Calculates the biomass. Details found here ...
 }
@@ -74,11 +71,13 @@ calc_swept_area(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU"
 }
 \seealso{
 Other survdat: 
+\code{\link{calc_discards}()},
 \code{\link{calc_stratified_mean}()},
 \code{\link{get_area}()},
 \code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{get_survdat_data}()},
+\code{\link{get_survdat_scallop_data}()},
 \code{\link{post_strat}()},
 \code{\link{strat_mean}()},
 \code{\link{swept_area}()}
