@@ -53,7 +53,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -102,7 +102,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/survdat" class="external-link">survdat</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/survdat" class="external-link">survdat</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="connect-to-the-database">Connect to the database<a class="anchor" aria-label="anchor" href="#connect-to-the-database"></a>
 </h2>
@@ -114,9 +114,9 @@
 <h2 id="pull-data">Pull Data<a class="anchor" aria-label="anchor" href="#pull-data"></a>
 </h2>
 <p>Pulling the data takes up to 15 minutes to complete. see <code>get_survdat_data</code> for details. To pull the survey data with conversion corrections applied use the following:</p>
-<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></code></pre>
 <p>To pull biological traits of individual fish sampled on the survey cruise</p>
-<pre><code><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, bio<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></code></pre>
+<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, bio<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 <p><code>data</code> is a list of 2 elements. The data pull and the set of sql statements made to pull the data</p>
 </div>
 <div class="section level2">
@@ -125,8 +125,8 @@
 <p>Two shape files are included in the package, <code>strata.shp</code> and <code>EPU.shp</code></p>
 <p>To read and plot the <code>EPU.shp</code> file:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">areaPolygon</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"EPU.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot_shapefile.html">plot_shapefile</a></span><span class="op">(</span><span class="va">areaPolygon</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">areaPolygon</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"EPU.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot_shapefile.html">plot_shapefile</a></span><span class="op">(</span><span class="va">areaPolygon</span><span class="op">)</span></span></code></pre></div>
 <p><img src="survdat_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div class="section level2">
@@ -173,7 +173,7 @@ plot_data_area(points=data$survdat,polygons=area,crs)
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

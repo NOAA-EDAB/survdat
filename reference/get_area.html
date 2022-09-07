@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -69,24 +69,31 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_area</span><span class="op">(</span><span class="va">areaPolygon</span>, <span class="va">areaDescription</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_area</span><span class="op">(</span><span class="va">areaPolygon</span>, <span class="va">areaDescription</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>areaPolygon</dt>
 <dd><p>sf object. Name of the object containing the shapefile.</p></dd>
+
+
 <dt>areaDescription</dt>
 <dd><p>Character String. Column name from <code>areaPolygon</code>
 that contains the strata designations.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data.table (nx2).</p>
+    
+
+<p>Returns a data.table (nx2).</p>
 <dl><dt>STRATA</dt>
 <dd><p>The name of each Region</p></dd>
+
 <dt>AREA</dt>
 <dd><p>The area of the STRATA in square kilometers</p></dd>
+
 </dl></div>
     <div id="coordinate-reference-system-crs-">
     <h2>Coordinate reference system (CRS)</h2>
@@ -110,12 +117,12 @@ that contains the strata designations.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">#Find the area of each Stratum in the strata.shp shapefile (bundled with the package)</span></span>
-<span class="r-in"><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span>dsn<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"strata.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_area</span><span class="op">(</span>areaPolygon <span class="op">=</span> <span class="va">area</span>, areaDescription<span class="op">=</span><span class="st">"STRATA"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">#Find the area of each Stratum in the strata.shp shapefile (bundled with the package)</span></span></span>
+<span class="r-in"><span><span class="va">area</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span>dsn<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"strata.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_area</span><span class="op">(</span>areaPolygon <span class="op">=</span> <span class="va">area</span>, areaDescription<span class="op">=</span><span class="st">"STRATA"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -130,7 +137,7 @@ that contains the strata designations.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

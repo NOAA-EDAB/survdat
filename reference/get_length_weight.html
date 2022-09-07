@@ -29,7 +29,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -69,23 +69,29 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_length_weight</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_length_weight</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>channel</dt>
 <dd><p>an Object inherited from <a href="https://dbi.r-dbi.org/reference/DBIConnection-class.html" class="external-link">DBIConnection-class</a>. This object is used to communicate with the database engine. (see <code><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data.table (nx12).</p>
+    
+
+<p>Returns a data.table (nx12).</p>
 <dl><dt>SVSPP</dt>
 <dd><p>A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST</p></dd>
+
 <dt>SVLWEXP</dt>
 <dd><p>The exponent of the length-weight equation, b.</p></dd>
+
 <dt>SVLWCOEFF</dt>
 <dd><p>The natural log of the coefficient of the length-weight equation, ln a.</p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -112,7 +118,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

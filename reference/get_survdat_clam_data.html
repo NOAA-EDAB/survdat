@@ -34,7 +34,7 @@ Pulls from Cruises with purpose code = 50. (See get_cruise_purpose). Data are as
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -79,140 +79,214 @@ Pulls from Cruises with purpose code = 50. (See <code><a href="get_cruise_purpos
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span>, shg.check <span class="op">=</span> <span class="cn">T</span>, clam.only <span class="op">=</span> <span class="cn">T</span>, tidy <span class="op">=</span> <span class="cn">F</span><span class="op">)</span>
-
-<span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span>, shg.check <span class="op">=</span> <span class="cn">T</span>, clam.only <span class="op">=</span> <span class="cn">T</span>, tidy <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span>, shg.check <span class="op">=</span> <span class="cn">T</span>, clam.only <span class="op">=</span> <span class="cn">T</span>, tidy <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span>, shg.check <span class="op">=</span> <span class="cn">T</span>, clam.only <span class="op">=</span> <span class="cn">T</span>, tidy <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>channel</dt>
 <dd><p>an Object inherited from <a href="https://dbi.r-dbi.org/reference/DBIConnection-class.html" class="external-link">DBIConnection-class</a>. This object is used to communicate with the database engine. (see <code><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></code>)</p></dd>
+
+
 <dt>shg.check</dt>
 <dd><p>Boolean. use only SHG &lt;=136 or TOGA &lt;= 1324 (&gt;2008). (Default = T)</p></dd>
+
+
 <dt>clam.only</dt>
 <dd><p>Boolean. T = grab only Atl. surfclam (403) and ocean quahog (409)</p></dd>
+
+
 <dt>tidy</dt>
 <dd><p>Boolean. Return output in long format (Default = F)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
-Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
-The data frame (Descriptions taken from NEFSC Data dictionary)</p>
+    
+
+<p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
+Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.</p>
+
+
+<p>The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 <dl><dt>clam.region</dt>
 <dd><p>One of 7 identified Regions, 'SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB'</p></dd>
+
 <dt>CRUISE6</dt>
 <dd><p>Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)</p></dd>
+
 <dt>STATION</dt>
 <dd><p>Unique sequential order in which stations have been completed. Hangups and short tows each receive a non-repeated consecutive number.</p></dd>
+
 <dt>STRATUM</dt>
 <dd><p>A predefined area where a net dredge, or other piece of gear was deployed. Code consists of 2 parts: Stratum group code number (2 bytes) and stratum number (3 bytes). Stratum group refers to if area fished is inshore or offshore North or South of Cape Hatteras or the type of cruise (shellfish, State of MA, offshore deepwater). The stratum number (third and fourth digits of code) refers to area defined by depth zone. See SVDBS.SVMSTRATA. The fifth digit of the code increases the length of the stratum number for revised strata after the Hague Line was established. Stratum group code: 01 = Trawl, offshore north of Hatteras; 02 = BIOM; 03 = Trawl, inshore north of Hatteras; 04 = Shrimp; 05 = Scotian shelf; 06 = Shellfish; 07 = Trawl, inshore south of Hatteras; 08 = Trawl, Offshore south of Hatteras; 09 = MA DMF; 99 = Offshore deepwater (outside the stratified area). A change in Bottom Trawl Stratum for the Gulf of Maine-Bay of Fundy has been in effect since Spring 1987, and may be summarized as follows: Previous strata: 01350; Present strata: 01351, 01352.</p></dd>
+
 <dt>SVSPP</dt>
 <dd><p>A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST</p></dd>
+
 <dt>CATCHSEX</dt>
 <dd><p>Code used to identify species that are sexed at the catch level. See SVDBS.SEX_CODES</p></dd>
+
 <dt>SVVESSEL</dt>
 <dd><p>Standard two character code for a survey vessel. Refer to SVDBS.SV_VESSEL</p></dd>
+
 <dt>YEAR</dt>
 <dd><p>Year in which cruise was conducted.</p></dd>
+
 <dt>LAT</dt>
 <dd><p>Beginning latitude of tow in decimal degrees.(DECDEG_BEGLAT)</p></dd>
+
 <dt>LON</dt>
 <dd><p>Beginning longitude of tow in decimal degrees.(DECDEG_BEGLON)</p></dd>
+
 <dt>DEPTH</dt>
 <dd><p>A four digit number recording the average depth, to the nearest meter, during a survey gear deployment.(AVGDEPTH)</p></dd>
+
 <dt>SURFTEMP</dt>
 <dd><p>Surface temperature of water (degrees Celcius).</p></dd>
+
 <dt>SURFSALIN</dt>
 <dd><p>Salinity at water surface in practical salinity units (PSU).</p></dd>
+
 <dt>BOTTEMP</dt>
 <dd><p>Bottom temperature (degrees Celsius).</p></dd>
+
 <dt>BOTSALIN</dt>
 <dd><p>Bottom salinity in Practical Salinity Units (PSU).</p></dd>
+
 <dt>ABUNDANCE</dt>
 <dd><p>Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)</p></dd>
+
 <dt>BIOMASS</dt>
 <dd><p>Expanded catch weight of a species caught at a given station. (EXPCATCHWT)</p></dd>
+
 <dt>LENGTH</dt>
 <dd><p>Measured length of species in centimeters (cm). Measure method differs by species.</p></dd>
+
 <dt>NUMLEN</dt>
 <dd><p>Expanded number of specimens at a given length.(EXPNUMLEN)</p></dd>
+
 <dt>BIOMASS.MW</dt>
 <dd><p>Meat weight of catch based on LENGTH and NUMLEN of clams, conversion factors hard coded</p></dd>
+
+
+
 </dl><p>The list of sql statements:</p>
 <dl><dt>cruise</dt>
 <dd><p>Select unique list of cruises. Table = MSTR_CRUISE</p></dd>
+
 <dt>station</dt>
 <dd><p>Select unique set of stations from result of <code>cruise</code>. Table = UNION_FSCS_SVSTA</p></dd>
+
 <dt>catch</dt>
 <dd><p>Select species abundance and biomass data from result of <code>station</code>. Table = UNION_FSCS_SVCAT</p></dd>
+
 <dt>length</dt>
 <dd><p>Select Lengths of species found in <code>catch</code>. Table = UNION_FSCS_SVLEN</p></dd>
+
+
 </dl><p>The date:</p>
 <dl><dt>pullDate</dt>
 <dd><p>The date the data was pulled from the database</p></dd>
+
+
 </dl><p>The expression:</p>
 <dl><dt>functionCall</dt>
 <dd><p>The call used to create the data pul</p></dd>
+
+
 </dl><p>A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
-Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
-The data frame (Descriptions taken from NEFSC Data dictionary)</p>
+Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.</p>
+
+
+<p>The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 <dl><dt>clam.region</dt>
 <dd><p>One of 7 identified Regions, 'SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB'</p></dd>
+
 <dt>CRUISE6</dt>
 <dd><p>Code uniquely identifying cruise. The first four digits indicate the year and the last two digit uniquely identify the cruise within the year. The 5th byte signifies cruises other than groundfish: Shrimp survey = 7 (i.e. 201470), State of Massachusetts survey = 9 (i.e. 201491), Food habits = 5 (i.e.199554)</p></dd>
+
 <dt>STATION</dt>
 <dd><p>Unique sequential order in which stations have been completed. Hangups and short tows each receive a non-repeated consecutive number.</p></dd>
+
 <dt>STRATUM</dt>
 <dd><p>A predefined area where a net dredge, or other piece of gear was deployed. Code consists of 2 parts: Stratum group code number (2 bytes) and stratum number (3 bytes). Stratum group refers to if area fished is inshore or offshore North or South of Cape Hatteras or the type of cruise (shellfish, State of MA, offshore deepwater). The stratum number (third and fourth digits of code) refers to area defined by depth zone. See SVDBS.SVMSTRATA. The fifth digit of the code increases the length of the stratum number for revised strata after the Hague Line was established. Stratum group code: 01 = Trawl, offshore north of Hatteras; 02 = BIOM; 03 = Trawl, inshore north of Hatteras; 04 = Shrimp; 05 = Scotian shelf; 06 = Shellfish; 07 = Trawl, inshore south of Hatteras; 08 = Trawl, Offshore south of Hatteras; 09 = MA DMF; 99 = Offshore deepwater (outside the stratified area). A change in Bottom Trawl Stratum for the Gulf of Maine-Bay of Fundy has been in effect since Spring 1987, and may be summarized as follows: Previous strata: 01350; Present strata: 01351, 01352.</p></dd>
+
 <dt>SVSPP</dt>
 <dd><p>A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST</p></dd>
+
 <dt>CATCHSEX</dt>
 <dd><p>Code used to identify species that are sexed at the catch level. See SVDBS.SEX_CODES</p></dd>
+
 <dt>SVVESSEL</dt>
 <dd><p>Standard two character code for a survey vessel. Refer to SVDBS.SV_VESSEL</p></dd>
+
 <dt>YEAR</dt>
 <dd><p>Year in which cruise was conducted.</p></dd>
+
 <dt>LAT</dt>
 <dd><p>Beginning latitude of tow in decimal degrees.(DECDEG_BEGLAT)</p></dd>
+
 <dt>LON</dt>
 <dd><p>Beginning longitude of tow in decimal degrees.(DECDEG_BEGLON)</p></dd>
+
 <dt>DEPTH</dt>
 <dd><p>A four digit number recording the average depth, to the nearest meter, during a survey gear deployment.(AVGDEPTH)</p></dd>
+
 <dt>SURFTEMP</dt>
 <dd><p>Surface temperature of water (degrees Celcius).</p></dd>
+
 <dt>SURFSALIN</dt>
 <dd><p>Salinity at water surface in practical salinity units (PSU).</p></dd>
+
 <dt>BOTTEMP</dt>
 <dd><p>Bottom temperature (degrees Celsius).</p></dd>
+
 <dt>BOTSALIN</dt>
 <dd><p>Bottom salinity in Practical Salinity Units (PSU).</p></dd>
+
 <dt>ABUNDANCE</dt>
 <dd><p>Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)</p></dd>
+
 <dt>BIOMASS</dt>
 <dd><p>Expanded catch weight of a species caught at a given station. (EXPCATCHWT)</p></dd>
+
 <dt>LENGTH</dt>
 <dd><p>Measured length of species in centimeters (cm). Measure method differs by species.</p></dd>
+
 <dt>NUMLEN</dt>
 <dd><p>Expanded number of specimens at a given length.(EXPNUMLEN)</p></dd>
+
 <dt>BIOMASS.MW</dt>
 <dd><p>Meat weight of catch based on LENGTH and NUMLEN of clams, conversion factors hard coded</p></dd>
+
+
+
 </dl><p>The list of sql statements:</p>
 <dl><dt>cruise</dt>
 <dd><p>Select unique list of cruises. Table = MSTR_CRUISE</p></dd>
+
 <dt>station</dt>
 <dd><p>Select unique set of stations from result of <code>cruise</code>. Table = UNION_FSCS_SVSTA</p></dd>
+
 <dt>catch</dt>
 <dd><p>Select species abundance and biomass data from result of <code>station</code>. Table = UNION_FSCS_SVCAT</p></dd>
+
 <dt>length</dt>
 <dd><p>Select Lengths of species found in <code>catch</code>. Table = UNION_FSCS_SVLEN</p></dd>
+
+
 </dl><p>The date:</p>
 <dl><dt>pullDate</dt>
 <dd><p>The date the data was pulled from the database</p></dd>
+
+
 </dl><p>The expression:</p>
 <dl><dt>functionCall</dt>
 <dd><p>The call used to create the data pul</p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -238,20 +312,20 @@ The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># Recommended use:</span></span>
-<span class="r-in"><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu"><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></span><span class="op">(</span><span class="st">"serverName"</span>,<span class="st">"userName"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># Recommended use:</span></span>
-<span class="r-in"><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu"><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></span><span class="op">(</span><span class="st">"serverName"</span>,<span class="st">"userName"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Recommended use:</span></span></span>
+<span class="r-in"><span><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu"><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></span><span class="op">(</span><span class="st">"serverName"</span>,<span class="st">"userName"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Recommended use:</span></span></span>
+<span class="r-in"><span><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu"><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></span><span class="op">(</span><span class="st">"serverName"</span>,<span class="st">"userName"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -266,7 +340,7 @@ The data frame (Descriptions taken from NEFSC Data dictionary)</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
