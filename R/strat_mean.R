@@ -127,8 +127,8 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   }
 
   #standard error of the means
-  stratmeanData[, biomass.SE := sqrt(biomass.var / N), by = key(stratmeanData)]
-  stratmeanData[, abund.SE   := sqrt(abund.var / N),   by = key(stratmeanData)]
+  stratmeanData[, biomass.SE := sqrt(biomass.var), by = key(stratmeanData)]
+  stratmeanData[, abund.SE   := sqrt(abund.var),   by = key(stratmeanData)]
 
   #Delete extra rows/columns
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
