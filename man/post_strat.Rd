@@ -30,7 +30,6 @@ Assign survey data (points, lat and lon) to designated regions (polygons) from a
 }
 \seealso{
 Other survdat: 
-\code{\link{calc_discards}()},
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},

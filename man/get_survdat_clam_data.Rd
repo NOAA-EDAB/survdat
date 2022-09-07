@@ -74,7 +74,6 @@ get_survdat_clam_data(channel)
 }
 \seealso{
 Other survdat: 
-\code{\link{calc_discards}()},
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},

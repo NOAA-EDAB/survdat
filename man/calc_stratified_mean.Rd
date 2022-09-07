@@ -67,7 +67,6 @@ calc_stratified_mean(surveyData=data$survdat, areaPolygon=area, areaDescription=
 }
 \seealso{
 Other survdat: 
-\code{\link{calc_discards}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
 \code{\link{get_length_weight}()},
