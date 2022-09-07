@@ -46,9 +46,6 @@ contains the groups (e.g. "SVSPP") on which the means are based.}
 as a list object. The default (F) returns only the \code{stratmeanData} as a
 \code{data.table}.}
 }
-\value{
-
-}
 \description{
 Calculates the stratified mean. Details of method found here ...
 }
@@ -70,11 +67,13 @@ calc_stratified_mean(surveyData=data$survdat, areaPolygon=area, areaDescription=
 }
 \seealso{
 Other survdat: 
+\code{\link{calc_discards}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
 \code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{get_survdat_data}()},
+\code{\link{get_survdat_scallop_data}()},
 \code{\link{post_strat}()},
 \code{\link{strat_mean}()},
 \code{\link{swept_area}()}
