@@ -4,17 +4,17 @@
 \alias{plot_shapefile}
 \title{Plots shapefile}
 \usage{
-plot_shapefile(polygons, crs = 4269)
+plot_shapefile(polygons, crs = 4269, filterPolygons = NULL)
 }
 \arguments{
 \item{polygons}{sf object. The polygons (shapefile)}
 
 \item{crs}{Character string. Defines the coordinate reference system for projection. Default = 4269 (NAD83)}
+
+\item{filterPolygons}{Numeric Vector. (Default = NULL) Set of polygons to plot in a differnt color}
 }
 \value{
 A figure
-
-#'@family plotting
 }
 \description{
 Plots shapefile
@@ -28,3 +28,8 @@ plot_shapefile(polygons=area)
 }
 
 }
+\seealso{
+Other plotting: 
+\code{\link{plot_data_area}()}
+}
+\concept{plotting}

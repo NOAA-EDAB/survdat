@@ -34,4 +34,8 @@ plot_data_area(points= filteredData,polygons = area)
 
 }
 }
+\seealso{
+Other plotting: 
+\code{\link{plot_shapefile}()}
+}
 \concept{plotting}
