@@ -50,9 +50,6 @@ a \code{q} of 1 for each \code{groupDescription} (Minimum swept area estimates).
 \item{a}{Numeric. The average swept area of the trawl.  Default value is the
 swept area of a standard NOAA Ship Albatross IV tow.}
 }
-\value{
-
-}
 \description{
 Calculates the biomass. Details found here ...
 }

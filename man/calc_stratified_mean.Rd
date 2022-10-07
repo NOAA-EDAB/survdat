@@ -46,9 +46,6 @@ contains the groups (e.g. "SVSPP") on which the means are based.}
 as a list object. The default (F) returns only the \code{stratmeanData} as a
 \code{data.table}.}
 }
-\value{
-
-}
 \description{
 Calculates the stratified mean. Details of method found here ...
 }
