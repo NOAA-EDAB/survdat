@@ -9,7 +9,7 @@
 #'   as a list object. The default (F) returns only the \code{stratmeanData} as a
 #'   \code{data.table}.
 #'
-#' @return
+#' @return data frame
 #'
 #'@family survdat
 #'

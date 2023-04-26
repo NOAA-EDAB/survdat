@@ -4,17 +4,17 @@
 \alias{plot_shapefile}
 \title{Plots shapefile}
 \usage{
-plot_shapefile(polygons, crs = 4269)
+plot_shapefile(polygons, crs = 4269, filterPolygons = NULL)
 }
 \arguments{
 \item{polygons}{sf object. The polygons (shapefile)}
 
 \item{crs}{Character string. Defines the coordinate reference system for projection. Default = 4269 (NAD83)}
+
+\item{filterPolygons}{Numeric Vector. (Default = NULL) Set of polygons to plot in a differnt color}
 }
 \value{
 A figure
-
-#'@family plotting
 }
 \description{
 Plots shapefile
@@ -25,6 +25,16 @@ Plots shapefile
 # Read in shapefile
 area <- sf::st_read(dsn = system.file("extdata","strata.shp",package="survdat"),quiet=T)
 plot_shapefile(polygons=area)
+
+# Plots shapefile and highlights GB region
+GB  <- c(1090, 1130:1210, 1230, 1250, 3460, 3480, 3490, 3520:3550)
+plot_shapefile(polygons=area,filterPolygons = GB)
+
 }
 
 }
+\seealso{
+Other plotting: 
+\code{\link{plot_data_area}()}
+}
+\concept{plotting}

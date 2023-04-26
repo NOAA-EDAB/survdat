@@ -9,7 +9,7 @@
 #' @param a Numeric. The average swept area of the trawl.  Default value is the
 #'  swept area of a standard NOAA Ship Albatross IV tow.
 #'
-#' @return
+#' @return data frame
 #'
 #'@family survdat
 #'

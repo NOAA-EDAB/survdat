@@ -20,6 +20,7 @@ reference:
 - contents:
   - get_survdat_data
   - get_survdat_clam_data
+  - get_survdat_scallop_data
   - get_length_weight_data
 - title: "Helper Functions"
   desc: "Functions that pull supporting information from the SVDBS database"
