@@ -38,7 +38,7 @@ get_sex <- function(channel){
   query <- DBI::dbGetQuery(channel,sqlStatement)
 
   # get column names
-  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'SEX_CODES' and owner='SVDBS';"
+  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'SEX_CODES' and owner='SVDBS'"
   colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
 
   return (list(data=dplyr::as_tibble(query),sql=sqlStatement, colNames=colNames))
