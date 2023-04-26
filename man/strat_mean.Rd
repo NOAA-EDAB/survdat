@@ -58,6 +58,7 @@ Other survdat:
 \code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
 \code{\link{get_survdat_data}()},
+\code{\link{get_survdat_scallop_data}()},
 \code{\link{post_strat}()},
 \code{\link{swept_area}()}
 }
