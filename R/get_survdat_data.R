@@ -124,7 +124,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
    }
 
 
-  cruise <- data.table::as.data.table(DBI::dbGetQuery(channel, cruise.qry))
+  cruise <- data.table::as.data.table(ROracle::dbGetQuery(channel, cruise.qry))
   cruise <- na.omit(cruise)
   data.table::setkey(cruise, CRUISE6, SVVESSEL)
 
@@ -156,7 +156,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                          order by cruise6, station")
   }
   # pull data
-  station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
+  station <- data.table::as.data.table(ROracle::dbGetQuery(channel, station.qry))
 
   data.table::setkey(station, CRUISE6, SVVESSEL)
   #merge cruise and station
@@ -171,7 +171,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                      where cruise6 in (", cruise6, ")
                      and stratum not like 'YT%'
                      order by cruise6, station, svspp")
-  catch <- data.table::as.data.table(DBI::dbGetQuery(channel, catch.qry))
+  catch <- data.table::as.data.table(ROracle::dbGetQuery(channel, catch.qry))
   data.table::setkey(catch, CRUISE6, STATION, STRATUM, TOW)
 
   #merge with survdat
@@ -193,7 +193,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                       where cruise6 in (", cruise6, ")
                       and stratum not like 'YT%'
                       order by cruise6, station, svspp, length")
-    len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
+    len <- data.table::as.data.table(ROracle::dbGetQuery(channel, length.qry))
     data.table::setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
 
     #merge with survdat
@@ -252,7 +252,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                   indwt, sex, maturity, age, stom_volume, stom_wgt
                   from UNION_FSCS_SVBIO
                   where cruise6 in (", cruise6, ")")
-    bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
+    bio <- data.table::as.data.table(ROracle::dbGetQuery(channel, bio.qry))
 
     #Remove YT Stratum
     bio <- bio[!STRATUM %like% 'YT', ]
