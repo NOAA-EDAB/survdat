@@ -41,7 +41,7 @@ get_length_weight <- function(channel){
   data.table::setnames(lw, "SEX", "CATCHSEX")
 
   # get column names
-  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'LENGTH_WEIGHT_COEFFICIENTS' and owner='SVDBS';"
+  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'LENGTH_WEIGHT_COEFFICIENTS' and owner='SVDBS'"
   colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
 
   return (list(data=lw,sql=lw.qry, colNames=colNames))
