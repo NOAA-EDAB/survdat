@@ -98,7 +98,7 @@ get_length_weight_data <- function(channel, year=1994, species="all", sex="all")
   query <- DBI::dbGetQuery(channel,sqlStatement)
 
   # column names
-  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'UNION_FSCS_SVBIO' and owner='SVDBS';"
+  sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'UNION_FSCS_SVBIO' and owner='SVDBS'"
   colNames <- DBI::dbGetQuery(channel,sqlcolName)
 
   query <- dplyr::as_tibble(query)
