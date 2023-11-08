@@ -104,7 +104,7 @@ to communicate with the database engine. (see <code>connect_to_database</code>)<
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></code></p>
+    <div class="dont-index"><p><code>connect_to_database</code></p>
 <p>Other helper: 
 <code><a href="get_conversion_factors.html">get_conversion_factors</a>()</code>,
 <code><a href="get_cruise_purpose.html">get_cruise_purpose</a>()</code>,
@@ -119,7 +119,7 @@ to communicate with the database engine. (see <code>connect_to_database</code>)<
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># extracts complete sex table</span></span></span>
-<span class="r-in"><span><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu"><a href="https://andybeet.github.io/dbutils/reference/connect_to_database.html" class="external-link">connect_to_database</a></span><span class="op">(</span>server<span class="op">=</span><span class="st">"serverName"</span>,uid<span class="op">=</span><span class="st">"userName"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu">connect_to_database</span><span class="op">(</span>server<span class="op">=</span><span class="st">"serverName"</span>,uid<span class="op">=</span><span class="st">"userName"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_sex_fscs</span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
