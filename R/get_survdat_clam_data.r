@@ -67,8 +67,6 @@
 
 #-------------------------------------------------------------------------------
 #User parameters
-library(na.replace)
-
 get_survdat_clam_data <- function(channel,
                                   shg.check=T,
                                   clam.only=T,
@@ -177,6 +175,17 @@ get_survdat_clam_data <- function(channel,
   #rename variables to match Dan's strata change code:
   clamdat %>% dplyr::rename(Lat = LAT, Lon = LON, Depth = DEPTH)
   
+  #na.replace function since package can't be installed in current R version:
+  na.replace<-function(x,rep1=0){
+    #This function will replace NA's in
+    #vector or matrix x with rep1 (0 is the default)
+    if(!is.null(ncol(x))) {
+      ret=apply(x,2, rep1,FUN=function(x,...) {ifelse(is.finite(x),x,rep1)})
+    } else ret=ifelse(is.finite(x),x,rep1)
+    
+    return(ret)
+  }
+  
   #Nov. 16, 2023 Dan Hennen sent code to map old strata to new strata:
   #The new strata are now divided into the 2 assessment regions for the purposes of meat weight and other biological parameter calculations. 
   #The areas are south (strata 1-6) and north (strata 7-12). 
@@ -192,6 +201,7 @@ get_survdat_clam_data <- function(channel,
     stratum=paste(stratum2)
     lat=dt1$Lat
     lon=dt1$Lon
+  #na.replace not working, package not available for R version 4.3.2
     depth=na.replace(dt1$Depth)
     cruise6=dt1$CRUISE6
     
@@ -314,7 +324,7 @@ get_survdat_clam_data <- function(channel,
 
   
   
-  clamdat <- StratumConvert(clamdat) 
+  clamdat_test <- StratumConvert(clamdat) 
   
   
   #shell length-to-meat weight conversion coefficients (OQ NEFSC 2004, SC NEFSC 2003)
