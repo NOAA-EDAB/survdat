@@ -4,7 +4,13 @@
 \alias{get_survdat_clam_data}
 \title{Extracts Clam data from Survey Database}
 \usage{
-get_survdat_clam_data(channel, shg.check = T, clam.only = T, tidy = F)
+get_survdat_clam_data(
+  channel,
+  shg.check = T,
+  clam.only = T,
+  tidy = F,
+  assignRegionWeights = T
+)
 }
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
@@ -14,6 +20,8 @@ get_survdat_clam_data(channel, shg.check = T, clam.only = T, tidy = F)
 \item{clam.only}{Boolean. T = grab only Atl. surfclam (403) and ocean quahog (409)}
 
 \item{tidy}{Boolean. Return output in long format (Default = F)}
+
+\item{assignRegionWeights}{Boolean. Assign Strata to Regions and then apply length weight coefficients. Currently hard coded for Survey strata prior to 2017. (Default = T).}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
