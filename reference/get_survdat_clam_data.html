@@ -73,7 +73,13 @@ Pulls from Cruises with purpose code = 50. (See <code><a href="get_cruise_purpos
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_survdat_clam_data</span><span class="op">(</span><span class="va">channel</span>, shg.check <span class="op">=</span> <span class="cn">T</span>, clam.only <span class="op">=</span> <span class="cn">T</span>, tidy <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_survdat_clam_data</span><span class="op">(</span></span>
+<span>  <span class="va">channel</span>,</span>
+<span>  shg.check <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>  clam.only <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>  tidy <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>  assignRegionWeights <span class="op">=</span> <span class="cn">T</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -92,6 +98,10 @@ Pulls from Cruises with purpose code = 50. (See <code><a href="get_cruise_purpos
 
 <dt>tidy</dt>
 <dd><p>Boolean. Return output in long format (Default = F)</p></dd>
+
+
+<dt>assignRegionWeights</dt>
+<dd><p>Boolean. Assign Strata to Regions and then apply length weight coefficients. Currently hard coded for Survey strata prior to 2017. (Default = T).</p></dd>
 
 </dl></div>
     <div id="value">
