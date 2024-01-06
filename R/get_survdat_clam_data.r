@@ -8,6 +8,7 @@
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
 #' @param clam.only Boolean. T = grab only Atl. surfclam (403) and ocean quahog (409)
 #' @param tidy Boolean. Return output in long format (Default = F)
+#' @param assignRegionWeights Boolean. Assign Strata to Regions and then apply length weight coefficients. Currently hard coded for Survey strata prior to 2017. (Default = T).
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -64,14 +65,14 @@
 #'
 #'@export
 
-
 #-------------------------------------------------------------------------------
 #User parameters
 
 get_survdat_clam_data <- function(channel,
                                   shg.check=T,
                                   clam.only=T,
-                                  tidy = F) {
+                                  tidy = F,
+                                  assignRegionWeights = T) {
 
   call <- capture_function_call()
 
@@ -99,13 +100,13 @@ get_survdat_clam_data <- function(channel,
                    where cruise6 in (", cruise6, ")
                    and SHG <= 136
                    order by cruise6, station", sep='')
-    } else {
+  } else {
     station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
                    avgdepth as depth, surftemp, surfsalin, bottemp, botsalin
                    from UNION_FSCS_SVSTA
                    where cruise6 in (", cruise6, ")
                    order by cruise6, station", sep='')
-    }
+  }
 
   station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
   data.table::setkey(station, CRUISE6, SVVESSEL)
@@ -120,12 +121,12 @@ get_survdat_clam_data <- function(channel,
                  where cruise6 in (", cruise6, ")
                  and svspp in ('403', '409')
                  order by cruise6, station, svspp", sep='')
-    } else {
+  } else {
     catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
                  from UNION_FSCS_SVCAT
                  where cruise6 in (", cruise6, ")
                  order by cruise6, station, svspp", sep='')
-    }
+  }
 
   catch <- data.table::as.data.table(DBI::dbGetQuery(channel, catch.qry))
   data.table::setkey(catch, CRUISE6, STATION, STRATUM)
@@ -157,36 +158,38 @@ get_survdat_clam_data <- function(channel,
 
   clamdat[,STRATUM := as.numeric(STRATUM)]
 
-  #Assign clam regions
-  regions <- c('SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB')
-  SVA <- c(6010:6080, 6800, 6810)
-  DMV <- c(6090:6160, 6820:6860)
-  SNJ <- c(6170:6200, 6870)
-  NNJ <- c(6210:6280, 6880:6900)
-  LI  <- c(6290:6360, 6910:6930)
-  SNE <- c(6370:6520, 6940:6960)
-  GB  <- c(6530:6740)
+  if (assignRegionWeights) {
 
-  clamdat[, clam.region := factor(NA, levels = regions)]
-  for(i in 1:length(regions)) clamdat[STRATUM %in% get(regions[i]), clam.region := regions[i]]
+    #Assign clam regions
+    regions <- c('SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB')
+    SVA <- c(6010:6080, 6800, 6810)
+    DMV <- c(6090:6160, 6820:6860)
+    SNJ <- c(6170:6200, 6870)
+    NNJ <- c(6210:6280, 6880:6900)
+    LI  <- c(6290:6360, 6910:6930)
+    SNE <- c(6370:6520, 6940:6960)
+    GB  <- c(6530:6740)
 
-  #shell length-to-meat weight conversion coefficients (OQ NEFSC 2004, SC NEFSC 2003)
-  coeff <- data.table::data.table(clam.region = c('SVA',     'DMV',     'SNJ',     'NNJ',     'LI',      'SNE',     'GB'),
-                      oq.a        = c(-9.04231,  -9.04231,  -9.84718,  -9.84718,  -9.23365,  -9.12428,  -8.96907),
-                      oq.b        = c( 2.787987,  2.787987,  2.94954,   2.94954,   2.822474,  2.774989,  2.767282),
-                      sc.a        = c(-7.0583,   -9.48913,  -9.3121,   -9.3121,   -7.9837,   -7.9837,   -8.27443),
-                      sc.b        = c( 2.3033,    2.860176,  2.863716,  2.863716,  2.5802,    2.5802,    2.654215))
-  coeff[, clam.region := as.factor(clam.region)]
-  clamdat <- base::merge(clamdat, coeff, by = 'clam.region')
+    clamdat[, clam.region := factor(NA, levels = regions)]
+    for(i in 1:length(regions)) clamdat[STRATUM %in% get(regions[i]), clam.region := regions[i]]
 
-  #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
-  clamdat[SVSPP == 403, meatwt := (exp(sc.a) * (LENGTH * 10) ^ sc.b) / 1000]
-  clamdat[SVSPP == 409, meatwt := (exp(oq.a) * (LENGTH * 10) ^ oq.b) / 1000]
-  clamdat[, expmw := meatwt * NUMLEN]
-  clamdat[, stamw := sum(expmw), by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')]
-  clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
-  data.table::setnames(clamdat, "stamw", "BIOMASS.MW")
+    #shell length-to-meat weight conversion coefficients (OQ NEFSC 2004, SC NEFSC 2003)
+    coeff <- data.table::data.table(clam.region = c('SVA',     'DMV',     'SNJ',     'NNJ',     'LI',      'SNE',     'GB'),
+                                    oq.a        = c(-9.04231,  -9.04231,  -9.84718,  -9.84718,  -9.23365,  -9.12428,  -8.96907),
+                                    oq.b        = c( 2.787987,  2.787987,  2.94954,   2.94954,   2.822474,  2.774989,  2.767282),
+                                    sc.a        = c(-7.0583,   -9.48913,  -9.3121,   -9.3121,   -7.9837,   -7.9837,   -8.27443),
+                                    sc.b        = c( 2.3033,    2.860176,  2.863716,  2.863716,  2.5802,    2.5802,    2.654215))
+    coeff[, clam.region := as.factor(clam.region)]
+    clamdat <- base::merge(clamdat, coeff, by = 'clam.region')
 
+    #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
+    clamdat[SVSPP == 403, meatwt := (exp(sc.a) * (LENGTH * 10) ^ sc.b) / 1000]
+    clamdat[SVSPP == 409, meatwt := (exp(oq.a) * (LENGTH * 10) ^ oq.b) / 1000]
+    clamdat[, expmw := meatwt * NUMLEN]
+    clamdat[, stamw := sum(expmw), by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')]
+    clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
+    data.table::setnames(clamdat, "stamw", "BIOMASS.MW")
+  }
   #saveRDS(clamdat, file = here::here('data","Clamdat.RDS'))
   if (tidy) {
     clamdat <- tibble::as_tibble(clamdat)
