@@ -79,7 +79,7 @@ get_survdat_clam_data <- function(channel,
   #Generate cruise list
   #V1.2 - remove surveys prior to 1982 due to difference in seasons/gear
   cruise.qry <- "select unique year, cruise6, svvessel
-                 from mstr_cruise
+                 from svdbs.mstr_cruise
                  where purpose_code = 50
                  and year >= 1982
                  order by year, cruise6"
@@ -96,14 +96,14 @@ get_survdat_clam_data <- function(channel,
   if(shg.check == T){
     station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
                    avgdepth as depth, surftemp, surfsalin, bottemp, botsalin
-                   from Union_fscs_svsta
+                   from svdbs.Union_fscs_svsta
                    where cruise6 in (", cruise6, ")
                    and SHG <= 136
                    order by cruise6, station", sep='')
   } else {
     station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
                    avgdepth as depth, surftemp, surfsalin, bottemp, botsalin
-                   from UNION_FSCS_SVSTA
+                   from svdbs.UNION_FSCS_SVSTA
                    where cruise6 in (", cruise6, ")
                    order by cruise6, station", sep='')
   }
@@ -117,13 +117,13 @@ get_survdat_clam_data <- function(channel,
   #Catch data
   if(clam.only == T){
     catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
-                 from UNION_FSCS_SVCAT
+                 from svdbs.UNION_FSCS_SVCAT
                  where cruise6 in (", cruise6, ")
                  and svspp in ('403', '409')
                  order by cruise6, station, svspp", sep='')
   } else {
     catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
-                 from UNION_FSCS_SVCAT
+                 from svdbs.UNION_FSCS_SVCAT
                  where cruise6 in (", cruise6, ")
                  order by cruise6, station, svspp", sep='')
   }
@@ -138,13 +138,13 @@ get_survdat_clam_data <- function(channel,
   #Length data
   if(clam.only == T){
     length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
-                  from UNION_FSCS_SVLEN
+                  from svdbs.UNION_FSCS_SVLEN
                   where cruise6 in (", cruise6, ")
                   and svspp in ('403', '409')
                   order by cruise6, station, svspp, length", sep='')
   } else {
     length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
-                  from UNION_FSCS_SVLEN
+                  from svdbs.UNION_FSCS_SVLEN
                   where cruise6 in (", cruise6, ")
                   order by cruise6, station, svspp, length", sep='')
   }
