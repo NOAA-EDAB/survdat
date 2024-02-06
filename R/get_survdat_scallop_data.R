@@ -13,7 +13,7 @@
 #' @param getWeightLength Boolean. Include the weight at length by applying length
 #'                        weight coefficients from SVDBS. (Default = F)
 #' @param scallopOnly Boolean. Include only sea scallop catch. (Default = T)
-#' 
+#'
 #' @return A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
 #' the date of the pull, and the call expression
 #' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
@@ -105,11 +105,11 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
   }
 
   cruise.qry <- paste0("select unique year, cruise6, svvessel, season
-      from mstr_cruise
+      from svdbs.mstr_cruise
       where purpose_code = 60
       and year ", years,
       "order by year, cruise6")
-   
+
 
   cruise <- data.table::as.data.table(DBI::dbGetQuery(channel, cruise.qry))
   cruise <- na.omit(cruise)
@@ -127,9 +127,9 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
                                tow, decdeg_beglat as lat, decdeg_beglon as lon,
                                begin_est_towdate as est_towdate, avgdepth as depth,
                                surftemp, surfsalin, bottemp, botsalin
-                               from UNION_FSCS_SVSTA
+                               from svdbs.UNION_FSCS_SVSTA
                                where cruise6 in (", cruise6, ")
-                               and SHG <= 136 
+                               and SHG <= 136
                                order by cruise6, station")
   }
   if(shg.check == F){
@@ -137,7 +137,7 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
                          decdeg_beglat as lat, decdeg_beglon as lon,
                          begin_est_towdate as est_towdate, avgdepth as depth,
                          surftemp, surfsalin, bottemp, botsalin
-                         from UNION_FSCS_SVSTA
+                         from svdbs.UNION_FSCS_SVSTA
                          where cruise6 in (", cruise6, ")
                          order by cruise6, station")
   }
@@ -153,7 +153,7 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
   message("Getting Species data ...")
   catch.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                      expcatchnum as abundance, expcatchwt as biomass
-                     from UNION_FSCS_SVCAT
+                     from svdbs.UNION_FSCS_SVCAT
                      where cruise6 in (", cruise6, ")
                      and stratum not like 'YT%'
                      order by cruise6, station, svspp")
@@ -173,7 +173,7 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
     #Length data
     length.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                       length, expnumlen as numlen
-                      from UNION_FSCS_SVLEN
+                      from svdbs.UNION_FSCS_SVLEN
                       where cruise6 in (", cruise6, ")
                       and stratum not like 'YT%'
                       order by cruise6, station, svspp, length")
@@ -237,22 +237,22 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
 #                   from UNION_FSCS_SVBIO
 #                   where cruise6 in (", cruise6, ")")
 #     bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
-# 
+#
 #     #Remove YT Stratum
 #     bio <- bio[!STRATUM %like% 'YT', ]
-# 
+#
 #     # fix bugs in SVDBS for character sex values
 #     bio[SEX %in% c("M","m"), SEX := 1]
 #     bio[SEX %in% c("F","f"), SEX := 2]
-# 
+#
 #     #Fix catch sex prior to 2001
 #     bio[is.na(CATCHSEX), CATCHSEX := 0]
 #     bio[SVSPP %in% c('015', '301') & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1]
 #     bio[SVSPP %in% c('015', '301') & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2]
-# 
+#
 #     data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
 #     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
-# 
+#
 # #    data.table::setkey(bio, CRUISE6, STATION, STRATUM, TOW, SVSPP)
 # #    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP)
 #     survdat <- merge(survdat, bio, by = key(survdat))
@@ -260,7 +260,7 @@ get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
 #   }
 
   if(scallopOnly) survdat <- survdat[SVSPP == 401, ]
-  
+
   #Convert number fields from chr to num
   numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
   survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols][]

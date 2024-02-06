@@ -109,7 +109,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   if(all.season == F){ # Spring and Fall
     cruise.qry <- paste0("select unique year, cruise6, svvessel, season
-      from mstr_cruise
+      from svdbs.mstr_cruise
       where purpose_code = 10
       and year ", years,
       "and (season = 'FALL'
@@ -117,7 +117,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
       order by year, cruise6")
    } else if(all.season == T){ # Everything
     cruise.qry <- paste0("select unique year, cruise6, svvessel, season
-      from mstr_cruise
+      from svdbs.mstr_cruise
       where purpose_code = 10
       and year ", years,
       "order by year, cruise6")
@@ -140,7 +140,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                                tow, decdeg_beglat as lat, decdeg_beglon as lon,
                                begin_est_towdate as est_towdate, avgdepth as depth,
                                surftemp, surfsalin, bottemp, botsalin
-                               from UNION_FSCS_SVSTA
+                               from svdbs.UNION_FSCS_SVSTA
                                where cruise6 in (", cruise6, ")
                                and (SHG <= 136 and cruise6 <= 200900)
                                or (TOGA <= 1324 and cruise6 > 200900)
@@ -151,7 +151,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                          decdeg_beglat as lat, decdeg_beglon as lon,
                          begin_est_towdate as est_towdate, avgdepth as depth,
                          surftemp, surfsalin, bottemp, botsalin
-                         from UNION_FSCS_SVSTA
+                         from svdbs.UNION_FSCS_SVSTA
                          where cruise6 in (", cruise6, ")
                          order by cruise6, station")
   }
@@ -167,7 +167,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   message("Getting Species data ...")
   catch.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                      expcatchnum as abundance, expcatchwt as biomass
-                     from UNION_FSCS_SVCAT
+                     from svdbs.UNION_FSCS_SVCAT
                      where cruise6 in (", cruise6, ")
                      and stratum not like 'YT%'
                      order by cruise6, station, svspp")
@@ -189,7 +189,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
     #Length data
     length.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
                       length, expnumlen as numlen
-                      from UNION_FSCS_SVLEN
+                      from svdbs.UNION_FSCS_SVLEN
                       where cruise6 in (", cruise6, ")
                       and stratum not like 'YT%'
                       order by cruise6, station, svspp, length")
@@ -250,7 +250,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
     message("Getting Individual Fish (Bio) Data ...")
     bio.qry <- paste0("select cruise6, station, stratum, svspp, catchsex, length, indid,
                   indwt, sex, maturity, age, stom_volume, stom_wgt
-                  from UNION_FSCS_SVBIO
+                  from svdbs.UNION_FSCS_SVBIO
                   where cruise6 in (", cruise6, ")")
     bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
 

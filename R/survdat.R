@@ -17,6 +17,4 @@
 #'To learn more about using \code{survdat}, start with the vignette: \code{browseVignettes(package="survdat")} or click the index below
 #'
 #'
-#' @docType package
-#' @name survdat
-NULL
+"_PACKAGE"
