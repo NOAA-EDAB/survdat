@@ -41,8 +41,8 @@ get_cruise_purpose(channel)
 Other helper: 
 \code{\link{get_conversion_factors}()},
 \code{\link{get_maturity}()},
-\code{\link{get_sex_fscs}()},
 \code{\link{get_sex}()},
+\code{\link{get_sex_fscs}()},
 \code{\link{get_species}()},
 \code{\link{get_strata}()},
 \code{\link{get_vessel}()}
