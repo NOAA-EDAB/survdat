@@ -17,7 +17,7 @@
 #'
 #'@family survdat
 #'
-#' @export
+#' @noRd
 
 
 post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
