@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_length_weight.R
 \name{get_length_weight}
 \alias{get_length_weight}
-\title{Generate a table of length weight coefficients}
+\title{Extract species specific LENGTH-WEIGHT COEFFICIENTS from SVDBS}
 \usage{
 get_length_weight(channel)
 }
@@ -17,7 +17,8 @@ Returns a data.table (nx12).
 \item{SVLWCOEFF}{The natural log of the coefficient of the length-weight equation, ln a.}
 }
 \description{
-Pulls the length-weight coefficients calculated from NOAA Tech Memo NMFS-NE-171.
+Pulls the length-weight coefficients from SVDBS LENGTH_WEIGHT_COEFFICIENTS table
+These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 }
 \seealso{
 Other survdat: 
