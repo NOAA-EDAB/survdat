@@ -12,7 +12,7 @@
 #'\item{SVLWEXP}{The exponent of the length-weight equation, b.}
 #'\item{SVLWCOEFF}{The natural log of the coefficient of the length-weight equation, ln a.}
 #'
-#'@family survdat
+#'@family helper
 #'
 #'@export
 

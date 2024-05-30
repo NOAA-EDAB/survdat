@@ -44,7 +44,7 @@ calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
 
     #Calculate total biomass/abundance estimates
     message("Calculating Swept Area Estimate  ...")
-    sweptareaData <- survdat::swept_area(prepData = stratmeanData$prepData,
+    sweptareaData <- survdat:::swept_area(prepData = stratmeanData$prepData,
                                          stratmeanData = stratmeanData$stratmeanData,
                                          q = q, areaDescription = areaDescription,
                                          groupDescription = groupDescription)
