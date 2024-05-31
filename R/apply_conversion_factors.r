@@ -31,7 +31,9 @@ apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
   survdat[, ABUNDANCE := as.double(ABUNDANCE)]
 
   #Grab all conversion factors off the network
-  convert <- data.table::as.data.table(get_conversion_factors(channel)$data)
+  conversionFactors <- get_conversion_factors(channel)
+  convert.qry <- conversionFactors$sql
+  convert <- data.table::as.data.table(conversionFactors$data)
 
   #DCF < 1985 Door Conversion
   dcf.spp <- convert[DCF_WT > 0, SVSPP]
