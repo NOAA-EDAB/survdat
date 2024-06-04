@@ -99,6 +99,8 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                              getBio = F, getLengths = T, getWeightLength = F) {
 
   call <- capture_function_call()
+  version <- packageVersion("survdat")
+
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
@@ -293,6 +295,6 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
 
 
-  return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call))
+  return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call,version=version))
 
 }
