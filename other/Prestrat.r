@@ -8,11 +8,11 @@ prestrat <- function (survdat, areas, strat.col, area.col = 'area') {
   #strat.col <- column of survdat and areas with the strata names
   #area.col  <- column of areas with the area of the stratum in square kilometers
   #sp.col    <- column of survdat with the species codes of interest
-  
+
   #-------------------------------------------------------------------------------
   #Required packages
   library(data.table)
-  
+
   #-------------------------------------------------------------------------------
   #User created functions
   #count occurances
@@ -21,15 +21,15 @@ prestrat <- function (survdat, areas, strat.col, area.col = 'area') {
     out <- sum(num)
     return(out)
     }
-    
+
   #-------------------------------------------------------------------------------
   x <- copy(survdat)
   y <- copy(areas)
-  
+
   setnames(x, strat.col, 'STRAT')
-  setnames(y, c(strat.col, area.col), 
+  setnames(y, c(strat.col, area.col),
               c('STRAT',   'S.AREA'))
-                         
+
   #Station data - remove catch/length
   setkey(x, CRUISE6, STRAT, STATION)
   stations <- unique(x)
@@ -55,9 +55,9 @@ prestrat <- function (survdat, areas, strat.col, area.col = 'area') {
 
   #Merge catch with station data
   strat.survdat <- merge(x, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
-  
+
   setnames(strat.survdat, c('STRAT',   'S.AREA'),
                           c(strat.col, area.col))
-  
+
   return(strat.survdat)
   }
