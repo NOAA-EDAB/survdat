@@ -1,0 +1,47 @@
+---
+title: "Pulling Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pulling Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(survdat)
+```
+
+Explain the differences between resulting data objects based on argument flags.
+
+In Development
+
+
+## Biological data
+
+When using the flag `getBio = T` additional fields are pulled, namely Maturity, Age, Individual weight, stomach volume, stomach weight, and sex. Species that have lengths but no additional "biological" data are dropped from the data pull.
+
+## Weight-Length data
+
+Length-weight conversion coefficients are applied using values from Wigley et al. These reside in the table LENGTH_WEIGHT_COEFFICIENTS
+
+## Length data
+
+## Calibration factors
+
+These reside in the table SURVAN_CONVERSION_FACTORS
+
+Describe how they are applied
+
+### Vessel effects
+
+### Gear Effects
+
+### Door Effects
+
