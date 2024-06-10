@@ -36,4 +36,22 @@ reference:
 - contents:
   - survdat
 
+navbar:
+ components:
+  articles:
+   text: Articles
+   menu:
+   - text: Introduction
+   - text: Survey design
+     href: articles/surveyDesign.html
+   - text: Pulling the data
+     href: articles/pullingData.html
+   - text: Lookup tables
+     href: articles/lookupTables.html
+   - text: --------
+   - text: Methodology
+   - text: Estimating Biomass
+     href: articles/methodology.html
+   - text: Estimating stratified mean
+     href: articles/calc_Strat_mean.html
 
