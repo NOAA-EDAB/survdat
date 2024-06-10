@@ -35,5 +35,6 @@ RoxygenNote: 7.3.1
 Suggests: 
     knitr,
     rmarkdown,
-    markdown
+    markdown,
+    kableExtra
 VignetteBuilder: knitr
