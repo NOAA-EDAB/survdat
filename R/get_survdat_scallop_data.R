@@ -6,8 +6,6 @@
 #' @param filterByYear Numeric vector. Subset of years from which to pull data.
 #'                     If not specified then all years are pulled. (Default = NA)
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
-#' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
-#' @param getBio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
 #' @param getLengths Boolean. Include length data which includes the length in
 #'                   cm and the number at length. (Default = T)
 #' @param getWeightLength Boolean. Include the weight at length by applying length
@@ -88,8 +86,12 @@
 #'
 #'@export
 
-get_survdat_scallop_data <- function(channel, filterByYear = NA, shg.check = T,
-                             getLengths = T, getWeightLength = F, scallopOnly = T){
+get_survdat_scallop_data <- function(channel,
+                                     filterByYear = NA,
+                                     shg.check = T,
+                                     getLengths = T,
+                                     getWeightLength = F,
+                                     scallopOnly = T){
 
   call <- capture_function_call()
 

@@ -1,0 +1,26 @@
+---
+title: "Lookup tables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lookup tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(survdat)
+```
+
+Bundled with the package are several helper functions to compliment the main data pulls
+
+## Species tables
+
+## Strata tables
+

@@ -1,23 +1,28 @@
-#' Extracts Survey data  from Database
+#' Extracts Survey data from Database
 #'
-#'Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
+#' Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT,
+#' UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
 #'
-#' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
+#' @param channel an Object inherited from \link[DBI]{DBIConnection-class}.
+#'      This object is used to communicate with the database engine.
+#'       (see \code{\link[dbutils]{connect_to_database}})
 #' @param filterByYear Numeric vector. Subset of years from which to pull data.
 #'                     If not specified then all years are pulled. (Default = NA)
 #' @param all.season Boolean. Spring and Fall only (F) otherwise T. (Default = F)
 #' @param shg.check Boolean. use only SHG <=136 or TOGA <= 1324 (>2008). (Default = T)
 #' @param conversion.factor Boolean. Whether to apply conversion factors to the data pull, (Default = T)
 #' @param use.SAD Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)
-#' @param getBio Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity
+#' @param getBio Boolean. Include biology data for each fish weight, sex,
+#' stomach weight, stomach volume, age, maturity
 #' @param getLengths Boolean. Include length data which includes the length in
 #'                   cm and the number at length. (Default = T)
 #' @param getWeightLength Boolean. Include the weight at length by applying length
 #'                        weight coefficients from SVDBS. (Default = F)
 #'
-#' @return A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
-#' the date of the pull, and the call expression
-#' Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
+#' @return A list containing a Data frame (data.table) (n x 21),
+#' a list of SQL queries used to pull the data, the date of the pull,
+#' and the call expression. Each row of the data.table represents the number
+#' at length of a species on a specific tow along with physical attributes of the tow.
 #'
 #' The data frame (Descriptions taken from NEFSC Data dictionary)
 #'
@@ -65,15 +70,14 @@
 #'
 #' The date:
 #'
-#'  \item{pullDate}{The date the data was pulled from the database}
+#' \item{pullDate}{The date the data was pulled from the database}
 #'
 #' The expression:
 #'
-#' \item{functionCall}{The call used to create the data pul}
+#' \item{functionCall}{The call used to create the data pull}
 #'
 #' @importFrom data.table "%like%"
-#'
-#'@family survdat
+#' @family survdat
 #'
 #'@examples
 #'\dontrun{
@@ -89,11 +93,14 @@
 #'
 #'@export
 
+
 get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                              shg.check = T, conversion.factor = T, use.SAD = F,
                              getBio = F, getLengths = T, getWeightLength = F) {
 
   call <- capture_function_call()
+  version <- packageVersion("survdat")
+
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
@@ -288,6 +295,6 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
 
 
-  return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call))
+  return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call,version=version))
 
 }

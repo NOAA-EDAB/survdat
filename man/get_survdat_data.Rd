@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_survdat_data.R
 \name{get_survdat_data}
 \alias{get_survdat_data}
-\title{Extracts Survey data  from Database}
+\title{Extracts Survey data from Database}
 \usage{
 get_survdat_data(
   channel,
@@ -17,7 +17,9 @@ get_survdat_data(
 )
 }
 \arguments{
-\item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
+\item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
+This object is used to communicate with the database engine.
+ (see \code{\link[dbutils]{connect_to_database}})}
 
 \item{filterByYear}{Numeric vector. Subset of years from which to pull data.
 If not specified then all years are pulled. (Default = NA)}
@@ -30,7 +32,8 @@ If not specified then all years are pulled. (Default = NA)}
 
 \item{use.SAD}{Boolean. Use Survey Analysis Database (SAD) for assessed species. (Default = F)}
 
-\item{getBio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
+\item{getBio}{Boolean. Include biology data for each fish weight, sex,
+stomach weight, stomach volume, age, maturity}
 
 \item{getLengths}{Boolean. Include length data which includes the length in
 cm and the number at length. (Default = T)}
@@ -39,9 +42,10 @@ cm and the number at length. (Default = T)}
 weight coefficients from SVDBS. (Default = F)}
 }
 \value{
-A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
-the date of the pull, and the call expression
-Each row of the data.table represents the number at length of a species on a specific tow along with physical attributes of the tow.
+A list containing a Data frame (data.table) (n x 21),
+a list of SQL queries used to pull the data, the date of the pull,
+and the call expression. Each row of the data.table represents the number
+at length of a species on a specific tow along with physical attributes of the tow.
 
 The data frame (Descriptions taken from NEFSC Data dictionary)
 
@@ -89,14 +93,15 @@ The list of sql statements:
 
 The date:
 
- \item{pullDate}{The date the data was pulled from the database}
+\item{pullDate}{The date the data was pulled from the database}
 
 The expression:
 
-\item{functionCall}{The call used to create the data pul}
+\item{functionCall}{The call used to create the data pull}
 }
 \description{
-Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
+Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT,
+UNION_FSCS_SVLEN, UNION_FSCS_SVSTA, UNION_FSCS_SVBIO
 }
 \examples{
 \dontrun{
@@ -116,11 +121,7 @@ Other survdat:
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
-\code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
-\code{\link{get_survdat_scallop_data}()},
-\code{\link{post_strat}()},
-\code{\link{strat_mean}()},
-\code{\link{swept_area}()}
+\code{\link{get_survdat_scallop_data}()}
 }
 \concept{survdat}

@@ -23,14 +23,14 @@
 #'
 #' @importFrom data.table "key"
 #'
-#'@family survdat
+#'@family surdat
 #'
 #'@examples
 #'\dontrun{
 #' # Called internally
 #'}
 #'
-#' @export
+#' @noRd
 
 
 strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "all",
@@ -44,7 +44,7 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
     stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
     stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
   }
-  
+
   data.table::setnames(stratmeanData, c(groupDescription, areaDescription),
                        c('group', 'strat'))
 
@@ -145,9 +145,9 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
     stratmeanData[, glen := NULL]
     data.table::setkey(stratmeanData, YEAR, SVSPP, CATCHSEX)
   }
-  
+
   if(seasonFlag == F) stratmeanData[, SEASON := 'ALL']
-  
+
   data.table::setnames(stratmeanData, 'group', groupDescription)
 
   return(stratmeanData[])
