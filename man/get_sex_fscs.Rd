@@ -41,6 +41,7 @@ get_sex_fscs(channel)
 Other helper: 
 \code{\link{get_conversion_factors}()},
 \code{\link{get_cruise_purpose}()},
+\code{\link{get_length_weight}()},
 \code{\link{get_maturity}()},
 \code{\link{get_sex}()},
 \code{\link{get_species}()},

@@ -28,10 +28,6 @@ cm and the number at length. (Default = T)}
 weight coefficients from SVDBS. (Default = F)}
 
 \item{scallopOnly}{Boolean. Include only sea scallop catch. (Default = T)}
-
-\item{conversion.factor}{Boolean. Whether to apply conversion factors to the data pull, (Default = T)}
-
-\item{getBio}{Boolean. Include biology data for each fish weight, sex,, stomach weight, stomach volume, age, maturity}
 }
 \value{
 A list containing a Data frame (data.table) (n x 21), a list of SQL queries used to pull the data,
@@ -111,11 +107,7 @@ Other survdat:
 \code{\link{calc_stratified_mean}()},
 \code{\link{calc_swept_area}()},
 \code{\link{get_area}()},
-\code{\link{get_length_weight}()},
 \code{\link{get_survdat_clam_data}()},
-\code{\link{get_survdat_data}()},
-\code{\link{post_strat}()},
-\code{\link{strat_mean}()},
-\code{\link{swept_area}()}
+\code{\link{get_survdat_data}()}
 }
 \concept{survdat}

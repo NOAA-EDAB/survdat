@@ -1,6 +1,7 @@
-#'Generate a table of length weight coefficients
+#' Extract species specific LENGTH-WEIGHT COEFFICIENTS from SVDBS
 #'
-#'Pulls the length-weight coefficients calculated from NOAA Tech Memo NMFS-NE-171.
+#'Pulls the length-weight coefficients from SVDBS LENGTH_WEIGHT_COEFFICIENTS table
+#' These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 #'
 #'
 #' @inheritParams get_survdat_data
@@ -11,7 +12,7 @@
 #'\item{SVLWEXP}{The exponent of the length-weight equation, b.}
 #'\item{SVLWCOEFF}{The natural log of the coefficient of the length-weight equation, ln a.}
 #'
-#'@family survdat
+#'@family helper
 #'
 #'@export
 

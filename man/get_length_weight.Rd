@@ -2,12 +2,14 @@
 % Please edit documentation in R/get_length_weight.R
 \name{get_length_weight}
 \alias{get_length_weight}
-\title{Generate a table of length weight coefficients}
+\title{Extract species specific LENGTH-WEIGHT COEFFICIENTS from SVDBS}
 \usage{
 get_length_weight(channel)
 }
 \arguments{
-\item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
+\item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
+This object is used to communicate with the database engine.
+ (see \code{\link[dbutils]{connect_to_database}})}
 }
 \value{
 Returns a data.table (nx12).
@@ -17,18 +19,18 @@ Returns a data.table (nx12).
 \item{SVLWCOEFF}{The natural log of the coefficient of the length-weight equation, ln a.}
 }
 \description{
-Pulls the length-weight coefficients calculated from NOAA Tech Memo NMFS-NE-171.
+Pulls the length-weight coefficients from SVDBS LENGTH_WEIGHT_COEFFICIENTS table
+These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 }
 \seealso{
-Other survdat: 
-\code{\link{calc_stratified_mean}()},
-\code{\link{calc_swept_area}()},
-\code{\link{get_area}()},
-\code{\link{get_survdat_clam_data}()},
-\code{\link{get_survdat_data}()},
-\code{\link{get_survdat_scallop_data}()},
-\code{\link{post_strat}()},
-\code{\link{strat_mean}()},
-\code{\link{swept_area}()}
+Other helper: 
+\code{\link{get_conversion_factors}()},
+\code{\link{get_cruise_purpose}()},
+\code{\link{get_maturity}()},
+\code{\link{get_sex}()},
+\code{\link{get_sex_fscs}()},
+\code{\link{get_species}()},
+\code{\link{get_strata}()},
+\code{\link{get_vessel}()}
 }
-\concept{survdat}
+\concept{helper}

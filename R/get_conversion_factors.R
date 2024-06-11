@@ -33,7 +33,7 @@
 get_conversion_factors <- function(channel){
 
   # creates the sql based on user input
-  sqlStatement <-   convert.qry <- "select * from SURVAN_CONVERSION_FACTORS"
+  sqlStatement <-   convert.qry <- "select * from SVDBS.SURVAN_CONVERSION_FACTORS"
 
   query <- DBI::dbGetQuery(channel,sqlStatement)
 

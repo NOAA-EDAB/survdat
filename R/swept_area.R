@@ -29,7 +29,7 @@
 #'# Called internally
 #'}
 #'
-#'@export
+#'@noRd
 
 
 swept_area <- function (prepData, stratmeanData, q = NULL, a = 0.0384,

@@ -28,7 +28,7 @@ Once you are granted permission to access the database and have Oracle's instant
 
 ## Pull Data
 
-Pulling the data takes up to 15 minutes to complete. see `get_survdat_data` for details. To pull the survey data with conversion corrections applied use the following:
+Pulling the data can take up to 15 minutes to complete. see `get_survdat_data` for details. To pull the survey data with conversion corrections applied use the following:
 
 ```
 data <- get_survdat_data(channel)
@@ -37,11 +37,18 @@ data <- get_survdat_data(channel)
 To pull biological traits of individual fish sampled on the survey cruise
 
 ```
-data <- get_survdat_data(channel, bio=TRUE)
+data <- get_survdat_data(channel, getBio=TRUE)
 ```
 
-`data` is a list of 2 elements. The data pull and the set of sql statements made to pull the data
+`data` is a list of 5 elements. 
 
+* The data 
+* The set of sql statements made to pull the data
+* The function call statement
+* The date of the pull
+* The version of the package used to create the data pull
+
+For detailed information 
 
 ## Plot the shapefiles
 
@@ -58,7 +65,7 @@ plot_shapefile(areaPolygon)
 
 ## Stratified Mean
 
-
+Under development. 
 
 ## Swept area biomass
 

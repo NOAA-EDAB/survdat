@@ -17,6 +17,7 @@
 #' This is an internal function.
 #' To pull the values of the conversion factors use \code{\link{get_conversion_factors}}
 #'
+#'@noRd
 
 
 
@@ -30,10 +31,9 @@ apply_conversion_factors <- function(channel,survdat.raw,use.SAD = F) {
   survdat[, ABUNDANCE := as.double(ABUNDANCE)]
 
   #Grab all conversion factors off the network
-  convert.qry <- "select *
-    from svdbs.survan_conversion_factors"
-
-  convert <- data.table::as.data.table(DBI::dbGetQuery(channel, convert.qry))
+  conversionFactors <- get_conversion_factors(channel)
+  convert.qry <- conversionFactors$sql
+  convert <- data.table::as.data.table(conversionFactors$data)
 
   #DCF < 1985 Door Conversion
   dcf.spp <- convert[DCF_WT > 0, SVSPP]
