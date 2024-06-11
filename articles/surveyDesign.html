@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How biomass estimates are calculated • survdat</title>
+<title>Survey Design • survdat</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="How biomass estimates are calculated">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Survey Design">
 <meta property="og:description" content="survdat">
 <meta property="og:image" content="https://noaa-edab.github.io/survdat/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -104,65 +104,52 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>How biomass estimates are calculated</h1>
+      <h1 data-toc-skip>Survey Design</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/NOAA-EDAB/survdat/blob/HEAD/vignettes/methodology.Rmd" class="external-link"><code>vignettes/methodology.Rmd</code></a></small>
-      <div class="hidden name"><code>methodology.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/NOAA-EDAB/survdat/blob/HEAD/vignettes/surveyDesign.Rmd" class="external-link"><code>vignettes/surveyDesign.Rmd</code></a></small>
+      <div class="hidden name"><code>surveyDesign.Rmd</code></div>
 
     </div>
 
     
     
-<p><code>survdat</code> is a collection of tools that:</p>
-<ul>
-<li>Query the NEFSC survey database (SVDBS)</li>
-<li>Use the data to calculate estimates of biomass for species based on
-a geographic region</li>
-</ul>
-<p>These data are available to qualified researchers upon request.</p>
-<div class="section level2">
-<h2 id="bottom-trawl-surveys">Bottom Trawl Surveys<a class="anchor" aria-label="anchor" href="#bottom-trawl-surveys"></a>
-</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/survdat" class="external-link">survdat</a></span><span class="op">)</span></span></code></pre></div>
 <p>The Northeast Fisheries Science Center (NEFSC) has been conducting
 standardized bottom trawl surveys in the fall since 1963 and spring
 since 1968. The surveys follow a stratified random design. Fish species
 and several invertebrate species are enumerated on a tow by tow basis
-<span class="citation">(Azarovitz 1981)</span>. The data are housed in
-the NEFSC’s survey database (SVDBS) maintained by the Ecosystem Survey
-Branch.</p>
+<span class="citation">(<a href="#ref-Azarovitz_1981">Azarovitz
+1981</a>)</span>. The data are housed in the NEFSC’s survey database
+(SVDBS) maintained by the Ecosystem Survey Branch.</p>
 <p>Direct pulls from the database are not advisable as there have been
 several gear modifications and vessel changes over the course of the
-time series <span class="citation">(Miller et al. 2010)</span>.
-<code>survdat</code> was developed as a database query that applies the
-appropriate calibration factors for a seamless time series since the
-1960s.</p>
-</div>
-<div class="section level2">
-<h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a>
-</h2>
-<p>The <code>survdat</code> package can be broken down into two
-sections. The first pulls the raw data from SVDBS. <code>survdat</code>
-identifies those research cruises associated with the seasonal bottom
-trawl surveys and pulls the station and biological data. Station data
-includes tow identification (cruise, station, and stratum), tow location
-and date, as well as several environmental variables (depth,
-surface/bottom salinity, and surface/bottom temperature). Stations are
-filtered for representativness using a station, haul, gear (SHG) code
-for tows prior to 2009 and a tow, operations, gear, and aquisition
-(TOGA) code from 2009 onward. The codes that correspond to a
-representative tow (SHG &lt;= 136 or TOGA &lt;= 1324) are the same used
-by assessment biologists at the NEFSC. Biological data includes the
-total biomass and abundance by species, as well as lengths and number at
-length.</p>
-<p>The second section of the Survdat script applies the calibration
-factors. There are four calibrartion factors applied (Table
-@ref(tab:calibration)). Calibration factors are pulled directly from
-SVDBS. Vessel conversions were made from either the NOAA Ship
-<em>Delaware II</em> or NOAA Ship <em>Henry Bigelow</em> to the NOAA
-Ship <em>Albatross IV</em> which was the primary vessel for most of the
-time series. The Albatross was decommisioned in 2009 and the Bigelow is
-now the primary vessel for the bottom trawl survey.</p>
+time series <span class="citation">(<a href="#ref-Miller_2010">Miller et
+al. 2010</a>)</span>. T R package <code>survdat</code> was developed as
+a database query that applies the appropriate calibration factors for a
+seamless time series since the 1960s.</p>
+<p>The R package <code>survdat</code> is used to pull and process the
+data. <code>survdat</code> identifies those research cruises associated
+with the seasonal bottom trawl surveys and pulls the station and
+biological data. Station data includes tow identification (cruise,
+station, and stratum), tow location and date, as well as several
+environmental variables (depth, surface/bottom salinity, and
+surface/bottom temperature). Stations are filtered using a station,
+haul, gear (SHG) code for tows prior to 2009 and a tow, operations,
+gear, and aquisition (TOGA) code from 2009 onward. The codes that
+correspond to a representative tow (SHG &lt;= 136 or TOGA &lt;= 1324)
+are the same used by assessment biologists at the NEFSC. Biological data
+includes the total biomass and abundance by species, as well as lengths
+and number at length.</p>
+<p><code>survdat</code> applies the calibration factors. There are four
+calibrartion factors applied (Table 64.1). Calibration factors are
+pulled directly from SVDBS. Vessel conversions were made from either the
+NOAA Ship <strong>Delaware II</strong> or NOAA Ship <strong>Henry
+Bigelow</strong> to the NOAA <strong>Ship Albatross IV</strong> which
+was the primary vessel for most of the time series. The Albatross was
+decommissioned in 2009 and the Bigelow is now the primary vessel for the
+bottom trawl survey.</p>
 <table class="table">
 <caption>Calibration factors for NEFSC trawl survey data</caption>
 <thead><tr class="header">
@@ -193,23 +180,13 @@ now the primary vessel for the bottom trawl survey.</p>
 </tr>
 </tbody>
 </table>
-<p>The output from <code>survdat</code> is a data.table that contains
-all the station and biological data, corrected as noted above, from the
-NEFSC Spring Bottom Trawl Survey and NEFSC Fall Bottom Trawl Survey.</p>
-<p>For the purposes of the aggregate biomass indicators, fall and spring
-survey data are treated separately. Additionally, all length data is
-dropped and species seperated by sex at the catch level are merged back
-together.</p>
-<p>The data pulled from SVDBS is first post stratified into geographical
-regions (any user supplied geospatial shapefile) by labeling sampling
-stations by the geographical region they fell within
-(<code>post_strat.r</code>) Next, the total number of stations within
-each geographical region per year is counted using unique station
-records (<code>strat_prep.r</code>). Biomass is summed by species per
-year per region and divided by the appropriate station count to get the
-regional mean (<code>strat_mean.r</code>). Finally, the mean biomasses
-are summed over the defined regions (<code>swept_area.r</code>).</p>
-</div>
+<p>Describe a little about the survey process that pertains to the
+data.</p>
+<p>eg.</p>
+<p>Since 19xx all species landed on the survey vessel are measured for
+length. A subset of these are then individually weighed, sexed, assessed
+for stage of maturity, and undergo a stomach content analysis</p>
+<p>At the tow level … expanded number, expanded weight etc..</p>
 <div class="section level2 unnumbered">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>

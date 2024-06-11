@@ -34,11 +34,23 @@
      
     <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/calc_strat_mean.html">Calculating stratified mean biomass/abundance</a>
+  <ul class="dropdown-menu" role="menu"><li class="dropdown-header">Introduction</li>
+    <li>
+      <a href="../articles/surveyDesign.html">Survey design</a>
     </li>
     <li>
-      <a href="../articles/methodology.html">How biomass estimates are calculated</a>
+      <a href="../articles/pullingData.html">Pulling the data</a>
+    </li>
+    <li>
+      <a href="../articles/lookupTables.html">Lookup tables</a>
+    </li>
+    <li class="divider">
+    <li class="dropdown-header">Methodology</li>
+    <li>
+      <a href="../articles/methodology.html">Estimating Biomass</a>
+    </li>
+    <li>
+      <a href="../articles/calc_Strat_mean.html">Estimating stratified mean</a>
     </li>
   </ul></li>
 <li>
@@ -74,34 +86,10 @@
           <p><code><a href="calc_stratified_mean.html">calc_stratified_mean()</a></code> </p>
         </td>
         <td><p>Calculate stratified mean</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="intermediate-functions">Intermediate Functions <a href="#intermediate-functions" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p><p>Functions used in estimation</p>
-        </th>
-      </tr></tbody><tbody><tr><td>
+      </tr><tr><td>
           <p><code><a href="get_area.html">get_area()</a></code> </p>
         </td>
         <td><p>Generate a table of stratum areas</p></td>
-      </tr><tr><td>
-          <p><code><a href="post_strat.html">post_strat()</a></code> </p>
-        </td>
-        <td><p>Assigns points to polygon</p></td>
-      </tr><tr><td>
-          <p><code><a href="strat_prep.html">strat_prep()</a></code> </p>
-        </td>
-        <td><p>Prepare survey data for calculating stratified mean</p></td>
-      </tr><tr><td>
-          <p><code><a href="strat_mean.html">strat_mean()</a></code> </p>
-        </td>
-        <td><p>Calculate stratified mean biomass and abundance</p></td>
-      </tr><tr><td>
-          <p><code><a href="swept_area.html">swept_area()</a></code> </p>
-        </td>
-        <td><p>Calculate the estimate of total biomass and abundance</p></td>
-      </tr><tr><td>
-          <p><code><a href="apply_conversion_factors.html">apply_conversion_factors()</a></code> </p>
-        </td>
-        <td><p>Applies conversion factors to Raw Survey data pull</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="get-data">Get Data <a href="#get-data" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Functions that pull data from the SVDBS database</p>
@@ -161,11 +149,7 @@
       </tr><tr><td>
           <p><code><a href="get_length_weight.html">get_length_weight()</a></code> </p>
         </td>
-        <td><p>Generate a table of length weight coefficients</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_length_weight_data.html">get_length_weight_data()</a></code> </p>
-        </td>
-        <td><p>Extract Length and weight data from SVDBS</p></td>
+        <td><p>Extract species specific LENGTH-WEIGHT COEFFICIENTS from SVDBS</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="plotting">Plotting <a href="#plotting" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Basic plotting functions to visualize data</p>

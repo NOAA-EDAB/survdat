@@ -59,11 +59,24 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/calc_strat_mean.html">Calculating stratified mean biomass/abundance</a>
+<li class="dropdown-header">Introduction</li>
+    <li>
+      <a href="../articles/surveyDesign.html">Survey design</a>
     </li>
     <li>
-      <a href="../articles/methodology.html">How biomass estimates are calculated</a>
+      <a href="../articles/pullingData.html">Pulling the data</a>
+    </li>
+    <li>
+      <a href="../articles/lookupTables.html">Lookup tables</a>
+    </li>
+    <li class="divider">
+    </li>
+<li class="dropdown-header">Methodology</li>
+    <li>
+      <a href="../articles/methodology.html">Estimating Biomass</a>
+    </li>
+    <li>
+      <a href="../articles/calc_Strat_mean.html">Estimating stratified mean</a>
     </li>
   </ul>
 </li>
@@ -117,15 +130,22 @@ in <code>survdat</code></p>
 <div class="section level2">
 <h2 id="pull-data">Pull Data<a class="anchor" aria-label="anchor" href="#pull-data"></a>
 </h2>
-<p>Pulling the data takes up to 15 minutes to complete. see
+<p>Pulling the data can take up to 15 minutes to complete. see
 <code>get_survdat_data</code> for details. To pull the survey data with
 conversion corrections applied use the following:</p>
 <pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></code></pre>
 <p>To pull biological traits of individual fish sampled on the survey
 cruise</p>
-<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, bio<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
-<p><code>data</code> is a list of 2 elements. The data pull and the set
-of sql statements made to pull the data</p>
+<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, getBio<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<p><code>data</code> is a list of 5 elements.</p>
+<ul>
+<li>The data</li>
+<li>The set of sql statements made to pull the data</li>
+<li>The function call statement</li>
+<li>The date of the pull</li>
+<li>The version of the package used to create the data pull</li>
+</ul>
+<p>For detailed information</p>
 </div>
 <div class="section level2">
 <h2 id="plot-the-shapefiles">Plot the shapefiles<a class="anchor" aria-label="anchor" href="#plot-the-shapefiles"></a>
@@ -141,6 +161,7 @@ and <code>EPU.shp</code></p>
 <div class="section level2">
 <h2 id="stratified-mean">Stratified Mean<a class="anchor" aria-label="anchor" href="#stratified-mean"></a>
 </h2>
+<p>Under development.</p>
 </div>
 <div class="section level2">
 <h2 id="swept-area-biomass">Swept area biomass<a class="anchor" aria-label="anchor" href="#swept-area-biomass"></a>

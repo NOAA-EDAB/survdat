@@ -3,9 +3,12 @@ pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   calc_strat_mean: calc_strat_mean.html
+  lookupTables: lookupTables.html
   methodology: methodology.html
+  pullingData: pullingData.html
   survdat: survdat.html
-last_built: 2024-06-04T20:57Z
+  surveyDesign: surveyDesign.html
+last_built: 2024-06-11T15:05Z
 urls:
   reference: https://noaa-edab.github.io/survdat/reference
   article: https://noaa-edab.github.io/survdat/articles

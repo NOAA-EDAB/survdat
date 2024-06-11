@@ -13,10 +13,19 @@
     <loc>https://noaa-edab.github.io/survdat/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://noaa-edab.github.io/survdat/articles/lookupTables.html</loc>
+  </url>
+  <url>
     <loc>https://noaa-edab.github.io/survdat/articles/methodology.html</loc>
   </url>
   <url>
+    <loc>https://noaa-edab.github.io/survdat/articles/pullingData.html</loc>
+  </url>
+  <url>
     <loc>https://noaa-edab.github.io/survdat/articles/survdat.html</loc>
+  </url>
+  <url>
+    <loc>https://noaa-edab.github.io/survdat/articles/surveyDesign.html</loc>
   </url>
   <url>
     <loc>https://noaa-edab.github.io/survdat/authors.html</loc>
@@ -26,9 +35,6 @@
   </url>
   <url>
     <loc>https://noaa-edab.github.io/survdat/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/apply_conversion_factors.html</loc>
   </url>
   <url>
     <loc>https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.html</loc>
@@ -88,18 +94,6 @@
     <loc>https://noaa-edab.github.io/survdat/reference/plot_shapefile.html</loc>
   </url>
   <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/post_strat.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/strat_mean.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/strat_prep.html</loc>
-  </url>
-  <url>
     <loc>https://noaa-edab.github.io/survdat/reference/survdat-package.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/swept_area.html</loc>
   </url>
 </urlset>
