@@ -38,7 +38,7 @@
 #'
 #'@section Reference:
 #'
-#' Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
+#' Note: species codes (SVSPP) are stored in the database as VARCHAR2(3 BYTE)
 #'
 #' @seealso \code{\link[dbutils]{connect_to_database}}
 #'
@@ -46,7 +46,7 @@
 #' \dontrun{
 #' # extracts length-weight data for cod (73) for all years and sexes
 #' channel <- connect_to_database(server="servername",uid="username")
-#' codPull <- get_length_weight_data(channel,species=73)
+#' codPull <- get_length_weight_data(channel,year = "all", species=73)
 #'}
 #'
 #' @export
@@ -86,7 +86,6 @@ get_length_weight_data <- function(channel, year=1994, species="all", sex="all")
     whereStr <- paste(whereStr,item,"and")
   }
 
-  print(whereStr)
   # eventually user will be able to pass these variables
   sqlStatement <- "select m.cruise6, m.stratum, m.tow, m.station, m.svspp, m.sex, m.indid, m.length, m.indwt, m.maturity, m.stom_wgt, m.stom_volume, s.season
                     from svdbs.union_fscs_svbio m LEFT JOIN svdbs.svdbs_cruises s

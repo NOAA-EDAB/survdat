@@ -20,7 +20,7 @@ A list is returned:
   \item{colNames}{a vector of the table's column names}
 }
 \description{
-Extract a list of sex codes and descriptions from the SVDBS FSCS_SEX_CODES table
+Extract a list of sex codes and descriptions from the SVDBS.FSCS_SEX_CODES table
 }
 \section{Reference}{
 

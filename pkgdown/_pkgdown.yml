@@ -26,6 +26,10 @@ reference:
   - get_vessel
   - get_conversion_factors
   - get_length_weight
+- title: "Sample Data"
+  desc: "Random sample of data from different types of data pulls"
+- contents:
+  - starts_with("sample")
 - title: "Plotting"
   desc: "Basic plotting functions to visualize data"
 - contents:

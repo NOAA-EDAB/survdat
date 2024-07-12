@@ -1,6 +1,6 @@
 #' Extract species specific LENGTH-WEIGHT COEFFICIENTS from SVDBS
 #'
-#'Pulls the length-weight coefficients from SVDBS LENGTH_WEIGHT_COEFFICIENTS table
+#'Pulls the length-weight coefficients from SVDBS.LENGTH_WEIGHT_COEFFICIENTS table
 #' These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 #'
 #'

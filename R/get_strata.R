@@ -1,11 +1,10 @@
 #' Extract STRATA information from SVDBS
 #'
-#'Extract STRATA information from the SVDBS SVMSTRATA table
-#'
+#'Extract STRATA information from the SVDBS.SVMSTRATA table
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 #' to communicate with the database engine. (see \code{\link{connect_to_database}})
-#' @param strata Numeric or character vector. Set of strata codes. Defaults to "all" strata.
+#' @param strata Numeric or character vector. Set of strata codes. Default = "all".
 #' Numeric codes are converted to VARCHAR2(5 BYTE) when creating the sql statement. Alternatively enter name of stratum
 #'
 #' @return A list is returned:
@@ -16,7 +15,6 @@
 #'
 #'   \item{colNames}{a vector of the table's column names}
 #'
-#'The default sql statement "\code{select * from svdbs.svspecies_list}" is used
 #'
 #'@section Reference:
 #'Use the data dictionary for field name explanations

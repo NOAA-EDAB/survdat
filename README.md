@@ -1,14 +1,12 @@
 # survdat <img src="man/figures/logo.png" align="right" width="120" /> 
 
-### Everything you need to pull and process the NEFSC survey data
+## Pull and process the NEFSC survey data
 
 <!-- badges: start -->
 [![gh-pages](https://github.com/NOAA-EDAB/survdat/workflows/gh-pages/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
 [![R-CMD-check](https://github.com/NOAA-EDAB/survdat/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions/workflows/check-standard.yaml) [![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
 <!-- badges: end -->
-
 ---
-
 
 ## Usage
 
@@ -17,13 +15,29 @@ To use this package you will need:
 1.  To be behind the NEFSC firewall
 2.  Permissions to access the required server : a username and password.
 3.  Oracle's instant Client installed
+4.  Oracle's ROracle R package
+
+### Who this is for?
+
+* Anyone looking for raw tow level survey data in the format that you would obtain from Ecosystem Survey Branch (ESB) - still in development
+
+* Anyone looking for Ecosystem/multispecies products derived from the tow level data. See [vignettes](articles/articles/pullingData.html) for explanation of methods
+
+### Who this isn't for!
+
+Anyone looking for survey data that is directly input into stock assessments. You will need to either:
+
+* Contact the appropriate stock assessment scientist 
+* Visit the [Northeast Region Stock Assessment Support Materials](https://www.fisheries.noaa.gov/resource/data/northeast-region-stock-assessment-support-materials)
+* Visit [StockSMART web portal](https://apps-st.fisheries.noaa.gov/stocksmart?app=homepage) or [stocksmart](https://noaa-edab.github.io/stocksmart/) R package housing the data from the portal
 
 
+## Installation
 
-### Installation
-
-`remotes::install_github("NOAA-EDAB/survdat",build_vignettes = TRUE)`
-
+``` r 
+# Install directly from GitHub
+remotes::install_github("NOAA-EDAB/survdat",build_vignettes = TRUE)`
+```
 ## Developers (in alphabetical order)
 
 | [andybeet](https://github.com/andybeet)                                                         | [slucey](https://github.com/slucey)                                                                                                    |

@@ -35,11 +35,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sean Lucey \email{Sean.Lucey@NOAA.gov}
+\strong{Maintainer}: Andy Beet \email{andrew.beet@NOAA.gov} (\href{https://orcid.org/0000-0001-8270-7090}{ORCID})
 
 Authors:
 \itemize{
-  \item Andy Beet \email{andrew.beet@NOAA.gov} (\href{https://orcid.org/0000-0001-8270-7090}{ORCID})
+  \item Sean Lucey \email{Sean.Lucey@NOAA.gov}
 }
 
 }

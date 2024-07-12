@@ -10,7 +10,7 @@ get_strata(channel, strata = "all")
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 to communicate with the database engine. (see \code{\link{connect_to_database}})}
 
-\item{strata}{Numeric or character vector. Set of strata codes. Defaults to "all" strata.
+\item{strata}{Numeric or character vector. Set of strata codes. Default = "all".
 Numeric codes are converted to VARCHAR2(5 BYTE) when creating the sql statement. Alternatively enter name of stratum}
 }
 \value{
@@ -21,11 +21,9 @@ A list is returned:
   \item{sql}{containing the sql call}
 
   \item{colNames}{a vector of the table's column names}
-
-The default sql statement "\code{select * from svdbs.svspecies_list}" is used
 }
 \description{
-Extract STRATA information from the SVDBS SVMSTRATA table
+Extract STRATA information from the SVDBS.SVMSTRATA table
 }
 \section{Reference}{
 

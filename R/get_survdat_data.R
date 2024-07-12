@@ -45,8 +45,16 @@
 #' \item{BOTSALIN}{Bottom salinity in Practical Salinity Units (PSU).}
 #' \item{ABUNDANCE}{Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)}
 #' \item{BIOMASS}{Expanded catch weight of a species caught at a given station. (EXPCATCHWT)}
+#'
+#' Additional Columns if getLengths = T (UNION_FSCS_SVLEN)
+#'
 #' \item{LENGTH}{Measured length of species in centimeters (cm). Measure method differs by species.}
 #' \item{NUMLEN}{Expanded number of specimens at a given length.(EXPNUMLEN)}
+#'
+#' Additional Columns if getWeightLength = T
+#'
+#' \item{PREDWT}{Predicted weight given length based on length-weight coefficients.}
+#' \item{WGTLEN}{Predicted total weight given number of fish observed at given length}
 #'
 #' Additional columns if bio = T (UNION_FSCS_SVBIO)
 #'
@@ -76,6 +84,10 @@
 #'
 #' \item{functionCall}{The call used to create the data pull}
 #'
+#' The version:
+#'
+#' \item{version}{The version of survdat used to pull the data}
+#'
 #' @importFrom data.table "%like%"
 #' @family survdat
 #'
@@ -101,6 +113,9 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   call <- capture_function_call()
   version <- packageVersion("survdat")
 
+  check_argument_validation(getBio = getBio,
+                            getLengths = getLengths,
+                            getWeightLength = getWeightLength)
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
@@ -211,11 +226,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   }
 
-  # Weight at Length Data -----------------------------------------------------
-  if(getWeightLength & getLengths == F){
-    stop("Can not calculate weight at length without lengths...
-         Set getLengths to TRUE.")
-  }
+
   if(getWeightLength){
     message("Getting Weight at Length Data ...")
     #Grab survey length/weight coefficients using survdat function

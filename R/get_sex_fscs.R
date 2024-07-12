@@ -1,6 +1,6 @@
 #' Extract SEX information from SVDBS
 #'
-#'Extract a list of sex codes and descriptions from the SVDBS FSCS_SEX_CODES table
+#'Extract a list of sex codes and descriptions from the SVDBS.FSCS_SEX_CODES table
 #'
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect

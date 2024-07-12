@@ -51,14 +51,14 @@ This data is extracted from svdbs.union_fscs_svbio
 \section{Reference}{
 
 
-Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
+Note: species codes (SVSPP) are stored in the database as VARCHAR2(3 BYTE)
 }
 
 \examples{
 \dontrun{
 # extracts length-weight data for cod (73) for all years and sexes
 channel <- connect_to_database(server="servername",uid="username")
-codPull <- get_length_weight_data(channel,species=73)
+codPull <- get_length_weight_data(channel,year = "all", species=73)
 }
 
 }

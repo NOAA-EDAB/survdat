@@ -6,11 +6,11 @@ Date: 2015-03-03
 Authors@R: c(person(given = "Sean",
                     family = "Lucey",
                     email = "Sean.Lucey@NOAA.gov",
-                    role = c("aut", "cre")),
+                    role = c("aut")),
             person(given = "Andy", 
                    family = "Beet", 
                    email = "andrew.beet@NOAA.gov",
-                   role = c("aut"),
+                   role = c("aut","cre"),
                    comment = c(ORCID = "0000-0001-8270-7090")))
 License: file LICENSE
 Encoding: UTF-8
@@ -36,5 +36,9 @@ Suggests:
     knitr,
     rmarkdown,
     markdown,
-    kableExtra
+    kableExtra,
+    DT
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
+LazyData: true
