@@ -101,6 +101,9 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   call <- capture_function_call()
   version <- packageVersion("survdat")
 
+  check_argument_validation(getBio = getBio,
+                            getLengths = getLengths,
+                            getWeightLength = getWeightLength)
 
   # Cruise List --------------------------------------------------------------
   #Generate cruise list
@@ -211,11 +214,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   }
 
-  # Weight at Length Data -----------------------------------------------------
-  if(getWeightLength & getLengths == F){
-    stop("Can not calculate weight at length without lengths...
-         Set getLengths to TRUE.")
-  }
+
   if(getWeightLength){
     message("Getting Weight at Length Data ...")
     #Grab survey length/weight coefficients using survdat function
