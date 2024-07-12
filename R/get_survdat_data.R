@@ -45,8 +45,16 @@
 #' \item{BOTSALIN}{Bottom salinity in Practical Salinity Units (PSU).}
 #' \item{ABUNDANCE}{Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)}
 #' \item{BIOMASS}{Expanded catch weight of a species caught at a given station. (EXPCATCHWT)}
+#'
+#' Additional Columns if getLengths = T (UNION_FSCS_SVLEN)
+#'
 #' \item{LENGTH}{Measured length of species in centimeters (cm). Measure method differs by species.}
 #' \item{NUMLEN}{Expanded number of specimens at a given length.(EXPNUMLEN)}
+#'
+#' Additional Columns if getWeightLength = T
+#'
+#' \item{PREDWT}{Predicted weight given length based on length-weight coefficients.}
+#' \item{WGTLEN}{Predicted total weight given number of fish observed at given length}
 #'
 #' Additional columns if bio = T (UNION_FSCS_SVBIO)
 #'
@@ -75,6 +83,10 @@
 #' The expression:
 #'
 #' \item{functionCall}{The call used to create the data pull}
+#'
+#' The version:
+#'
+#' \item{version}{The version of survdat used to pull the data}
 #'
 #' @importFrom data.table "%like%"
 #' @family survdat

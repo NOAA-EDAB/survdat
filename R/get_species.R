@@ -5,7 +5,7 @@
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 #' to communicate with the database engine. (see \code{\link{connect_to_database}})
-#' @param species Numeric or character vector. a specific species code or set of codes. Defaults to "all" species.
+#' @param species Numeric or character vector. A specific species code or set of codes. Default = "all".
 #' Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement. Character codes are short character strings.
 #'
 #' @return A list is returned:
@@ -16,7 +16,6 @@
 #'
 #'   \item{colNames}{a vector of the table's column names}
 #'
-#'The default sql statement "\code{select * from svdbs.svspecies_list}" is used
 #'
 #'@section Reference:
 #'Use the data dictionary for field name explanations

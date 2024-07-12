@@ -10,7 +10,7 @@ get_species(channel, species = "all")
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
 to communicate with the database engine. (see \code{\link{connect_to_database}})}
 
-\item{species}{Numeric or character vector. a specific species code or set of codes. Defaults to "all" species.
+\item{species}{Numeric or character vector. A specific species code or set of codes. Default = "all".
 Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement. Character codes are short character strings.}
 }
 \value{
@@ -21,8 +21,6 @@ A list is returned:
   \item{sql}{containing the sql call}
 
   \item{colNames}{a vector of the table's column names}
-
-The default sql statement "\code{select * from svdbs.svspecies_list}" is used
 }
 \description{
 Extract a list of speices names, code, market category, etc from the SVDBS SVSPECIES_LIST table

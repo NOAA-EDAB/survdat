@@ -19,7 +19,7 @@ Returns a data.table (nx12).
 \item{SVLWCOEFF}{The natural log of the coefficient of the length-weight equation, ln a.}
 }
 \description{
-Pulls the length-weight coefficients from SVDBS LENGTH_WEIGHT_COEFFICIENTS table
+Pulls the length-weight coefficients from SVDBS.LENGTH_WEIGHT_COEFFICIENTS table
 These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 }
 \seealso{
