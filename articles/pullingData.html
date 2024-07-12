@@ -18,15 +18,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Pulling Data">
-<meta property="og:description" content="survdat">
-<meta property="og:image" content="https://noaa-edab.github.io/survdat/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -55,7 +53,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -88,7 +86,7 @@
 <li>
   <a href="https://github.com/NOAA-EDAB/survdat/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -99,15 +97,20 @@
 </div>
 <!--/.navbar -->
 
-      
 
-      </header><div class="row">
+
+      </header><link href="pullingData_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="pullingData_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="pullingData_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+<script src="pullingData_files/datatables-binding-0.33/datatables.js"></script><link href="pullingData_files/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="pullingData_files/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="pullingData_files/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="pullingData_files/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+<script src="pullingData_files/crosstalk-1.2.1/js/crosstalk.min.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Pulling Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/NOAA-EDAB/survdat/blob/HEAD/vignettes/pullingData.Rmd" class="external-link"><code>vignettes/pullingData.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/NOAA-EDAB/survdat/blob/master/vignettes/pullingData.Rmd" class="external-link"><code>vignettes/pullingData.Rmd</code></a></small>
       <div class="hidden name"><code>pullingData.Rmd</code></div>
 
     </div>
@@ -115,53 +118,175 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/survdat" class="external-link">survdat</a></span><span class="op">)</span></span></code></pre></div>
-<p>Explain the differences between resulting data objects based on
-argument flags.</p>
-<p>In Development</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/survdat" class="external-link">survdat</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/DT" class="external-link">DT</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="base">Basic data pull<a class="anchor" aria-label="anchor" href="#base"></a>
+</h2>
+<p>Pull tow level data from the Bottom Trawl Survey (purpose_code =
+10)</p>
+<p>Species abundance (EXPCATCHNUM), biomass (EXPCATCHWT), and sex
+(CATCHSEX), for each spring and fall cruise (for user specified years)
+for all representative tows. In addition non biological data is
+retrieved specific to the tow location: latitude (DECDEG_BEGLAT),
+longitude (DECDEG_BEGLON), depth (AVGDEPTH), surface and bottom
+temperature (SURFTEMP, BOTTEMP) and salinity (SURSALIN, BOTSALIN)</p>
+<p>A representative tow is a tow with:</p>
+<ul>
+<li>SHG code &lt;= 136 for tows on cruises on or before 2009 and</li>
+<li>TOGA code &lt;= 1324 for tows on cruises after 2009</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">survdat</span><span class="fu">::</span><span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, </span>
+<span>                          getLengths <span class="op">=</span> <span class="cn">F</span>, </span>
+<span>                          conversion.factor <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>The list of cruises is retrieved for user specified years</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="kw">select</span> <span class="kw">unique</span> <span class="dt">year</span>, cruise6, svvessel, season</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="kw">from</span> svdbs.mstr_cruise</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="kw">where</span> purpose_code <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="kw">and</span> <span class="dt">year</span> <span class="kw">in</span> <span class="op">&lt;</span>userYears<span class="op">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="kw">and</span> season <span class="op">=</span> <span class="st">'FALL'</span>  <span class="kw">or</span> season <span class="op">=</span> <span class="st">'SPRING'</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> <span class="dt">year</span>, cruise6</span></code></pre></div>
+<p>The station data is retrieved for the cruises (pulled above) and the
+tables joined</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="kw">select</span> <span class="kw">unique</span> cruise6, svvessel, station, stratum, tow, decdeg_beglat <span class="kw">as</span> lat, decdeg_beglon <span class="kw">as</span> lon, begin_est_towdate <span class="kw">as</span> est_towdate, avgdepth <span class="kw">as</span> <span class="fu">depth</span>, surftemp, surfsalin, bottemp, botsalin</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="kw">from</span> svdbs.UNION_FSCS_SVSTA</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="kw">where</span> cruise6 <span class="kw">in</span> <span class="op">&lt;</span>cruiseData<span class="op">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="kw">and</span> (SHG <span class="op">&lt;=</span> <span class="dv">136</span> <span class="kw">and</span> cruise6 <span class="op">&lt;=</span> <span class="dv">200900</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="kw">or</span> (TOGA <span class="op">&lt;=</span> <span class="dv">1324</span> <span class="kw">and</span> cruise6 <span class="op">&gt;</span> <span class="dv">200900</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> cruise6, station)</span></code></pre></div>
+<p>The species data are retrieved for the cruises (pulled above) and
+joined to the cruise/station data table</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="kw">select</span> cruise6, station, stratum, tow, svspp, catchsex,expcatchnum <span class="kw">as</span> abundance, expcatchwt <span class="kw">as</span> biomass</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="kw">from</span> svdbs.UNION_FSCS_SVCAT</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="kw">where</span> cruise6 <span class="kw">in</span> <span class="op">&lt;</span>cruiseData<span class="op">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="kw">and</span> stratum <span class="kw">not</span> <span class="kw">like</span> <span class="st">'YT%'</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> cruise6, station, svspp</span></code></pre></div>
+<p>The resulting data frame will look like this:</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],[201302,199004,197404,200604,201502,197512,200803,198202,201404,198901,197910,198002,201105,199604,198803,201302,201302,200902,201804,201102],[398,229,89,285,228,423,295,149,17,223,487,552,280,118,288,223,343,416,321,358],[3640,1150,1100,1360,1230,1390,1370,1690,1700,1290,1330,1230,3600,3460,1380,1240,3610,1090,1290,1270],[3,1,2,2,6,2,5,3,2,3,3,2,1,4,4,2,4,7,10,1],["HB","DE","AL","AL","HB","AL","AL","DE","HB","DE","DE","AL","HB","AL","AL","HB","HB","HB","HB","HB"],[2013,1990,1974,2006,2015,1975,2008,1982,2014,1989,1979,1980,2011,1996,1988,2013,2013,2009,2018,2011],["SPRING","FALL","SPRING","SPRING","SPRING","FALL","SPRING","SPRING","FALL","SPRING","FALL","SPRING","FALL","FALL","FALL","SPRING","SPRING","SPRING","FALL","SPRING"],[42.332442,40.516667,40.4,43.43965,41.254982,43.866667,43.192712,38.8,38.051618,42.283333,43.366667,41.016667,42.039367,41.316667,43.5,41.53996,42.07670299999999,40.691728,42.281973,42.676145],[-70.76331999999999,-67.11666699999999,-69.816667,-67.591567,-68.85893799999999,-68.583333,-69.19224299999999,-74.11666699999999,-74.102817,-67.38333299999999,-66.516667,-68.966667,-70.51754199999999,-70.88333299999999,-69.38333299999999,-68.79464,-70.001875,-69.38373299999999,-66.152512,-70.012052],["2013-05-07T19:17:18Z","1990-10-08T09:57:00Z","1974-04-03T12:16:00Z","2006-04-13T00:05:59Z","2015-04-11T14:56:40Z","1975-11-17T23:16:00Z","2008-04-23T13:58:02Z","1982-03-23T20:18:00Z","2014-09-10T11:10:21Z","1989-03-29T15:24:00Z","1979-11-14T17:43:00Z","1980-04-25T01:11:00Z","2011-10-20T17:29:01Z","1996-09-24T06:19:00Z","1988-10-24T17:25:00Z","2013-04-12T05:57:57Z","2013-05-01T14:36:19Z","2009-05-08T01:13:15Z","2018-11-06T19:34:22Z","2011-05-09T09:40:05Z"],[32,297,73,227,99,72,189,47,92,284,92,78,43,32,138,155,null,42,247,134],[10.48,null,5.9,5.64,5.12,10.1,6.84,6.100000000000001,23.64,null,10,6.4,15.36,null,10.1,6.79,7.67,6.640000000000001,11.71,8.609999999999999],[31.693,null,null,32.296,33.423,null,32.536,null,32.947,null,null,null,31.1,null,null,33.38,32.261,32.505,32.276,30.572],[6.81,null,7.100000000000001,7.94,4.81,10.4,5.73,4.8,10.16,null,10.3,5.2,10.51,null,6.5,6.17,6.12,6.59,9.470000000000001,6.67],[31.931,null,null,34.345,33.432,null,33.407,null,33.82400000000001,null,null,null,31.897,null,null,33.387,32.445,32.514,35.162,33.025],[32,164,77,102,23,401,512,193,503,79,105,106,77,131,28,121,72,106,161,998],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[1298,1,4,1,8,1,2,4,1626,2,17,10,13,3,1,2,11,32,1,0],[45.483,0.2,1.8,0.42,3.485,0,0.076,5.2,14.223,0,4.8,4.5,1.963,0.1,4.9,0.236,1.523,15.3,0.009000000000000001,1.625]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>CRUISE6<\/th>\n      <th>STATION<\/th>\n      <th>STRATUM<\/th>\n      <th>TOW<\/th>\n      <th>SVVESSEL<\/th>\n      <th>YEAR<\/th>\n      <th>SEASON<\/th>\n      <th>LAT<\/th>\n      <th>LON<\/th>\n      <th>EST_TOWDATE<\/th>\n      <th>DEPTH<\/th>\n      <th>SURFTEMP<\/th>\n      <th>SURFSALIN<\/th>\n      <th>BOTTEMP<\/th>\n      <th>BOTSALIN<\/th>\n      <th>SVSPP<\/th>\n      <th>CATCHSEX<\/th>\n      <th>ABUNDANCE<\/th>\n      <th>BIOMASS<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,6,8,9,11,12,13,14,15,16,17,18,19]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"CRUISE6","targets":1},{"name":"STATION","targets":2},{"name":"STRATUM","targets":3},{"name":"TOW","targets":4},{"name":"SVVESSEL","targets":5},{"name":"YEAR","targets":6},{"name":"SEASON","targets":7},{"name":"LAT","targets":8},{"name":"LON","targets":9},{"name":"EST_TOWDATE","targets":10},{"name":"DEPTH","targets":11},{"name":"SURFTEMP","targets":12},{"name":"SURFSALIN","targets":13},{"name":"BOTTEMP","targets":14},{"name":"BOTSALIN","targets":15},{"name":"SVSPP","targets":16},{"name":"CATCHSEX","targets":17},{"name":"ABUNDANCE","targets":18},{"name":"BIOMASS","targets":19}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="lengths">Length data<a class="anchor" aria-label="anchor" href="#lengths"></a>
+</h2>
+<p>Individual lengths (to the nearest centimeter) of species sampled (in
+addition to the <a href="base">base pull</a> data). Two additional
+fields are retrieved: length (LENGTH) AND numlen (EXPNUMLEN), the number
+of fish sampled at the given length. Use the argument
+<code>getLengths = T</code></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">survdat</span><span class="fu">::</span><span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, </span>
+<span>                          getLengths <span class="op">=</span> <span class="cn">T</span>, </span>
+<span>                          conversion.factor <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>The length data are retrieved for ALL species for the user specified
+years and joined with the base pull data</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">select</span> cruise6, station, stratum, tow, svspp, catchsex, <span class="fu">length</span>, expnumlen <span class="kw">as</span> numlen</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="kw">from</span> svdbs.UNION_FSCS_SVLEN</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="kw">where</span> cruise6 <span class="kw">in</span> <span class="op">&lt;</span>cuiseData<span class="op">&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="kw">and</span> stratum <span class="kw">not</span> <span class="kw">like</span> <span class="st">'YT%'</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> cruise6, station, svspp, <span class="fu">length</span></span></code></pre></div>
+<p>The resulting data frame has many more rows of data than the base
+pull. The tow level data for each species is replicated as many times as
+there are different lengths sampled</p>
+<p>The resulting data frame will look like this:</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],[197702,197208,196721,197503,197712,196803,197512,197006,197712,197208,196911,197003,197609,197303,197208,197702,197702,197602,197806,197609],[322,139,262,234,281,225,293,272,131,78,244,148,201,296,57,241,291,66,259,94],[1220,1160,1310,1260,1210,1190,1240,1360,3120,7760,1380,1400,1090,1410,8780,1120,1200,1730,1160,1690],[3,4,5,1,2,3,2,8,1,1,3,3,2,7,1,1,5,3,12,1],[102,163,74,102,163,106,502,76,13,171,76,155,401,15,839,197,74,72,164,72],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],["AL","AL","AL","AL","DE","AL","AL","AL","DE","DE","AL","AL","AL","AL","DE","AL","AL","DE","DE","AL"],[1977,1972,1967,1975,1977,1968,1975,1970,1977,1972,1969,1970,1976,1973,1972,1977,1977,1976,1978,1976],["SPRING","FALL","FALL","SPRING","FALL","SPRING","FALL","FALL","FALL","FALL","FALL","SPRING","FALL","SPRING","FALL","SPRING","SPRING","SPRING","FALL","FALL"],[41.85,41.48333299999999,42.766667,42.366667,42.116667,41.1,41.45,43.833333,40.216667,31.983333,43.5,43.583333,41.133333,43.516667,32.833333,39.916667,42.05,39.55,41.48333299999999,38.583333],[-68.166667,-66.65000000000001,-65.3,-70.516667,-67.36666699999999,-67.93333299999999,-68.85000000000001,-67.533333,-73.983333,-79.966667,-69.40000000000001,-69.833333,-70.8,-64.38333299999999,-78.41666699999999,-69.93333299999999,-67.416667,-73.66666699999999,-66.3,-74.033333],["1977-04-26T16:31:00Z","1972-10-23T19:01:00Z","1967-11-15T14:15:00Z","1975-05-06T00:44:00Z","1977-11-01T04:27:00Z","1968-04-17T14:09:00Z","1975-10-17T03:56:00Z","1970-11-15T18:35:00Z","1977-10-06T23:40:00Z","1972-11-03T00:15:00Z","1969-11-21T12:05:00Z","1970-04-08T12:25:00Z","1976-10-23T06:00:00Z","1973-05-08T18:46:00Z","1972-11-01T06:38:00Z","1977-04-18T07:20:00Z","1977-04-23T12:04:00Z","1976-03-12T14:12:00Z","1978-10-03T04:41:00Z","1976-10-08T04:42:00Z"],[174,78,110,89,87,51,146,211,13,29,146,96,31,180,40,366,48,29,89,51],[7.100000000000001,12.2,9.300000000000001,0,11.2,4.3,13.8,8.700000000000001,16.8,23.5,9,null,14.2,3.6,24.5,13.7,6.4,5,13.6,18.7],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[4.5,11.7,5.5,null,9.6,4.4,5.9,6.9,17.5,23.1,8,null,14.4,8.800000000000001,23.9,8.5,5.600000000000001,5.2,8.6,9.700000000000001],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[12,10,87,86,96,38,6,5,60,3,40,17,5,78,5,2,57,11,1,77],[8.199999999999999,1.8,64.90000000000001,7.3,21.5,44.9,3.6,3.6,78.3,0,53,6.8,0.5,267.2,1.8,9.9,45,2.3,0.2,0.6],[30,26,49,6,25,41,30,47,76,17,53,37,12,75,27,63,56,44,20,27],[1,3,2,1,11,1,2,1,1,2,2,1,1,1,2,1,1,1,1,2]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>CRUISE6<\/th>\n      <th>STATION<\/th>\n      <th>STRATUM<\/th>\n      <th>TOW<\/th>\n      <th>SVSPP<\/th>\n      <th>CATCHSEX<\/th>\n      <th>SVVESSEL<\/th>\n      <th>YEAR<\/th>\n      <th>SEASON<\/th>\n      <th>LAT<\/th>\n      <th>LON<\/th>\n      <th>EST_TOWDATE<\/th>\n      <th>DEPTH<\/th>\n      <th>SURFTEMP<\/th>\n      <th>SURFSALIN<\/th>\n      <th>BOTTEMP<\/th>\n      <th>BOTSALIN<\/th>\n      <th>ABUNDANCE<\/th>\n      <th>BIOMASS<\/th>\n      <th>LENGTH<\/th>\n      <th>NUMLEN<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,8,10,11,13,14,15,16,17,18,19,20,21]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"CRUISE6","targets":1},{"name":"STATION","targets":2},{"name":"STRATUM","targets":3},{"name":"TOW","targets":4},{"name":"SVSPP","targets":5},{"name":"CATCHSEX","targets":6},{"name":"SVVESSEL","targets":7},{"name":"YEAR","targets":8},{"name":"SEASON","targets":9},{"name":"LAT","targets":10},{"name":"LON","targets":11},{"name":"EST_TOWDATE","targets":12},{"name":"DEPTH","targets":13},{"name":"SURFTEMP","targets":14},{"name":"SURFSALIN","targets":15},{"name":"BOTTEMP","targets":16},{"name":"BOTSALIN","targets":17},{"name":"ABUNDANCE","targets":18},{"name":"BIOMASS","targets":19},{"name":"LENGTH","targets":20},{"name":"NUMLEN","targets":21}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="length-weight-conversions">Length weight conversions<a class="anchor" aria-label="anchor" href="#length-weight-conversions"></a>
+</h2>
+<p>Of the fish that have their length measured, only a subset of those
+have their weight measured. However based on a paper by Wigley et al
+length-weight coefficients have been calculated (for each species by
+season and sex) and reside in the table LENGTH_WEIGHT_COEFFICIENTS.
+These coefficients can be applied to the observed lengths to obtain
+estimates of weight. Use the argument
+<code>getWeightLength = T</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">survdat</span><span class="fu">::</span><span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, </span>
+<span>                          getLengths <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          getWeightLength <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          conversion.factor <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<p>The length-weight coefficients are pulled and are applied to the <a href="#lengths">length data</a>. Two additional columns are included:
+Predicted weight (PREDWT) and expanded weight (WGTLEN). WGTLEN is the
+predicted weight * number of fish observed at the specified length.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="kw">select</span> svspp, sex, svlwexp, svlwcoeff, svlwexp_spring, svlwcoeff_spring, svlwexp_fall, svlwcoeff_fall, svlwexp_winter, svlwcoeff_winter, svlwexp_summer, svlwcoeff_summer</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="kw">from</span> svdbs.length_weight_coefficients</span></code></pre></div>
+<p><strong>Note: The predicted weight is incorrect. The variance of the
+underlying fit is required. The reported predicted weight in an
+underestimate</strong></p>
+<p>The resulting data frame will look like this:</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-36aa3d2a04d42bbc2145" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],[26,15,15,23,26,15,23,15,26,15,15,15,25,15,15,26,26,23,26,24],[0,2,0,0,0,1,0,1,0,2,1,1,0,2,2,0,0,0,0,0],[197804,199302,197702,199804,198803,198002,201105,201304,198306,198901,200209,200610,201202,201202,198705,197702,197804,201604,200902,201602],[361,13,22,186,9,163,273,304,264,11,307,325,10,191,254,95,78,210,206,98],[1310,1670,1670,1190,1700,1040,3610,1240,1100,1650,1360,1270,1750,1150,1190,1690,3290,1240,1100,1650],[6,1,1,7,3,2,3,3,3,5,7,2,1,1,4,7,2,8,11,3],["AL","AL","DE","AL","AL","DE","HB","HB","AL","DE","AL","AL","HB","HB","AL","DE","AL","HB","HB","HB"],[1978,1993,1977,1998,1988,1980,2011,2013,1983,1989,2002,2006,2012,2012,1987,1977,1978,2016,2009,2016],["SPRING","SPRING","SPRING","FALL","FALL","SPRING","FALL","FALL","FALL","SPRING","FALL","FALL","SPRING","SPRING","FALL","SPRING","SPRING","FALL","SPRING","SPRING"],[42.48333299999999,37.15,36.983333,40.766667,38.416667,39.35,42.16945,41.742828,40.6,37.15,44.191833,43.242068,38.849033,40.16339199999999,42,38.266667,38.35,41.273007,40.46976799999999,36.801642],[-65.533333,-74.566667,-74.63333299999999,-68.5,-73.833333,-72.25,-70.11653299999999,-68.86914299999999,-68.95,-75.10000000000001,-67.446333,-70.133993,-72.979573,-68.54870799999999,-67.033333,-74.36666699999999,-74.85000000000001,-69.09124799999999,-69.05081,-75.60418799999999],["1978-05-11T06:00:00Z","1993-03-11T00:17:00Z","1977-03-21T21:53:00Z","1998-10-13T00:44:00Z","1988-09-14T09:50:00Z","1980-04-03T17:30:00Z","2011-10-19T21:03:22Z","2013-10-30T22:22:11Z","1983-10-10T06:46:00Z","1989-03-01T17:35:00Z","2002-10-22T12:38:40Z","2006-10-18T07:50:30Z","2012-03-01T01:44:06Z","2012-04-04T01:36:05Z","1987-10-16T17:25:00Z","1977-04-02T00:45:00Z","1978-03-28T04:46:00Z","2016-10-05T11:32:01Z","2009-04-02T13:52:11Z","2016-04-16T06:41:50Z"],[97,134,132,48,67,281,52,165,71,38,213,136,119,193,65,44,20,158,79,23],[3.2,6.81,12,14.55,null,13,14.82,13.37,15.8,7.2,12.1,12.26,10.59,8.93,null,7,4.2,15.75,null,10.71],[null,23.547,null,31.764,null,null,31.25,32.516,null,null,33.328,32.433,33.998,33.656,null,null,null,32.568,null,32.96],[3,11.93,10,14.55,null,11.6,10.1,7.100000000000001,11.4,7.4,8.970000000000001,7.17,12.97,null,null,6.2,4.2,6.600000000000001,null,10.72],[null,35.234,null,31.757,null,null,32.167,33.671,null,null,34.606,33.304,35.434,null,null,null,null,33.149,null,32.971],[25,120,141,45,3,58,47,4,77,214,39,26,5,85,35,15,37,4,80,8],[20.5,68.8,65,41.7,0,86,58.021,2.88,12,333,58.03,42.04,0.788,9.726000000000001,21,5,16.5,11.789,30.67,7.933000000000001],[43,33,40,43,19,42,56,59,25,96,68,74,40,24,48,11,43,76,21,47],[1,2,3,2,1,2,1,1,4,1,4,1,1,1,1,2,4,1,5,1],[0.5060266019208179,0.1237546039871092,0.2284761625904801,0.5128512490108321,0.03932106600071731,0.2713193813616642,1.235799275356905,0.7540428084497395,0.09277700880675552,3.923714026393906,1.155657473701217,1.490297504999849,0.270884501645767,0.04414579691634654,0.4161916416352044,0.007114761372263754,0.5060266019208179,3.416033360443855,0.05377568773433591,0.5029222539474191],[0.5060266019208179,0.2475092079742184,0.6854284877714404,1.025702498021664,0.03932106600071731,0.5426387627233283,1.235799275356905,0.7540428084497395,0.3711080352270221,3.923714026393906,4.622629894804867,1.490297504999849,0.270884501645767,0.04414579691634654,0.4161916416352044,0.01422952274452751,2.024106407683272,3.416033360443855,0.2688784386716796,0.5029222539474191]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>SVSPP<\/th>\n      <th>CATCHSEX<\/th>\n      <th>CRUISE6<\/th>\n      <th>STATION<\/th>\n      <th>STRATUM<\/th>\n      <th>TOW<\/th>\n      <th>SVVESSEL<\/th>\n      <th>YEAR<\/th>\n      <th>SEASON<\/th>\n      <th>LAT<\/th>\n      <th>LON<\/th>\n      <th>EST_TOWDATE<\/th>\n      <th>DEPTH<\/th>\n      <th>SURFTEMP<\/th>\n      <th>SURFSALIN<\/th>\n      <th>BOTTEMP<\/th>\n      <th>BOTSALIN<\/th>\n      <th>ABUNDANCE<\/th>\n      <th>BIOMASS<\/th>\n      <th>LENGTH<\/th>\n      <th>NUMLEN<\/th>\n      <th>PREDWT<\/th>\n      <th>WGTLEN<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,8,10,11,13,14,15,16,17,18,19,20,21,22,23]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"SVSPP","targets":1},{"name":"CATCHSEX","targets":2},{"name":"CRUISE6","targets":3},{"name":"STATION","targets":4},{"name":"STRATUM","targets":5},{"name":"TOW","targets":6},{"name":"SVVESSEL","targets":7},{"name":"YEAR","targets":8},{"name":"SEASON","targets":9},{"name":"LAT","targets":10},{"name":"LON","targets":11},{"name":"EST_TOWDATE","targets":12},{"name":"DEPTH","targets":13},{"name":"SURFTEMP","targets":14},{"name":"SURFSALIN","targets":15},{"name":"BOTTEMP","targets":16},{"name":"BOTSALIN","targets":17},{"name":"ABUNDANCE","targets":18},{"name":"BIOMASS","targets":19},{"name":"LENGTH","targets":20},{"name":"NUMLEN","targets":21},{"name":"PREDWT","targets":22},{"name":"WGTLEN","targets":23}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
 <div class="section level2">
 <h2 id="biological-data">Biological data<a class="anchor" aria-label="anchor" href="#biological-data"></a>
 </h2>
-<p>When using the flag <code>getBio = T</code> additional fields are
-pulled, namely Maturity, Age, Individual weight, stomach volume, stomach
-weight, and sex. Species that have lengths but no additional
-“biological” data are dropped from the data pull.</p>
-</div>
-<div class="section level2">
-<h2 id="weight-length-data">Weight-Length data<a class="anchor" aria-label="anchor" href="#weight-length-data"></a>
-</h2>
-<p>Length-weight conversion coefficients are applied using values from
-Wigley et al. These reside in the table LENGTH_WEIGHT_COEFFICIENTS</p>
-</div>
-<div class="section level2">
-<h2 id="length-data">Length data<a class="anchor" aria-label="anchor" href="#length-data"></a>
-</h2>
+<p>To pull additional biological data use the argument
+<code>getBio = T</code></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">survdat</span><span class="fu">::</span><span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, </span>
+<span>                          getLengths <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          getWeightLength <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          conversion.factor <span class="op">=</span> <span class="cn">F</span>,</span>
+<span>                          getBio <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<p>Additional fields are pulled, namely:</p>
+<ul>
+<li>INDID - Individual fish identity.</li>
+<li>INDWT - Individual weight of fish (Kg)</li>
+<li>SEX - Sex of fish</li>
+<li>MATURITY - Stage of maturation</li>
+<li>AGE - Age of fish (yrs)</li>
+<li>STOM_VOLUME - Volume of stomach (cc)</li>
+<li>STOM_WGT - Weight of stomach (g)</li>
+</ul>
+<p>The biological data is retrieved and joined with the <a href="#lengths">length</a> data</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="kw">select</span> cruise6, station, stratum, svspp, catchsex, <span class="fu">length</span>, indid, indwt, sex, maturity, age, stom_volume, stom_wgt</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="kw">from</span> svdbs.UNION_FSCS_SVBIO</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="kw">where</span> cruise6 <span class="kw">in</span> <span class="op">&lt;</span>cruiseData<span class="op">&gt;</span></span></code></pre></div>
+<p>The resulting data frame will look like this:</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-febe03efa1a2d8d52a86" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-febe03efa1a2d8d52a86">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],[200005,198904,197602,199702,200109,197702,199802,198303,200102,198803,198102,198106,199908,199302,198801,200005,200005,199804,200306,199908],[299,334,89,207,282,420,161,419,308,261,272,367,314,90,313,226,275,156,117,208],[3610,1390,1740,1270,1230,1370,1010,1400,1270,1340,1230,1310,1370,3290,1260,1240,1340,1100,1230,1240],[15,121,33,74,197,72,32,102,155,102,105,102,155,32,102,197,75,77,106,32],[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[75,37,25,25,10,14,17,30,29,15,28,31,18,29,14,59,28,26,36,29],[1,3,3,1,3,4,2,3,1,3,2,6,3,1,2,6,2,5,1,4],["AL","DE","DE","AL","AL","AL","AL","AL","AL","AL","DE","DE","AL","AL","AL","AL","AL","AL","AL","AL"],[2000,1989,1976,1997,2001,1977,1998,1983,2001,1988,1981,1981,1999,1993,1988,2000,2000,1998,2003,1999],["FALL","FALL","SPRING","SPRING","FALL","SPRING","SPRING","SPRING","SPRING","FALL","SPRING","FALL","FALL","SPRING","SPRING","FALL","FALL","FALL","FALL","FALL"],[42.043667,43.966667,38.883333,42.266667,41.731412,43,40.65,43.566667,43.014862,43.05,41,42.883333,43.191667,38.3,42.9,41.894667,43.98,40.23333299999999,41.0735,41.768833],[-70.330167,-68.61666699999999,-73.36666699999999,-69.983333,-69.805207,-69.05,-72.45,-69.68333299999999,-70.29308999999999,-66.733333,-68.783333,-65.63333299999999,-69.8535,-74.86666699999999,-70.066667,-68.413667,-66.77883299999999,-70.233333,-69.119,-68.52716699999999],["2000-10-12T20:04:00Z","1989-11-01T15:42:00Z","1976-03-15T04:04:00Z","1997-03-26T23:59:00Z","2001-10-16T03:58:43Z","1977-05-12T06:07:00Z","1998-03-20T08:39:00Z","1983-04-30T09:25:00Z","2001-04-28T22:08:37Z","1988-10-20T12:25:00Z","1981-04-22T06:57:00Z","1981-10-28T12:24:00Z","1999-11-06T13:38:00Z","1993-03-25T19:57:00Z","1988-04-20T03:21:00Z","2000-10-04T07:05:00Z","2000-10-09T01:16:00Z","1998-10-09T16:39:00Z","2003-09-24T23:39:47Z","1999-10-20T15:04:00Z"],[54,88,62,126,62,185,40,108,153,198,63,126,169,13,98,200,111,94,79,193],[14.22,10.5,7.600000000000001,4.67,14.59,4.9,4.75,6.3,7.57,null,5.7,11.4,11.43,3.84,4.8,14.29,11.29,15.84,12.91,15.14],[31.82,null,null,32.423,32.011,null,31.606,null,31.443,null,null,null,32.57,31.526,null,32.422,33.094,32.292,32.298,33.186],[9.790000000000001,9.9,8.800000000000001,null,7.17,4.9,5.5,4.3,4.29,null,5.7,5.7,7.26,3.83,4.2,7.79,9.92,11.37,7.84,8.31],[32.085,null,null,null,32.595,null,32.177,null,32.741,null,null,null,33.975,31.529,null,34.156,33.797,34.23,32.546,34.562],[16,7,3,6,2,54,20,60,1368,19,9,50,45,87,30,2,20,1,8,1],[26.1,3.5,0.5,1,0.5,6.4,1.3,19.4,211.84,5.5,2.8,13,10.8,7.3,4,4,4.5,0.1,5.66,0.3],[2,2,1,4,1,7,2,4,1,2,2,2,1,1,1,1,4,1,2,1],[1,null,null,3,1,null,5,null,314,null,null,null,13,8,null,1,4,1,2,1],[1.47,null,null,0.148,0.023,null,0.04500000000000001,null,0.38,null,null,null,0.11,0.171,null,3.41,0.239,0.117,0.633,0.289],["1","0","1","2","0","0","2","1","2","0","1","2","2","2","0","2","1","1","2","2"],["X","X",null,"I","X",null,"I","D","E","I","R","I","I","T","I","T","I","S","T","D"],[null,7,5,1,null,1,3,5,null,1,2,4,5,null,2,5,1,null,3,7],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,7,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>CRUISE6<\/th>\n      <th>STATION<\/th>\n      <th>STRATUM<\/th>\n      <th>SVSPP<\/th>\n      <th>CATCHSEX<\/th>\n      <th>LENGTH<\/th>\n      <th>TOW<\/th>\n      <th>SVVESSEL<\/th>\n      <th>YEAR<\/th>\n      <th>SEASON<\/th>\n      <th>LAT<\/th>\n      <th>LON<\/th>\n      <th>EST_TOWDATE<\/th>\n      <th>DEPTH<\/th>\n      <th>SURFTEMP<\/th>\n      <th>SURFSALIN<\/th>\n      <th>BOTTEMP<\/th>\n      <th>BOTSALIN<\/th>\n      <th>ABUNDANCE<\/th>\n      <th>BIOMASS<\/th>\n      <th>NUMLEN<\/th>\n      <th>INDID<\/th>\n      <th>INDWT<\/th>\n      <th>SEX<\/th>\n      <th>MATURITY<\/th>\n      <th>AGE<\/th>\n      <th>STOM_VOLUME<\/th>\n      <th>STOM_WGT<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,9,11,12,14,15,16,17,18,19,20,21,22,23,26,27,28]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"CRUISE6","targets":1},{"name":"STATION","targets":2},{"name":"STRATUM","targets":3},{"name":"SVSPP","targets":4},{"name":"CATCHSEX","targets":5},{"name":"LENGTH","targets":6},{"name":"TOW","targets":7},{"name":"SVVESSEL","targets":8},{"name":"YEAR","targets":9},{"name":"SEASON","targets":10},{"name":"LAT","targets":11},{"name":"LON","targets":12},{"name":"EST_TOWDATE","targets":13},{"name":"DEPTH","targets":14},{"name":"SURFTEMP","targets":15},{"name":"SURFSALIN","targets":16},{"name":"BOTTEMP","targets":17},{"name":"BOTSALIN","targets":18},{"name":"ABUNDANCE","targets":19},{"name":"BIOMASS","targets":20},{"name":"NUMLEN","targets":21},{"name":"INDID","targets":22},{"name":"INDWT","targets":23},{"name":"SEX","targets":24},{"name":"MATURITY","targets":25},{"name":"AGE","targets":26},{"name":"STOM_VOLUME","targets":27},{"name":"STOM_WGT","targets":28}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p><strong>Species that have lengths but no additional “biological” data
+are dropped from the returned data frame</strong></p>
 </div>
 <div class="section level2">
 <h2 id="calibration-factors">Calibration factors<a class="anchor" aria-label="anchor" href="#calibration-factors"></a>
 </h2>
-<p>These reside in the table SURVAN_CONVERSION_FACTORS</p>
-<p>Describe how they are applied</p>
-<div class="section level3">
-<h3 id="vessel-effects">Vessel effects<a class="anchor" aria-label="anchor" href="#vessel-effects"></a>
-</h3>
-</div>
-<div class="section level3">
-<h3 id="gear-effects">Gear Effects<a class="anchor" aria-label="anchor" href="#gear-effects"></a>
-</h3>
-</div>
-<div class="section level3">
-<h3 id="door-effects">Door Effects<a class="anchor" aria-label="anchor" href="#door-effects"></a>
-</h3>
-</div>
+<p>Since the bottom trawl survey began there have been modifications to
+the sampling strategy. For example:</p>
+<ul>
+<li>Door effects - In 1985 a new set of doors were introduced</li>
+<li>Gear effects - From 1973 - 1981, in the spring survey, a different
+net was used</li>
+<li>Vessel effects - There have been several changes in ships used
+(Delaware II, Albatross IV, Henry Bigelow (2009))</li>
+</ul>
+<p>Experiments to measure the relative catchability of two or more
+vessel-gear combinations are necessary to rigorously combine their
+information in analyses such as stock assessments. Without accounting
+for these effects the resulting abundance and biomass time series could
+exhibit shifts related to these effects. To help mitigate this
+conversion factors have been calculated to create a continuous time
+series. These conversion factors reside in the table
+SURVAN_CONVERSION_FACTORS and can be applied to the pulled data.</p>
+<p>using the argument <code>conversion.factor = T</code> will apply
+these conversion factors</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">survdat</span><span class="fu">::</span><span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, </span>
+<span>                          getLengths <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          getWeightLength <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          conversion.factor <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                          getBio <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<p>The resulting data frame will look like this:</p>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-1fb4450895fe099f74a1" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-1fb4450895fe099f74a1">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],[201302,199004,197404,200604,201502,197512,200803,198202,201404,198901,197910,198002,201105,199604,198803,201302,201302,200902,201804,201102],[398,229,89,285,228,423,295,149,17,223,487,552,280,118,288,223,343,416,321,358],[3640,1150,1100,1360,1230,1390,1370,1690,1700,1290,1330,1230,3600,3460,1380,1240,3610,1090,1290,1270],[3,1,2,2,6,2,5,3,2,3,3,2,1,4,4,2,4,7,10,1],["HB","DE","AL","AL","HB","AL","AL","DE","HB","DE","DE","AL","HB","AL","AL","HB","HB","HB","HB","HB"],[2013,1990,1974,2006,2015,1975,2008,1982,2014,1989,1979,1980,2011,1996,1988,2013,2013,2009,2018,2011],["SPRING","FALL","SPRING","SPRING","SPRING","FALL","SPRING","SPRING","FALL","SPRING","FALL","SPRING","FALL","FALL","FALL","SPRING","SPRING","SPRING","FALL","SPRING"],[42.332442,40.516667,40.4,43.43965,41.254982,43.866667,43.192712,38.8,38.051618,42.283333,43.366667,41.016667,42.039367,41.316667,43.5,41.53996,42.07670299999999,40.691728,42.281973,42.676145],[-70.76331999999999,-67.11666699999999,-69.816667,-67.591567,-68.85893799999999,-68.583333,-69.19224299999999,-74.11666699999999,-74.102817,-67.38333299999999,-66.516667,-68.966667,-70.51754199999999,-70.88333299999999,-69.38333299999999,-68.79464,-70.001875,-69.38373299999999,-66.152512,-70.012052],["2013-05-07T19:17:18Z","1990-10-08T09:57:00Z","1974-04-03T12:16:00Z","2006-04-13T00:05:59Z","2015-04-11T14:56:40Z","1975-11-17T23:16:00Z","2008-04-23T13:58:02Z","1982-03-23T20:18:00Z","2014-09-10T11:10:21Z","1989-03-29T15:24:00Z","1979-11-14T17:43:00Z","1980-04-25T01:11:00Z","2011-10-20T17:29:01Z","1996-09-24T06:19:00Z","1988-10-24T17:25:00Z","2013-04-12T05:57:57Z","2013-05-01T14:36:19Z","2009-05-08T01:13:15Z","2018-11-06T19:34:22Z","2011-05-09T09:40:05Z"],[32,297,73,227,99,72,189,47,92,284,92,78,43,32,138,155,null,42,247,134],[10.48,null,5.9,5.64,5.12,10.1,6.84,6.100000000000001,23.64,null,10,6.4,15.36,null,10.1,6.79,7.67,6.640000000000001,11.71,8.609999999999999],[31.693,null,null,32.296,33.423,null,32.536,null,32.947,null,null,null,31.1,null,null,33.38,32.261,32.505,32.276,30.572],[6.81,null,7.100000000000001,7.94,4.81,10.4,5.73,4.8,10.16,null,10.3,5.2,10.51,null,6.5,6.17,6.12,6.59,9.470000000000001,6.67],[31.931,null,null,34.345,33.432,null,33.407,null,33.82400000000001,null,null,null,31.897,null,null,33.387,32.445,32.514,35.162,33.025],[32,164,77,102,23,401,512,193,503,79,105,106,77,131,28,121,72,106,161,998],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[568,1,5,1,2,1,2,3,1936,2,18,7,5,3,1,2,2,13,1,0],[8.432146829810902,0.2,2.268,0.42,0.9373318988703605,0,0.076,3.588000000000001,11.99241146711636,0,5.2224,3.362903225806452,0.6543333333333333,0.1,4.9,0.271889400921659,0.3317360052276193,7.334611697027805,0.009000000000000001,1.625]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>CRUISE6<\/th>\n      <th>STATION<\/th>\n      <th>STRATUM<\/th>\n      <th>TOW<\/th>\n      <th>SVVESSEL<\/th>\n      <th>YEAR<\/th>\n      <th>SEASON<\/th>\n      <th>LAT<\/th>\n      <th>LON<\/th>\n      <th>EST_TOWDATE<\/th>\n      <th>DEPTH<\/th>\n      <th>SURFTEMP<\/th>\n      <th>SURFSALIN<\/th>\n      <th>BOTTEMP<\/th>\n      <th>BOTSALIN<\/th>\n      <th>SVSPP<\/th>\n      <th>CATCHSEX<\/th>\n      <th>ABUNDANCE<\/th>\n      <th>BIOMASS<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,6,8,9,11,12,13,14,15,16,17,18,19]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"CRUISE6","targets":1},{"name":"STATION","targets":2},{"name":"STRATUM","targets":3},{"name":"TOW","targets":4},{"name":"SVVESSEL","targets":5},{"name":"YEAR","targets":6},{"name":"SEASON","targets":7},{"name":"LAT","targets":8},{"name":"LON","targets":9},{"name":"EST_TOWDATE","targets":10},{"name":"DEPTH","targets":11},{"name":"SURFTEMP","targets":12},{"name":"SURFSALIN","targets":13},{"name":"BOTTEMP","targets":14},{"name":"BOTSALIN","targets":15},{"name":"SVSPP","targets":16},{"name":"CATCHSEX","targets":17},{"name":"ABUNDANCE","targets":18},{"name":"BIOMASS","targets":19}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><p><strong>NOTE: The application of these conversion factors requires a
+review</strong></p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 
@@ -174,16 +299,16 @@ Wigley et al. These reside in the table LENGTH_WEIGHT_COEFFICIENTS</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

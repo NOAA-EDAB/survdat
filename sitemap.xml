@@ -1,99 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/404.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/calc_strat_mean.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/lookupTables.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/methodology.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/pullingData.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/survdat.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/articles/surveyDesign.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/index.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/calc_swept_area.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_area.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_conversion_factors.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_cruise_purpose.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_length_weight.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_length_weight_data.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_maturity.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_sex.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_sex_fscs.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_species.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_strata.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_survdat_data.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/get_vessel.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/plot_data_area.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/plot_shapefile.html</loc>
-  </url>
-  <url>
-    <loc>https://noaa-edab.github.io/survdat/reference/survdat-package.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://noaa-edab.github.io/survdat/404.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/LICENSE-text.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/calc_strat_mean.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/index.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/lookupTables.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/methodology.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/pullingData.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/survdat.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/articles/surveyDesign.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/authors.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/index.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/news/index.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/calc_swept_area.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_area.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_conversion_factors.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_cruise_purpose.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_length_weight.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_length_weight_data.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_maturity.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_sex.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_sex_fscs.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_species.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_strata.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_survdat_data.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/get_vessel.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/index.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/plot_data_area.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/plot_shapefile.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/sampleBio.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/sampleLengthWeight.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/sampleLengths.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/sampleRaw.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/sampleRawWithConversion.html</loc></url>
+<url><loc>https://noaa-edab.github.io/survdat/reference/survdat-package.html</loc></url>
 </urlset>
+

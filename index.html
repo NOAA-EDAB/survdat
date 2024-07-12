@@ -26,7 +26,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -55,7 +55,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -88,7 +88,7 @@
 <li>
   <a href="https://github.com/NOAA-EDAB/survdat/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -99,19 +99,18 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
 <div class="page-header"><h1 id="survdat-">survdat <img src="reference/figures/logo.png" align="right" width="120"><a class="anchor" aria-label="anchor" href="#survdat-"></a>
 </h1></div>
-<div class="section level3">
-<h3 id="everything-you-need-to-pull-and-process-the-nefsc-survey-data">Everything you need to pull and process the NEFSC survey data<a class="anchor" aria-label="anchor" href="#everything-you-need-to-pull-and-process-the-nefsc-survey-data"></a>
-</h3>
+<div class="section level2">
+<h2 id="pull-and-process-the-nefsc-survey-data">Pull and process the NEFSC survey data<a class="anchor" aria-label="anchor" href="#pull-and-process-the-nefsc-survey-data"></a>
+</h2>
 <!-- badges: start -->
 
-<hr>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -121,12 +120,33 @@
 <li>To be behind the NEFSC firewall</li>
 <li>Permissions to access the required server : a username and password.</li>
 <li>Oracle’s instant Client installed</li>
+<li>Oracle’s ROracle R package</li>
 </ol>
 <div class="section level3">
-<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+<h3 id="who-this-is-for">Who this is for?<a class="anchor" aria-label="anchor" href="#who-this-is-for"></a>
 </h3>
-<p><code>remotes::install_github("NOAA-EDAB/survdat",build_vignettes = TRUE)</code></p>
+<ul>
+<li><p>Anyone looking for raw tow level survey data in the format that you would obtain from Ecosystem Survey Branch (ESB) - still in development</p></li>
+<li><p>Anyone looking for Ecosystem/multispecies products derived from the tow level data. See <a href="articles/articles/pullingData.html">vignettes</a> for explanation of methods</p></li>
+</ul>
 </div>
+<div class="section level3">
+<h3 id="who-this-isnt-for">Who this isn’t for!<a class="anchor" aria-label="anchor" href="#who-this-isnt-for"></a>
+</h3>
+<p>Anyone looking for survey data that is directly input into stock assessments. You will need to either:</p>
+<ul>
+<li>Contact the appropriate stock assessment scientist</li>
+<li>Visit the <a href="https://www.fisheries.noaa.gov/resource/data/northeast-region-stock-assessment-support-materials" class="external-link">Northeast Region Stock Assessment Support Materials</a>
+</li>
+<li>Visit <a href="https://apps-st.fisheries.noaa.gov/stocksmart?app=homepage" class="external-link">StockSMART web portal</a> or <a href="https://noaa-edab.github.io/stocksmart/" class="external-link">stocksmart</a> R package housing the data from the portal</li>
+</ul>
+</div>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Install directly from GitHub</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"NOAA-EDAB/survdat"</span>,<span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)<span class="st">`</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="developers-in-alphabetical-order">Developers (in alphabetical order)<a class="anchor" aria-label="anchor" href="#developers-in-alphabetical-order"></a>
@@ -184,8 +204,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Sean Lucey <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Andy Beet <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-8270-7090" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Sean Lucey <br><small class="roles"> Author </small>  </li>
+<li>Andy Beet <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-8270-7090" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -209,16 +229,16 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
