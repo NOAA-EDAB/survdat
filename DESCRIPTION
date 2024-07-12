@@ -36,7 +36,8 @@ Suggests:
     knitr,
     rmarkdown,
     markdown,
-    kableExtra
+    kableExtra,
+    DT
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)
