@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(survdat)
+library(DT)
 ```
 
 ## Basic data pull {#base}
@@ -73,8 +74,7 @@ order by cruise6, station, svspp
 The resulting data frame will look like this:
 
 ```{r sampleData1, echo = F,eval = T}
-
-
+DT::datatable(sampleRaw,options = list(scrollX = T))
 ```
 
 ## Length data {#lengths}
@@ -100,11 +100,10 @@ order by cruise6, station, svspp, length
 The resulting data frame has many more rows of data than the base pull.
 The tow level data for each species is replicated as many times as there are different lengths sampled
 
-An example of what this looks like:
+The resulting data frame will look like this:
 
 ```{r sampleData2, echo = F,eval = T}
-
-
+DT::datatable(sampleLengths,options = list(scrollX = T))
 ```
 
 ## Length weight conversions
@@ -128,11 +127,11 @@ from svdbs.length_weight_coefficients
 
 **Note: The predicted weight is incorrect. The variance of the underlying fit is required. The reported predicted weight in an underestimate**
 
-An example of what this looks like:
+
+The resulting data frame will look like this:
 
 ```{r sampleData3, echo = F,eval = T}
-
-
+DT::datatable(sampleLengthWeight,options = list(scrollX = T))
 ```
 
 ## Biological data
@@ -166,6 +165,12 @@ where cruise6 in <cruiseData>
 ```
 
 
+The resulting data frame will look like this:
+
+```{r sampleData4, echo = F,eval = T}
+DT::datatable(sampleBio,options = list(scrollX = T))
+```
+
 **Species that have lengths but no additional "biological" data are dropped from the returned data frame**
 
 ## Calibration factors
@@ -186,6 +191,13 @@ survdat::get_survdat_data(channel,
                           getWeightLength = T,
                           conversion.factor = T,
                           getBio = T)
+```
+
+
+The resulting data frame will look like this:
+
+```{r sampleData5, echo = F,eval = T}
+DT::datatable(sampleRawWithConversion,options = list(scrollX = T))
 ```
 
 **NOTE: The application of these conversion factors requires a review**
