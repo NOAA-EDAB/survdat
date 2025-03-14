@@ -47,7 +47,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Methodology</h6></li>
     <li><a class="dropdown-item" href="../articles/methodology.html">Estimating Biomass</a></li>
-    <li><a class="dropdown-item" href="../articles/calc_Strat_mean.html">Estimating stratified mean</a></li>
+    <li><a class="dropdown-item" href="../articles/calc_strat_mean.html">Estimating stratified mean</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -86,7 +86,7 @@
 <p>Once you are granted permission to access the database and have
 Oracle’s instant Client installed you can make a connection as
 follows:</p>
-<p><code>channel &lt;- dbutils::connect_to_database(server="servername",uid="yourUsername")</code></p>
+<pre><code><span><span class="va">channel</span> <span class="op">&lt;-</span> <span class="fu">dbutils</span><span class="fu">::</span><span class="fu">connect_to_database</span><span class="op">(</span>server<span class="op">=</span><span class="st">"servername"</span>,uid<span class="op">=</span><span class="st">"yourUsername"</span><span class="op">)</span></span></code></pre>
 <p><code>channel</code> is an object inherited from the
 DBIConnection-class. This object is passed as an argument to functions
 in <code>survdat</code></p>
@@ -95,12 +95,9 @@ in <code>survdat</code></p>
 <h2 id="pull-data">Pull Data<a class="anchor" aria-label="anchor" href="#pull-data"></a>
 </h2>
 <p>Pulling the data can take up to 15 minutes to complete. see
-<code>get_survdat_data</code> for details. To pull the survey data with
-conversion corrections applied use the following:</p>
+<code><a href="../reference/get_survdat_data.html">get_survdat_data()</a></code> for details. To pull the survey data
+with conversion corrections applied use the following:</p>
 <pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span><span class="op">)</span></span></code></pre>
-<p>To pull biological traits of individual fish sampled on the survey
-cruise</p>
-<pre><code><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, getBio<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 <p><code>data</code> is a list of 5 elements.</p>
 <ul>
 <li>The data</li>
@@ -109,7 +106,8 @@ cruise</p>
 <li>The date of the pull</li>
 <li>The version of the package used to create the data pull</li>
 </ul>
-<p>For detailed information</p>
+<p>For detailed information regarding the different types of data pulls
+please review <code><a href="../articles/pullingData.html">vignette("pullingData")</a></code></p>
 </div>
 <div class="section level2">
 <h2 id="plot-the-shapefiles">Plot the shapefiles<a class="anchor" aria-label="anchor" href="#plot-the-shapefiles"></a>
@@ -120,7 +118,7 @@ and <code>EPU.shp</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">areaPolygon</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,<span class="st">"EPU.shp"</span>,package<span class="op">=</span><span class="st">"survdat"</span><span class="op">)</span>, quiet<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_shapefile.html">plot_shapefile</a></span><span class="op">(</span><span class="va">areaPolygon</span><span class="op">)</span></span></code></pre></div>
-<p><img src="survdat_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
+<p><img src="survdat_files/figure-html/sample_plot_shapefile-1.png" alt="EPU footprint" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="stratified-mean">Stratified Mean<a class="anchor" aria-label="anchor" href="#stratified-mean"></a>
@@ -138,22 +136,37 @@ object.</p>
 <li>To calculate swept area biomass for any one of these regions, say
 Georges Bank in the Spring:</li>
 </ul>
-<p><code>calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING")</code></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_swept_area.html">calc_swept_area</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">survdat</span>,</span>
+<span>                areaPolygon<span class="op">=</span><span class="va">areaPolygon</span>,</span>
+<span>                areaDescription<span class="op">=</span><span class="st">"EPU"</span>,</span>
+<span>                filterByArea<span class="op">=</span><span class="st">"GB"</span>,</span>
+<span>                filterBySeason <span class="op">=</span> <span class="st">"SPRING"</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>filterByArea</code> value should be one of the values found
 in the <code>areaDescription</code> field of the shapefile</p>
 <ul>
-<li>To return the values in TIDY format add the tidy=T argument:</li>
+<li>To return the values in TIDY format add the <code>tidy=T</code>
+argument:</li>
 </ul>
-<p><code>calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING",tidy=T)</code></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/calc_swept_area.html">calc_swept_area</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">survdat</span>,</span>
+<span>                areaPolygon<span class="op">=</span><span class="va">areaPolygon</span>,</span>
+<span>                areaDescription<span class="op">=</span><span class="st">"EPU"</span>,</span>
+<span>                filterByArea<span class="op">=</span><span class="st">"GB"</span>,</span>
+<span>                filterBySeason <span class="op">=</span> <span class="st">"SPRING"</span>,</span>
+<span>                tidy<span class="op">=</span><span class="cn">T</span><span class="op">)</span> </span></code></pre></div>
 <p>To visualize the overlap of the survey data and the regions, first
 define a coordinate reference system (crs) in which to project both the
 points and the shapefile. Convert the LAT and LON coordinates to the
 WGS84 reference ellipsoid (crs = 4326)</p>
-<pre><code>crs &lt;- 4326
-points &lt;- sf::st_as_sf(data$survdat,coords=("LON","LAT"), crs=crs)
-# plot data with regions
-plot_data_area(points=data$survdat,polygons=area,crs)
-</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>crs <span class="ot">&lt;-</span> <span class="dv">4326</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>points <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(data<span class="sc">$</span>survdat,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                       <span class="at">coords=</span>(<span class="st">"LON"</span>,<span class="st">"LAT"</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>                       <span class="at">crs=</span>crs)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># plot data with regions</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">plot_data_area</span>(<span class="at">points=</span>data<span class="sc">$</span>survdat,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>               <span class="at">polygons=</span>area,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>               crs)</span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
