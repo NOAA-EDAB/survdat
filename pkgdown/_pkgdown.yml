@@ -57,5 +57,5 @@ navbar:
    - text: Estimating Biomass
      href: articles/methodology.html
    - text: Estimating stratified mean
-     href: articles/calc_Strat_mean.html
+     href: articles/calc_strat_mean.html
 
