@@ -1,0 +1,15 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  calc_strat_mean: calc_strat_mean.html
+  lookupTables: lookupTables.html
+  methodology: methodology.html
+  pullingData: pullingData.html
+  RandomSampling: RandomSampling.html
+  survdat: survdat.html
+  surveyDesign: surveyDesign.html
+last_built: 2025-03-14T15:20Z
+urls:
+  reference: https://noaa-edab.github.io/survdat/reference
+  article: https://noaa-edab.github.io/survdat/articles
