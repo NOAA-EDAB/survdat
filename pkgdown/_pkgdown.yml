@@ -1,5 +1,11 @@
 url: https://noaa-edab.github.io/survdat/
 
+template:
+  bootstrap: 5
+
+deploy:
+  install_metadata: true
+
 reference:
 - title: "Estimation"
   desc: "Main functions for estimating swept area biomass and stratified mean"

@@ -2,7 +2,6 @@ Package: survdat
 Type: Package
 Title: Tools for working with NEFSC survey data
 Version: 1.0
-Date: 2015-03-03
 Authors@R: c(person(given = "Sean",
                     family = "Lucey",
                     email = "Sean.Lucey@NOAA.gov",
@@ -16,8 +15,7 @@ License: file LICENSE
 Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
-URL: https://github.com/NOAA-EDAB/survdat,
-    https://noaa-edab.github.io/survdat/
+URL: https://github.com/NOAA-EDAB/survdat, https://noaa-edab.github.io/survdat/
 BugReports: https://github.com/NOAA-EDAB/survdat/issues
 Imports: 
     data.table,
@@ -40,5 +38,5 @@ Suggests:
     DT
 VignetteBuilder: knitr
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
 LazyData: true
