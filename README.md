@@ -21,7 +21,7 @@ To use this package you will need:
 
 * Anyone looking for raw tow level survey data in the format that you would obtain from Ecosystem Survey Branch (ESB) - still in development
 
-* Anyone looking for Ecosystem/multispecies products derived from the tow level data. See [vignettes](articles/articles/pullingData.html) for explanation of methods
+* Anyone looking for Ecosystem/multispecies products derived from the tow level data. See [vignettes](articles/pullingData.html) for explanation of methods
 
 ### Who this isn't for!
 
