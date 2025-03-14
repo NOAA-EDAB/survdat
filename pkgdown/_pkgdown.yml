@@ -1,5 +1,9 @@
 url: https://noaa-edab.github.io/survdat/
 
+authors:
+  Andy beet:
+    href: https://andybeet.com
+
 template:
   bootstrap: 5
 
