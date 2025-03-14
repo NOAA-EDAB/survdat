@@ -35,14 +35,20 @@ Anyone looking for survey data that is directly input into stock assessments. Yo
 ## Installation
 
 ``` r 
-# Install directly from GitHub
-remotes::install_github("NOAA-EDAB/survdat",build_vignettes = TRUE)`
+remotes::install_github("NOAA-EDAB/survdat")`
 ```
+
+or 
+
+```
+pak::pak("NOAA-EDAB/survdat")
+```
+
 ## Developers (in alphabetical order)
 
 | [andybeet](https://github.com/andybeet)                                                         | [slucey](https://github.com/slucey)                                                                                                    |
 |-------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| [![](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet) | [![](https://avatars.githubusercontent.com/u/5578254?s=100&u=cd59cd654cab73ea583c697145bfe062222355cd&v=4)](https://github.com/slucey) |
+| [![](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet "andybeet avatar") | [![](https://avatars.githubusercontent.com/u/5578254?s=100&u=cd59cd654cab73ea583c697145bfe062222355cd&v=4)](https://github.com/slucey "slucey avatar") |
 
 #### Legal disclaimer
 
