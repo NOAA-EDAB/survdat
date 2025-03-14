@@ -22,23 +22,20 @@ library(survdat)
 
 Once you are granted permission to access the database and have Oracle's instant Client installed you can make a connection as follows:
 
-```channel <- dbutils::connect_to_database(server="servername",uid="yourUsername")```
+```
+channel <- dbutils::connect_to_database(server="servername",uid="yourUsername")
+```
 
 `channel` is an object inherited from the DBIConnection-class. This object is passed as an argument to functions in `survdat`
 
 ## Pull Data
 
-Pulling the data can take up to 15 minutes to complete. see `get_survdat_data` for details. To pull the survey data with conversion corrections applied use the following:
+Pulling the data can take up to 15 minutes to complete. see `get_survdat_data()` for details. To pull the survey data with conversion corrections applied use the following:
 
 ```
 data <- get_survdat_data(channel)
 ```
 
-To pull biological traits of individual fish sampled on the survey cruise
-
-```
-data <- get_survdat_data(channel, getBio=TRUE)
-```
 
 `data` is a list of 5 elements. 
 
@@ -48,7 +45,7 @@ data <- get_survdat_data(channel, getBio=TRUE)
 * The date of the pull
 * The version of the package used to create the data pull
 
-For detailed information 
+For detailed information regarding the different types of data pulls please review `vignette("pullingData")`
 
 ## Plot the shapefiles
 
@@ -56,7 +53,7 @@ Two shape files are included in the package, `strata.shp` and `EPU.shp`
 
 To read and plot the `EPU.shp` file:
 
-``` {r}
+``` {r sample_plot_shapefile, echo = TRUE, eval = TRUE, fig.alt = "EPU footprint"}
 areaPolygon <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"), quiet=T)
 plot_shapefile(areaPolygon)
 
@@ -76,21 +73,37 @@ All shapefiles are required to be an sf ([simple features](https://r-spatial.git
 
 * To calculate swept area biomass for any one of these regions, say Georges Bank in the Spring:
 
-``` calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING") ```
+```{r swept1, echo = TRUE, eval = FALSE}
+calc_swept_area(data$survdat,
+                areaPolygon=areaPolygon,
+                areaDescription="EPU",
+                filterByArea="GB",
+                filterBySeason = "SPRING")
+```
 
 The `filterByArea` value should be one of the values found in the `areaDescription` field of the shapefile
 
-* To return the values in TIDY format add the tidy=T argument:
+* To return the values in TIDY format add the `tidy=T` argument:
 
-``` calc_swept_area(data$survdat,areaPolygon=areaPolygon,areaDescription="EPU",filterByArea="GB",filterBySeason = "SPRING",tidy=T) ```
+```{r swept2, echo = TRUE, eval = FALSE}
+calc_swept_area(data$survdat,
+                areaPolygon=areaPolygon,
+                areaDescription="EPU",
+                filterByArea="GB",
+                filterBySeason = "SPRING",
+                tidy=T) 
+```
 
 To visualize the overlap of the survey data and the regions, first define a coordinate reference system (crs) in which to project both the points and the shapefile. Convert the LAT and LON coordinates to the WGS84 reference ellipsoid (crs = 4326)
 
-```
+```{r viz1, echo = TRUE, eval = FALSE}
 crs <- 4326
-points <- sf::st_as_sf(data$survdat,coords=("LON","LAT"), crs=crs)
+points <- sf::st_as_sf(data$survdat,
+                       coords=("LON","LAT"),
+                       crs=crs)
 # plot data with regions
-plot_data_area(points=data$survdat,polygons=area,crs)
-
+plot_data_area(points=data$survdat,
+               polygons=area,
+               crs)
 ```
 
