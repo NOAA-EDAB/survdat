@@ -295,6 +295,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
 
   # Apply conversion factors --------------------------------------------------
   if(conversion.factor){
+    message("Applying Conversion/Calibration Factors (Gear, Vessel, Door) ...")
     survdatConv <- apply_conversion_factors(channel,survdat,use.SAD = use.SAD)
     sql <- c(sql,survdatConv$sql)
     survdat <- survdatConv$survdat
