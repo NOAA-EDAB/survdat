@@ -305,7 +305,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
   survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols][]
 
-
+  message("Done!")
 
   return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call,version=version))
 
