@@ -1,3 +1,4 @@
+# fmt: skip file
 #' Extracts Survey data from Database
 #'
 #' Connects to svdbs and pulls data from MSTR_CRUISE, UNION_FSCS_SVCAT,
@@ -165,7 +166,7 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
                                from svdbs.UNION_FSCS_SVSTA
                                where cruise6 in (", cruise6, ")
                                and (SHG <= 136 and cruise6 <= 200900)
-                               or (TOGA <= 1324 and cruise6 > 200900)
+                               or (type_code <= 1 and operation_code <= 3 and gear_code <= 2 and cruise6 > 200900)
                                order by cruise6, station")
   }
   if(shg.check == F){
@@ -304,8 +305,6 @@ get_survdat_data <- function(channel, filterByYear = NA, all.season = F,
   #Convert number fields from chr to num
   numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
   survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols][]
-
-  message("Done!")
 
   return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call,version=version))
 
