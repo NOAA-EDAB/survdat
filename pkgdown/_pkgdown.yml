@@ -30,6 +30,7 @@ reference:
   - get_cruise_purpose
   - get_maturity
   - get_species
+  - get_species_stock_area
   - get_strata
   - get_sex
   - get_sex_fscs
