@@ -12,7 +12,6 @@ Authors@R: c(person(given = "Sean",
                    role = c("aut","cre"),
                    comment = c(ORCID = "0000-0001-8270-7090")))
 License: file LICENSE
-Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
 Description: A collection of functions for use with NEFSC survey data.  Functions
   will generate stratified means and swept area estimates from the surveys.
