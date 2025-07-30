@@ -46,6 +46,7 @@ Other helper:
 \code{\link{get_sex}()},
 \code{\link{get_sex_fscs}()},
 \code{\link{get_species}()},
+\code{\link{get_species_stock_area}()},
 \code{\link{get_strata}()}
 }
 \concept{helper}
