@@ -1,7 +1,7 @@
 url: https://noaa-edab.github.io/survdat/
 
 authors:
-  Andy beet:
+  Andy Beet:
     href: https://andybeet.com
 
 template:
@@ -30,6 +30,7 @@ reference:
   - get_cruise_purpose
   - get_maturity
   - get_species
+  - get_species_stock_area
   - get_strata
   - get_sex
   - get_sex_fscs
