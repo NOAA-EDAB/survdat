@@ -30,57 +30,73 @@
 #'
 #' @export
 
-calc_swept_area <- function(surveyData, areaPolygon = 'NEFSC strata',
-                            areaDescription = 'STRATA', filterByArea = "all",
-                            filterBySeason, groupDescription = "SVSPP",
-                            filterByGroup = "all", mergesexFlag = T,
-                            tidy = F, q = NULL, a = 0.0384) {
+calc_swept_area <- function(
+  surveyData,
+  areaPolygon = 'NEFSC strata',
+  areaDescription = 'STRATA',
+  filterByArea = "all",
+  filterBySeason,
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = T,
+  tidy = F,
+  q = NULL,
+  a = 0.0384
+) {
+  #Run stratified mean
+  stratmeanData <- calc_stratified_mean(
+    surveyData,
+    areaPolygon,
+    areaDescription,
+    filterByArea,
+    filterBySeason,
+    groupDescription,
+    filterByGroup,
+    mergesexFlag,
+    returnPrepData = T
+  )
 
-    #Run stratified mean
-    stratmeanData <- calc_stratified_mean(surveyData, areaPolygon, areaDescription,
-                                          filterByArea, filterBySeason,
-                                          groupDescription, filterByGroup,
-                                          mergesexFlag, returnPrepData = T)
+  #Calculate total biomass/abundance estimates
+  message("Calculating Swept Area Estimate  ...")
+  sweptareaData <- survdat:::swept_area(
+    prepData = stratmeanData$prepData,
+    stratmeanData = stratmeanData$stratmeanData,
+    q = q,
+    areaDescription = areaDescription,
+    a = a,
+    groupDescription = groupDescription
+  )
 
-    #Calculate total biomass/abundance estimates
-    message("Calculating Swept Area Estimate  ...")
-    sweptareaData <- survdat:::swept_area(prepData = stratmeanData$prepData,
-                                         stratmeanData = stratmeanData$stratmeanData,
-                                         q = q, areaDescription = areaDescription,
-                                         groupDescription = groupDescription)
+  #create tidy data set
+  if (tidy) {
+    message("Tidying data  ...")
+    tidyData <- data.table::melt.data.table(
+      sweptareaData,
+      id.vars = c('YEAR', groupDescription),
+      measure.vars = c(
+        'strat.biomass',
+        'biomass.var',
+        'strat.abund',
+        'abund.var',
+        'tot.biomass',
+        'tot.bio.var',
+        'tot.abundance',
+        'tot.abund.var'
+      )
+    )
+    tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
+    tidyData[variable == 'biomass.var', units := '(kg tow^-1)^2']
+    tidyData[variable == 'strat.abund', units := 'number']
+    tidyData[variable == 'abund.var', units := 'numbers^2']
+    tidyData[variable == 'tot.biomass', units := 'kg']
+    tidyData[variable == 'tot.bio.var', units := 'kg^2']
+    tidyData[variable == 'tot.abundance', units := 'number']
+    tidyData[variable == 'tot.abund.var', units := 'numbers^2']
 
-    #create tidy data set
-    if(tidy){
-        message("Tidying data  ...")
-        tidyData <- data.table::melt.data.table(sweptareaData, id.vars = c('YEAR',
-                                                                           groupDescription),
-                                                measure.vars = c('strat.biomass',
-                                                                 'biomass.var',
-                                                                 'strat.abund',
-                                                                 'abund.var',
-                                                                 'tot.biomass',
-                                                                 'tot.bio.var',
-                                                                 'tot.abundance',
-                                                                 'tot.abund.var'))
-        tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
-        tidyData[variable == 'biomass.var',   units := '(kg tow^-1)^2']
-        tidyData[variable == 'strat.abund',   units := 'number']
-        tidyData[variable == 'abund.var',     units := 'numbers^2']
-        tidyData[variable == 'tot.biomass',   units := 'kg']
-        tidyData[variable == 'tot.bio.var',   units := 'kg^2']
-        tidyData[variable == 'tot.abundance', units := 'number']
-        tidyData[variable == 'tot.abund.var', units := 'numbers^2']
+    sweptareaData <- tidyData
+  }
 
-        sweptareaData <- tidyData
-    }
+  sweptareaData[]
 
-    sweptareaData[]
-
-    return(sweptareaData)
+  return(sweptareaData)
 }
-
-
-
-
-
-

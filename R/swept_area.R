@@ -31,16 +31,24 @@
 #'
 #'@noRd
 
-
-swept_area <- function (prepData, stratmeanData, q = NULL, a = 0.0384,
-                        areaDescription, groupDescription = 'SVSPP') {
+swept_area <- function(
+  prepData,
+  stratmeanData,
+  q = NULL,
+  a = 0.0384,
+  areaDescription,
+  groupDescription = 'SVSPP'
+) {
   #This is necessary to break the link with the original data table
-  prepData.x  <- data.table::copy(prepData)
-  stratmeanData.x  <- data.table::copy(stratmeanData)
+  prepData.x <- data.table::copy(prepData)
+  stratmeanData.x <- data.table::copy(stratmeanData)
 
   #Calculate A (Total area)
-  data.table::setnames(prepData.x, c(areaDescription, "Area"),
-           c('STRAT', 'S.AREA'))
+  data.table::setnames(
+    prepData.x,
+    c(areaDescription, "Area"),
+    c('STRAT', 'S.AREA')
+  )
 
   data.table::setkey(prepData.x, YEAR, STRAT)
   stratum <- unique(prepData.x, by = key(prepData.x))
@@ -51,34 +59,67 @@ swept_area <- function (prepData, stratmeanData, q = NULL, a = 0.0384,
   swept.area <- base::merge(stratmeanData.x, stratum, by = 'YEAR')
 
   #Merge q
-  if(is.null(q)) q <- data.table::data.table(groups = unique(swept.area[, get(groupDescription)]), q = 1)
+  if (is.null(q)) {
+    q <- data.table::data.table(
+      groups = unique(swept.area[, get(groupDescription)]),
+      q = 1
+    )
+    message("Assuming a value of q = ", q, " for all groups")
+  } else if (length(q) == 1) {
+    # apply q to all groups
+    message("Assuming a value of q = ", q, " for all groups")
+    q <- data.table::data.table(
+      groups = unique(swept.area[, get(groupDescription)]),
+      q = q
+    )
+  } else {
+    # Need a value of q for all groups
+  }
+
   data.table::setnames(q, names(q), c(groupDescription, 'q'))
   swept.area <- base::merge(swept.area, q, by = groupDescription, all.x = T)
   swept.area[is.na(q), q := 1]
 
   #Calculate swept area biomass
-  swept.area[, tot.biomass   :=       (strat.biomass * A/a)/q]
-  swept.area[, tot.abundance := round((strat.abund   * A/a)/q)]
+  swept.area[, tot.biomass := (strat.biomass * A / a) / q]
+  swept.area[, tot.abundance := round((strat.abund * A / a) / q)]
 
   #Calculate variance
-  swept.area[, var.constant := (A/a)/q]
-  swept.area[, tot.bio.var   := var.constant^2 * biomass.var]
+  swept.area[, var.constant := (A / a) / q]
+  swept.area[, tot.bio.var := var.constant^2 * biomass.var]
   swept.area[, tot.abund.var := var.constant^2 * abund.var]
 
   #Calculate standard error
-  swept.area[, tot.bio.SE   := sqrt(tot.bio.var)]
+  swept.area[, tot.bio.SE := sqrt(tot.bio.var)]
   swept.area[, tot.abund.SE := sqrt(tot.abund.var)]
 
   #remove extra columns - need to add sex column if stratmean object does not have one
   #then remove before output
-  if(length(which(names(stratmeanData.x) == 'sex')) == 0) swept.area[, sex := 0]
-  swept.area <- swept.area[, list(YEAR, get(groupDescription), sex, N,
-                                  strat.biomass, biomass.var,   biomass.SE,
-                                  strat.abund,   abund.var,     abund.SE,
-                                  tot.biomass,   tot.bio.var,   tot.bio.SE,
-                                  tot.abundance, tot.abund.var, tot.abund.SE)]
+  if (length(which(names(stratmeanData.x) == 'sex')) == 0) {
+    swept.area[, sex := 0]
+  }
+  swept.area <- swept.area[, list(
+    YEAR,
+    get(groupDescription),
+    sex,
+    N,
+    strat.biomass,
+    biomass.var,
+    biomass.SE,
+    strat.abund,
+    abund.var,
+    abund.SE,
+    tot.biomass,
+    tot.bio.var,
+    tot.bio.SE,
+    tot.abundance,
+    tot.abund.var,
+    tot.abund.SE
+  )]
   data.table::setnames(swept.area, 'V2', groupDescription)
-  if(length(which(names(stratmeanData.x) == 'sex')) == 0) swept.area[, sex := NULL]
+  if (length(which(names(stratmeanData.x) == 'sex')) == 0) {
+    swept.area[, sex := NULL]
+  }
 
   swept.area <- swept.area %>% units::drop_units()
 
