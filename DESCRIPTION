@@ -1,7 +1,7 @@
 Package: survdat
 Type: Package
 Title: Tools for working with NEFSC survey data
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: c(person(given = "Sean",
                     family = "Lucey",
                     email = "Sean.Lucey@NOAA.gov",
