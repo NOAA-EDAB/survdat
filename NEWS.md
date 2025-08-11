@@ -1,3 +1,10 @@
+# survdat 1.1.1
+
+## Bug fixes
+
+* `calc_swept_area` function can now use a user supplied value of `a` (average swept area of trawl, km^-2)
+* `swep_area` function can now utilize a user supplied scalar for `q` (catchability) across all groups
+
 # survdat 1.1.0
 
 * Added `get_species_stock_area` function to retrieve species stock area (Bottom Trawl survey STRATA) data from STOCKEFF
