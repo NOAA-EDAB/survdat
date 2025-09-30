@@ -21,6 +21,7 @@ reference:
   desc: "Functions that pull data from the SVDBS database"
 - contents:
   - get_survdat_data
+  - get_mass_inshore_survey_data
   - get_survdat_clam_data
   - get_survdat_scallop_data
   - get_length_weight_data
