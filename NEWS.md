@@ -1,3 +1,9 @@
+# survdat 1.2.0
+
+## New Feature
+
+* `get_mass_inshore_survey_data` - pulls data from the Massachusetts Inshore Survey
+
 # survdat 1.1.1
 
 ## Bug fixes
