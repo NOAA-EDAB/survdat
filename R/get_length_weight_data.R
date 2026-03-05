@@ -51,39 +51,56 @@
 #'
 #' @export
 
-
-get_length_weight_data <- function(channel, year=1994, species="all", sex="all"){
-
-  if((length(year) == 1) & (length(species) == 1)) {
-    if ((year == "all") & (species == "all")) stop("Can not pull all species and all years. Too much data!!")
+get_length_weight_data <- function(
+  channel,
+  year = 1994,
+  species = "all",
+  sex = "all"
+) {
+  if ((length(year) == 1) & (length(species) == 1)) {
+    if ((year == "all") & (species == "all")) {
+      stop("Can not pull all species and all years. Too much data!!")
+    }
   }
   # create an SQL query to extract all relavent data from tables
   # list of strings to build where clause in sql statement
   whereVec <- list()
 
-  whereVec[[1]] <-  dbutils::createString(itemName="m.svspp",species,convertToCharacter=TRUE,numChars=3)
-  whereVec[[3]] <-  dbutils::createStringYear(itemName="m.cruise6",year,convertToCharacter=TRUE,numChars=4)
+  whereVec[[1]] <- dbutils::createString(
+    itemName = "m.svspp",
+    species,
+    convertToCharacter = TRUE,
+    numChars = 3
+  )
+  whereVec[[3]] <- dbutils::createStringYear(
+    itemName = "m.cruise6",
+    year,
+    convertToCharacter = TRUE,
+    numChars = 4
+  )
 
   # sex conversion
   if (tolower(sex) == "all") {
-    sex <- c(0,1,2)
+    sex <- c(0, 1, 2)
   } else if (!is.numeric(sex)) {
-    sex <- gsub("M",1,sex)
-    sex <- gsub("F",2,sex)
-    sex <- as.numeric(gsub("U",0,sex))
+    sex <- gsub("M", 1, sex)
+    sex <- gsub("F", 2, sex)
+    sex <- as.numeric(gsub("U", 0, sex))
   }
 
-  whereVec[[4]] <-  paste("m.sex in (",toString(sex),")")
+  whereVec[[4]] <- paste("m.sex in (", toString(sex), ")")
 
   # build where clause of SQL statement based on input above
   whereStr <- "where"
   for (item in whereVec) {
-    if (is.null(item)) {next}
-    if (which(item == whereVec) == length(whereVec)) {
-      whereStr <- paste(whereStr,item)
+    if (is.null(item)) {
       next
     }
-    whereStr <- paste(whereStr,item,"and")
+    if (which(item == whereVec) == length(whereVec)) {
+      whereStr <- paste(whereStr, item)
+      next
+    }
+    whereStr <- paste(whereStr, item, "and")
   }
 
   # eventually user will be able to pass these variables
@@ -91,14 +108,14 @@ get_length_weight_data <- function(channel, year=1994, species="all", sex="all")
                     from svdbs.union_fscs_svbio m LEFT JOIN svdbs.svdbs_cruises s
                     ON m.cruise6 = s.cruise6 "
 
-  sqlStatement <- paste(sqlStatement,whereStr)
+  sqlStatement <- paste(sqlStatement, whereStr)
 
   # call database
-  query <- DBI::dbGetQuery(channel,sqlStatement)
+  query <- DBI::dbGetQuery(channel, sqlStatement)
 
   # column names
   sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'UNION_FSCS_SVBIO' and owner='SVDBS'"
-  colNames <- DBI::dbGetQuery(channel,sqlcolName)
+  colNames <- DBI::dbGetQuery(channel, sqlcolName)
 
   query <- dplyr::as_tibble(query)
   query$SEASON <- as.factor(query$SEASON)
@@ -106,9 +123,5 @@ get_length_weight_data <- function(channel, year=1994, species="all", sex="all")
   query$INDWT <- as.numeric(query$INDWT)
   query$SEX <- as.integer(query$SEX)
 
-
-  return (list(data =query,sql=sqlStatement, colNames=colNames))
+  return(list(data = query, sql = sqlStatement, colNames = colNames))
 }
-
-
-

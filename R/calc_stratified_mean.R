@@ -42,27 +42,35 @@
 #'
 #' @export
 
-
-calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
-                                 areaDescription = 'STRATA', filterByArea = "all",
-                                 filterBySeason, groupDescription = "SVSPP",
-                                 filterByGroup = "all", mergesexFlag = T,
-                                 tidy = F, returnPrepData = F) {
-
+calc_stratified_mean <- function(
+  surveyData,
+  areaPolygon = 'NEFSC strata',
+  areaDescription = 'STRATA',
+  filterByArea = "all",
+  filterBySeason,
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = T,
+  tidy = F,
+  returnPrepData = F
+) {
   # Use original stratified design and built-in shapefile
-  if(!is(areaPolygon, 'sf')) {
-    if (is.character(areaPolygon)) { # not sf but a string
-      if(areaPolygon == 'NEFSC strata') {
+  if (!is(areaPolygon, 'sf')) {
+    if (is.character(areaPolygon)) {
+      # not sf but a string
+      if (areaPolygon == 'NEFSC strata') {
         poststratFlag <- F
       } else {
-        message("areaPolygon currently only takes \"NEFSC strata\" as character string option")
+        message(
+          "areaPolygon currently only takes \"NEFSC strata\" as character string option"
+        )
         stop("areaPolygon incorrectly defined")
       }
-    } else { # not sf and not a string
+    } else {
+      # not sf and not a string
       message("areaPolygon must be an sf object. For example")
       message("areaPolygon <- sf::st_read(dsn = \"shapefile.shp\"")
       stop("areaPolygon incorrectly defined")
-
     }
   } else {
     poststratFlag <- T
@@ -70,42 +78,60 @@ calc_stratified_mean <- function(surveyData, areaPolygon = 'NEFSC strata',
 
   #Run stratification prep
   message("Prepping data ...")
-  prepData <- survdat:::strat_prep(surveyData, areaPolygon, areaDescription,
-                                  filterByArea, filterBySeason)
+  prepData <- survdat:::strat_prep(
+    surveyData,
+    areaPolygon,
+    areaDescription,
+    filterByArea,
+    filterBySeason
+  )
 
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
   #Check if calculating mean base on all station or by season
-  if(filterBySeason[1] == "all"){seasonFlag <- F}else{seasonFlag <- T}
+  if (filterBySeason[1] == "all") {
+    seasonFlag <- F
+  } else {
+    seasonFlag <- T
+  }
 
-  stratmeanData <- survdat:::strat_mean(prepData, groupDescription, filterByGroup,
-                                       mergesexFlag, seasonFlag = seasonFlag,
-                                       areaDescription, poststratFlag)
+  stratmeanData <- survdat:::strat_mean(
+    prepData,
+    groupDescription,
+    filterByGroup,
+    mergesexFlag,
+    seasonFlag = seasonFlag,
+    areaDescription,
+    poststratFlag
+  )
 
   # create tidy data
-  if(tidy){
+  if (tidy) {
     message("Tidying data  ...")
-    tidyData <- data.table::melt.data.table(stratmeanData, id.vars = c('YEAR',
-                                                                       groupDescription,
-                                                                       'SEASON'),
-                                            measure.vars = c('strat.biomass',
-                                                             'biomass.var',
-                                                             'biomass.SE',
-                                                             'strat.abund',
-                                                             'abund.var',
-                                                             'abund.SE'))
+    tidyData <- data.table::melt.data.table(
+      stratmeanData,
+      id.vars = c('YEAR', groupDescription, 'SEASON'),
+      measure.vars = c(
+        'strat.biomass',
+        'biomass.var',
+        'biomass.SE',
+        'strat.abund',
+        'abund.var',
+        'abund.SE'
+      )
+    )
     tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
-    tidyData[variable == 'biomass.var',   units := '(kg tow^-1)^2']
-    tidyData[variable == 'biomass.SE',    units := 'kg tow^-1']
-    tidyData[variable == 'strat.abund',   units := 'number tow^-1']
-    tidyData[variable == 'abund.var',     units := '(numbers tow^-1)^2']
-    tidyData[variable == 'abund.SE',      units := 'kg tow^-1']
+    tidyData[variable == 'biomass.var', units := '(kg tow^-1)^2']
+    tidyData[variable == 'biomass.SE', units := 'kg tow^-1']
+    tidyData[variable == 'strat.abund', units := 'number tow^-1']
+    tidyData[variable == 'abund.var', units := '(numbers tow^-1)^2']
+    tidyData[variable == 'abund.SE', units := 'kg tow^-1']
     stratmeanData <- tidyData
   }
 
-  if(returnPrepData) stratmeanData <- list(stratmeanData = stratmeanData,
-                                           prepData = prepData)
+  if (returnPrepData) {
+    stratmeanData <- list(stratmeanData = stratmeanData, prepData = prepData)
+  }
 
   return(stratmeanData[])
 }
-

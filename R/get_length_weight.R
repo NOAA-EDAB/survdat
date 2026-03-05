@@ -16,9 +16,7 @@
 #'
 #'@export
 
-
-get_length_weight <- function(channel){
-
+get_length_weight <- function(channel) {
   #Grab survey length/weight coefficients
   lw.qry <- "select svspp, sex, svlwexp, svlwcoeff, svlwexp_spring, svlwcoeff_spring,
                svlwexp_fall, svlwcoeff_fall, svlwexp_winter, svlwcoeff_winter,
@@ -30,11 +28,11 @@ get_length_weight <- function(channel){
   #Clean up NAs
   lw <- lw[!is.na(SVLWEXP), ]
   lw[is.na(SVLWEXP_SPRING), SVLWEXP_SPRING := SVLWEXP]
-  lw[is.na(SVLWEXP_FALL),   SVLWEXP_FALL   := SVLWEXP]
+  lw[is.na(SVLWEXP_FALL), SVLWEXP_FALL := SVLWEXP]
   lw[is.na(SVLWEXP_WINTER), SVLWEXP_WINTER := SVLWEXP]
   lw[is.na(SVLWEXP_SUMMER), SVLWEXP_SUMMER := SVLWEXP]
   lw[is.na(SVLWCOEFF_SPRING), SVLWCOEFF_SPRING := SVLWCOEFF]
-  lw[is.na(SVLWCOEFF_FALL),   SVLWCOEFF_FALL   := SVLWCOEFF]
+  lw[is.na(SVLWCOEFF_FALL), SVLWCOEFF_FALL := SVLWCOEFF]
   lw[is.na(SVLWCOEFF_WINTER), SVLWCOEFF_WINTER := SVLWCOEFF]
   lw[is.na(SVLWCOEFF_SUMMER), SVLWCOEFF_SUMMER := SVLWCOEFF]
 
@@ -43,8 +41,7 @@ get_length_weight <- function(channel){
 
   # get column names
   sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'LENGTH_WEIGHT_COEFFICIENTS' and owner='SVDBS'"
-  colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
+  colNames <- t(DBI::dbGetQuery(channel, sqlcolName))
 
-  return (list(data=lw[],sql=lw.qry, colNames=colNames))
-
+  return(list(data = lw[], sql = lw.qry, colNames = colNames))
 }
