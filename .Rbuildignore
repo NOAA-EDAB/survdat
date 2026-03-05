@@ -10,3 +10,5 @@ testing
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^[.]?air[.]toml$
+^\.vscode$

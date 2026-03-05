@@ -86,13 +86,14 @@
 #'
 #'@export
 
-get_survdat_scallop_data <- function(channel,
-                                     filterByYear = NA,
-                                     shg.check = T,
-                                     getLengths = T,
-                                     getWeightLength = F,
-                                     scallopOnly = T){
-
+get_survdat_scallop_data <- function(
+  channel,
+  filterByYear = NA,
+  shg.check = T,
+  getLengths = T,
+  getWeightLength = F,
+  scallopOnly = T
+) {
   call <- capture_function_call()
 
   # Cruise List --------------------------------------------------------------
@@ -100,18 +101,20 @@ get_survdat_scallop_data <- function(channel,
   message("Getting Cruise list  ...")
 
   #Create year vector
-  if(is.na(filterByYear[1])){
+  if (is.na(filterByYear[1])) {
     years <- ">= 1963"
-  }else{
+  } else {
     years <- paste0("in (", survdat:::sqltext(filterByYear), ")")
   }
 
-  cruise.qry <- paste0("select unique year, cruise6, svvessel, season
+  cruise.qry <- paste0(
+    "select unique year, cruise6, svvessel, season
       from svdbs.mstr_cruise
       where purpose_code = 60
-      and year ", years,
-      "order by year, cruise6")
-
+      and year ",
+    years,
+    "order by year, cruise6"
+  )
 
   cruise <- data.table::as.data.table(DBI::dbGetQuery(channel, cruise.qry))
   cruise <- na.omit(cruise)
@@ -120,28 +123,34 @@ get_survdat_scallop_data <- function(channel,
   #Use cruise codes to select other data
   cruise6 <- survdat:::sqltext(cruise$CRUISE6)
 
-
-
   # Station Data --------------------------------------------------------------
   message("Getting Station data ...")
-  if(shg.check == T){
-    station.qry <- paste0("select unique cruise6, svvessel, station, stratum,
+  if (shg.check == T) {
+    station.qry <- paste0(
+      "select unique cruise6, svvessel, station, stratum,
                                tow, decdeg_beglat as lat, decdeg_beglon as lon,
                                begin_est_towdate as est_towdate, avgdepth as depth,
                                surftemp, surfsalin, bottemp, botsalin
                                from svdbs.UNION_FSCS_SVSTA
-                               where cruise6 in (", cruise6, ")
+                               where cruise6 in (",
+      cruise6,
+      ")
                                and SHG <= 136
-                               order by cruise6, station")
+                               order by cruise6, station"
+    )
   }
-  if(shg.check == F){
-    station.qry <- paste0("select unique cruise6, svvessel, station, stratum, tow,
+  if (shg.check == F) {
+    station.qry <- paste0(
+      "select unique cruise6, svvessel, station, stratum, tow,
                          decdeg_beglat as lat, decdeg_beglon as lon,
                          begin_est_towdate as est_towdate, avgdepth as depth,
                          surftemp, surfsalin, bottemp, botsalin
                          from svdbs.UNION_FSCS_SVSTA
-                         where cruise6 in (", cruise6, ")
-                         order by cruise6, station")
+                         where cruise6 in (",
+      cruise6,
+      ")
+                         order by cruise6, station"
+    )
   }
   # pull data
   station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
@@ -150,15 +159,18 @@ get_survdat_scallop_data <- function(channel,
   #merge cruise and station
   survdat <- merge(cruise, station)
 
-
   # Catch Data --------------------------------------------------------------
   message("Getting Species data ...")
-  catch.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
+  catch.qry <- paste0(
+    "select cruise6, station, stratum, tow, svspp, catchsex,
                      expcatchnum as abundance, expcatchwt as biomass
                      from svdbs.UNION_FSCS_SVCAT
-                     where cruise6 in (", cruise6, ")
+                     where cruise6 in (",
+    cruise6,
+    ")
                      and stratum not like 'YT%'
-                     order by cruise6, station, svspp")
+                     order by cruise6, station, svspp"
+  )
   catch <- data.table::as.data.table(DBI::dbGetQuery(channel, catch.qry))
   data.table::setkey(catch, CRUISE6, STATION, STRATUM, TOW)
 
@@ -167,18 +179,22 @@ get_survdat_scallop_data <- function(channel,
   survdat <- merge(survdat, catch, by = data.table::key(survdat))
 
   # create list of all sql calls
-  sql <- list(catch=catch.qry, cruise=cruise.qry, station=station.qry)
+  sql <- list(catch = catch.qry, cruise = cruise.qry, station = station.qry)
 
   # Length Data --------------------------------------------------------------
-  if(getLengths){
+  if (getLengths) {
     message("Getting Length Data ...")
     #Length data
-    length.qry <- paste0("select cruise6, station, stratum, tow, svspp, catchsex,
+    length.qry <- paste0(
+      "select cruise6, station, stratum, tow, svspp, catchsex,
                       length, expnumlen as numlen
                       from svdbs.UNION_FSCS_SVLEN
-                      where cruise6 in (", cruise6, ")
+                      where cruise6 in (",
+      cruise6,
+      ")
                       and stratum not like 'YT%'
-                      order by cruise6, station, svspp, length")
+                      order by cruise6, station, svspp, length"
+    )
     len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
     data.table::setkey(len, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
 
@@ -186,16 +202,17 @@ get_survdat_scallop_data <- function(channel,
     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP, CATCHSEX)
     survdat <- merge(survdat, len, all.x = T)
 
-    sql <- c(sql,length=length.qry)
-
+    sql <- c(sql, length = length.qry)
   }
 
   # Weight at Length Data -----------------------------------------------------
-  if(getWeightLength & getLengths == F){
-    stop("Can not calculate weight at length without lengths...
-         Set getLengths to TRUE.")
+  if (getWeightLength & getLengths == F) {
+    stop(
+      "Can not calculate weight at length without lengths...
+         Set getLengths to TRUE."
+    )
   }
-  if(getWeightLength){
+  if (getWeightLength) {
     message("Getting Weight at Length Data ...")
     #Grab survey length/weight coefficients using survdat function
     lwpull <- get_length_weight(channel)
@@ -214,61 +231,95 @@ get_survdat_scallop_data <- function(channel,
     survdat <- merge(survdat, lw, by = c('SVSPP', 'CATCHSEX'), all.x = T)
 
     #Calculate weight at length
-    survdat[SEASON == 'SPRING', PREDWT := exp(SVLWCOEFF_SPRING + SVLWEXP_SPRING * log(LENGTH))]
-    survdat[SEASON == 'FALL',   PREDWT := exp(SVLWCOEFF_FALL   + SVLWEXP_FALL   * log(LENGTH))]
-    survdat[SEASON == 'WINTER', PREDWT := exp(SVLWCOEFF_WINTER + SVLWEXP_WINTER * log(LENGTH))]
-    survdat[SEASON == 'SUMMER', PREDWT := exp(SVLWCOEFF_SUMMER + SVLWEXP_SUMMER * log(LENGTH))]
+    survdat[
+      SEASON == 'SPRING',
+      PREDWT := exp(SVLWCOEFF_SPRING + SVLWEXP_SPRING * log(LENGTH))
+    ]
+    survdat[
+      SEASON == 'FALL',
+      PREDWT := exp(SVLWCOEFF_FALL + SVLWEXP_FALL * log(LENGTH))
+    ]
+    survdat[
+      SEASON == 'WINTER',
+      PREDWT := exp(SVLWCOEFF_WINTER + SVLWEXP_WINTER * log(LENGTH))
+    ]
+    survdat[
+      SEASON == 'SUMMER',
+      PREDWT := exp(SVLWCOEFF_SUMMER + SVLWEXP_SUMMER * log(LENGTH))
+    ]
 
     #Calculate expanded weight at length
     survdat[, WGTLEN := PREDWT * NUMLEN]
 
     #drop extra columns
-    survdat[, c('SVLWEXP', 'SVLWEXP_SPRING', 'SVLWEXP_FALL', 'SVLWEXP_WINTER',
-                'SVLWEXP_SUMMER', 'SVLWCOEFF', 'SVLWCOEFF_SPRING',
-                'SVLWCOEFF_FALL', 'SVLWCOEFF_WINTER', 'SVLWCOEFF_SUMMER') := NULL]
+    survdat[,
+      c(
+        'SVLWEXP',
+        'SVLWEXP_SPRING',
+        'SVLWEXP_FALL',
+        'SVLWEXP_WINTER',
+        'SVLWEXP_SUMMER',
+        'SVLWCOEFF',
+        'SVLWCOEFF_SPRING',
+        'SVLWCOEFF_FALL',
+        'SVLWCOEFF_WINTER',
+        'SVLWCOEFF_SUMMER'
+      ) := NULL
+    ]
 
     sql <- c(sql, weightlength = lwpull$sql)
-
   }
 
   # Biology Data --------------------------------------------------------------
-#   if (getBio) {
-#     message("Getting Individual Fish (Bio) Data ...")
-#     bio.qry <- paste0("select cruise6, station, stratum, svspp, catchsex, length, indid,
-#                   indwt, sex, maturity, age, stom_volume, stom_wgt
-#                   from UNION_FSCS_SVBIO
-#                   where cruise6 in (", cruise6, ")")
-#     bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
-#
-#     #Remove YT Stratum
-#     bio <- bio[!STRATUM %like% 'YT', ]
-#
-#     # fix bugs in SVDBS for character sex values
-#     bio[SEX %in% c("M","m"), SEX := 1]
-#     bio[SEX %in% c("F","f"), SEX := 2]
-#
-#     #Fix catch sex prior to 2001
-#     bio[is.na(CATCHSEX), CATCHSEX := 0]
-#     bio[SVSPP %in% c('015', '301') & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1]
-#     bio[SVSPP %in% c('015', '301') & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2]
-#
-#     data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
-#     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
-#
-# #    data.table::setkey(bio, CRUISE6, STATION, STRATUM, TOW, SVSPP)
-# #    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP)
-#     survdat <- merge(survdat, bio, by = key(survdat))
-#     sql <- c(sql,bio=bio.qry)
-#   }
+  #   if (getBio) {
+  #     message("Getting Individual Fish (Bio) Data ...")
+  #     bio.qry <- paste0("select cruise6, station, stratum, svspp, catchsex, length, indid,
+  #                   indwt, sex, maturity, age, stom_volume, stom_wgt
+  #                   from UNION_FSCS_SVBIO
+  #                   where cruise6 in (", cruise6, ")")
+  #     bio <- data.table::as.data.table(DBI::dbGetQuery(channel, bio.qry))
+  #
+  #     #Remove YT Stratum
+  #     bio <- bio[!STRATUM %like% 'YT', ]
+  #
+  #     # fix bugs in SVDBS for character sex values
+  #     bio[SEX %in% c("M","m"), SEX := 1]
+  #     bio[SEX %in% c("F","f"), SEX := 2]
+  #
+  #     #Fix catch sex prior to 2001
+  #     bio[is.na(CATCHSEX), CATCHSEX := 0]
+  #     bio[SVSPP %in% c('015', '301') & SEX == 1 & CRUISE6 < 200100, CATCHSEX := 1]
+  #     bio[SVSPP %in% c('015', '301') & SEX == 2 & CRUISE6 < 200100, CATCHSEX := 2]
+  #
+  #     data.table::setkey(bio, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
+  #     data.table::setkey(survdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX, LENGTH)
+  #
+  # #    data.table::setkey(bio, CRUISE6, STATION, STRATUM, TOW, SVSPP)
+  # #    data.table::setkey(survdat, CRUISE6, STATION, STRATUM, TOW, SVSPP)
+  #     survdat <- merge(survdat, bio, by = key(survdat))
+  #     sql <- c(sql,bio=bio.qry)
+  #   }
 
-  if(scallopOnly) survdat <- survdat[SVSPP == 401, ]
+  if (scallopOnly) {
+    survdat <- survdat[SVSPP == 401, ]
+  }
 
   #Convert number fields from chr to num
-  numberCols <- c('CRUISE6', 'STATION', 'STRATUM', 'TOW', 'SVSPP', 'CATCHSEX', 'YEAR')
-  survdat[, (numberCols):= lapply(.SD, as.numeric), .SDcols = numberCols][]
+  numberCols <- c(
+    'CRUISE6',
+    'STATION',
+    'STRATUM',
+    'TOW',
+    'SVSPP',
+    'CATCHSEX',
+    'YEAR'
+  )
+  survdat[, (numberCols) := lapply(.SD, as.numeric), .SDcols = numberCols][]
 
-
-
-  return(list(survdat=survdat,sql=sql,pullDate=date(),functionCall = call))
-
+  return(list(
+    survdat = survdat,
+    sql = sql,
+    pullDate = date(),
+    functionCall = call
+  ))
 }

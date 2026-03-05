@@ -68,12 +68,13 @@
 #-------------------------------------------------------------------------------
 #User parameters
 
-get_survdat_clam_data <- function(channel,
-                                  shg.check=T,
-                                  clam.only=T,
-                                  tidy = F,
-                                  assignRegionWeights = T) {
-
+get_survdat_clam_data <- function(
+  channel,
+  shg.check = T,
+  clam.only = T,
+  tidy = F,
+  assignRegionWeights = T
+) {
   call <- capture_function_call()
 
   #Generate cruise list
@@ -91,21 +92,30 @@ get_survdat_clam_data <- function(channel,
   #Use cruise codes to select other data
   cruise6 <- survdat:::sqltext(cruise$CRUISE6)
 
-
   #Station data
-  if(shg.check == T){
-    station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
+  if (shg.check == T) {
+    station.qry <- paste(
+      "select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
                    avgdepth as depth, surftemp, surfsalin, bottemp, botsalin
                    from svdbs.Union_fscs_svsta
-                   where cruise6 in (", cruise6, ")
+                   where cruise6 in (",
+      cruise6,
+      ")
                    and SHG <= 136
-                   order by cruise6, station", sep='')
+                   order by cruise6, station",
+      sep = ''
+    )
   } else {
-    station.qry <- paste("select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
+    station.qry <- paste(
+      "select unique cruise6, svvessel, station, stratum, decdeg_beglat as lat, decdeg_beglon as lon,
                    avgdepth as depth, surftemp, surfsalin, bottemp, botsalin
                    from svdbs.UNION_FSCS_SVSTA
-                   where cruise6 in (", cruise6, ")
-                   order by cruise6, station", sep='')
+                   where cruise6 in (",
+      cruise6,
+      ")
+                   order by cruise6, station",
+      sep = ''
+    )
   }
 
   station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
@@ -115,17 +125,27 @@ get_survdat_clam_data <- function(channel,
   clamdat <- base::merge(cruise, station)
 
   #Catch data
-  if(clam.only == T){
-    catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
+  if (clam.only == T) {
+    catch.qry <- paste(
+      "select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
                  from svdbs.UNION_FSCS_SVCAT
-                 where cruise6 in (", cruise6, ")
+                 where cruise6 in (",
+      cruise6,
+      ")
                  and svspp in ('403', '409')
-                 order by cruise6, station, svspp", sep='')
+                 order by cruise6, station, svspp",
+      sep = ''
+    )
   } else {
-    catch.qry <- paste("select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
+    catch.qry <- paste(
+      "select cruise6, station, stratum, svspp, catchsex, expcatchnum as abundance, expcatchwt as biomass
                  from svdbs.UNION_FSCS_SVCAT
-                 where cruise6 in (", cruise6, ")
-                 order by cruise6, station, svspp", sep='')
+                 where cruise6 in (",
+      cruise6,
+      ")
+                 order by cruise6, station, svspp",
+      sep = ''
+    )
   }
 
   catch <- data.table::as.data.table(DBI::dbGetQuery(channel, catch.qry))
@@ -136,17 +156,27 @@ get_survdat_clam_data <- function(channel,
   clamdat <- base::merge(clamdat, catch, all.x = T)
 
   #Length data
-  if(clam.only == T){
-    length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
+  if (clam.only == T) {
+    length.qry <- paste(
+      "select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
                   from svdbs.UNION_FSCS_SVLEN
-                  where cruise6 in (", cruise6, ")
+                  where cruise6 in (",
+      cruise6,
+      ")
                   and svspp in ('403', '409')
-                  order by cruise6, station, svspp, length", sep='')
+                  order by cruise6, station, svspp, length",
+      sep = ''
+    )
   } else {
-    length.qry <- paste("select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
+    length.qry <- paste(
+      "select cruise6, station, stratum, svspp, catchsex, length, expnumlen as numlen
                   from svdbs.UNION_FSCS_SVLEN
-                  where cruise6 in (", cruise6, ")
-                  order by cruise6, station, svspp, length", sep='')
+                  where cruise6 in (",
+      cruise6,
+      ")
+                  order by cruise6, station, svspp, length",
+      sep = ''
+    )
   }
 
   len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
@@ -156,37 +186,59 @@ get_survdat_clam_data <- function(channel,
   data.table::setkey(clamdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
   clamdat <- base::merge(clamdat, len, all.x = T)
 
-  clamdat[,STRATUM := as.numeric(STRATUM)]
+  clamdat[, STRATUM := as.numeric(STRATUM)]
 
   if (assignRegionWeights) {
-
     #Assign clam regions
     regions <- c('SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB')
     SVA <- c(6010:6080, 6800, 6810)
     DMV <- c(6090:6160, 6820:6860)
     SNJ <- c(6170:6200, 6870)
     NNJ <- c(6210:6280, 6880:6900)
-    LI  <- c(6290:6360, 6910:6930)
+    LI <- c(6290:6360, 6910:6930)
     SNE <- c(6370:6520, 6940:6960)
-    GB  <- c(6530:6740)
+    GB <- c(6530:6740)
 
     clamdat[, clam.region := factor(NA, levels = regions)]
-    for(i in 1:length(regions)) clamdat[STRATUM %in% get(regions[i]), clam.region := regions[i]]
+    for (i in 1:length(regions)) {
+      clamdat[STRATUM %in% get(regions[i]), clam.region := regions[i]]
+    }
 
     #shell length-to-meat weight conversion coefficients (OQ NEFSC 2004, SC NEFSC 2003)
-    coeff <- data.table::data.table(clam.region = c('SVA',     'DMV',     'SNJ',     'NNJ',     'LI',      'SNE',     'GB'),
-                                    oq.a        = c(-9.04231,  -9.04231,  -9.84718,  -9.84718,  -9.23365,  -9.12428,  -8.96907),
-                                    oq.b        = c( 2.787987,  2.787987,  2.94954,   2.94954,   2.822474,  2.774989,  2.767282),
-                                    sc.a        = c(-7.0583,   -9.48913,  -9.3121,   -9.3121,   -7.9837,   -7.9837,   -8.27443),
-                                    sc.b        = c( 2.3033,    2.860176,  2.863716,  2.863716,  2.5802,    2.5802,    2.654215))
+    coeff <- data.table::data.table(
+      clam.region = c('SVA', 'DMV', 'SNJ', 'NNJ', 'LI', 'SNE', 'GB'),
+      oq.a = c(
+        -9.04231,
+        -9.04231,
+        -9.84718,
+        -9.84718,
+        -9.23365,
+        -9.12428,
+        -8.96907
+      ),
+      oq.b = c(
+        2.787987,
+        2.787987,
+        2.94954,
+        2.94954,
+        2.822474,
+        2.774989,
+        2.767282
+      ),
+      sc.a = c(-7.0583, -9.48913, -9.3121, -9.3121, -7.9837, -7.9837, -8.27443),
+      sc.b = c(2.3033, 2.860176, 2.863716, 2.863716, 2.5802, 2.5802, 2.654215)
+    )
     coeff[, clam.region := as.factor(clam.region)]
     clamdat <- base::merge(clamdat, coeff, by = 'clam.region')
 
     #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
-    clamdat[SVSPP == 403, meatwt := (exp(sc.a) * (LENGTH * 10) ^ sc.b) / 1000]
-    clamdat[SVSPP == 409, meatwt := (exp(oq.a) * (LENGTH * 10) ^ oq.b) / 1000]
+    clamdat[SVSPP == 403, meatwt := (exp(sc.a) * (LENGTH * 10)^sc.b) / 1000]
+    clamdat[SVSPP == 409, meatwt := (exp(oq.a) * (LENGTH * 10)^oq.b) / 1000]
     clamdat[, expmw := meatwt * NUMLEN]
-    clamdat[, stamw := sum(expmw), by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')]
+    clamdat[,
+      stamw := sum(expmw),
+      by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')
+    ]
     clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
     data.table::setnames(clamdat, "stamw", "BIOMASS.MW")
   }
@@ -195,7 +247,17 @@ get_survdat_clam_data <- function(channel,
     clamdat <- tibble::as_tibble(clamdat)
   }
 
-  sql <- list(cruise=cruise.qry,station=station.qry,catch=catch.qry,length=length.qry)
+  sql <- list(
+    cruise = cruise.qry,
+    station = station.qry,
+    catch = catch.qry,
+    length = length.qry
+  )
 
-  return(list(data=clamdat,sql=sql,pullDate=date(),functionCall = call))
+  return(list(
+    data = clamdat,
+    sql = sql,
+    pullDate = date(),
+    functionCall = call
+  ))
 }

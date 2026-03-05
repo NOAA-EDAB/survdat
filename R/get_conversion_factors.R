@@ -30,20 +30,19 @@
 #'
 #' @export
 
-get_conversion_factors <- function(channel){
-
+get_conversion_factors <- function(channel) {
   # creates the sql based on user input
-  sqlStatement <-   convert.qry <- "select * from SVDBS.SURVAN_CONVERSION_FACTORS"
+  sqlStatement <- convert.qry <- "select * from SVDBS.SURVAN_CONVERSION_FACTORS"
 
-  query <- DBI::dbGetQuery(channel,sqlStatement)
+  query <- DBI::dbGetQuery(channel, sqlStatement)
 
   # get column names
   sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'SURVAN_CONVERSION_FACTORS' and owner='SVDBS'"
-  colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
+  colNames <- t(DBI::dbGetQuery(channel, sqlcolName))
 
-  return (list(data=dplyr::as_tibble(query),sql=sqlStatement, colNames=colNames))
-
+  return(list(
+    data = dplyr::as_tibble(query),
+    sql = sqlStatement,
+    colNames = colNames
+  ))
 }
-
-
-

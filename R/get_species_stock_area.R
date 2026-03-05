@@ -53,24 +53,42 @@
 #' @export
 #'
 #
-get_species_stock_area <- function(channel, species = "all", stock_name = NULL){
-
-  nameType <-  "COMMON_NAME"
+get_species_stock_area <- function(
+  channel,
+  species = "all",
+  stock_name = NULL
+) {
+  nameType <- "COMMON_NAME"
   # creates the sql based on user input
-  sqlStatement <- dbutils::create_sql(species,fieldName="species_itis",fieldName2=nameType,dataType="%06d",defaultSqlStatement="select * from STOCKEFF.V_SV_STOCK_RECENT_STRATA_O")
+  sqlStatement <- dbutils::create_sql(
+    species,
+    fieldName = "species_itis",
+    fieldName2 = nameType,
+    dataType = "%06d",
+    defaultSqlStatement = "select * from STOCKEFF.V_SV_STOCK_RECENT_STRATA_O"
+  )
 
   # strip ; and add additional content
-  sqlStatement <- sub(";","",sqlStatement)
+  sqlStatement <- sub(";", "", sqlStatement)
   if (!is.null(stock_name)) {
     stock_name <- toupper(stock_name)
-    sqlStatement <- paste0(sqlStatement, " and STOCK_ABBREV = '", stock_name, "'")
+    sqlStatement <- paste0(
+      sqlStatement,
+      " and STOCK_ABBREV = '",
+      stock_name,
+      "'"
+    )
   }
 
-  query <- DBI::dbGetQuery(channel,sqlStatement)
+  query <- DBI::dbGetQuery(channel, sqlStatement)
 
   # get column names
   sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'V_CF_STOCK_RECENT_STAT_AREA_O' and owner='STOCKEFF'"
-  colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
+  colNames <- t(DBI::dbGetQuery(channel, sqlcolName))
 
-  return (list(data=dplyr::as_tibble(query),sql=sqlStatement, colNames=colNames))
+  return(list(
+    data = dplyr::as_tibble(query),
+    sql = sqlStatement,
+    colNames = colNames
+  ))
 }
