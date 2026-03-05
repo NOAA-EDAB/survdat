@@ -1,0 +1,199 @@
+# Pulling Data
+
+``` r
+library(survdat)
+library(DT)
+```
+
+## Basic data pull
+
+Pull tow level data from the Bottom Trawl Survey (purpose_code = 10)
+
+Species abundance (EXPCATCHNUM), biomass (EXPCATCHWT), and sex
+(CATCHSEX), for each spring and fall cruise (for user specified years)
+for all representative tows. In addition non biological data is
+retrieved specific to the tow location: latitude (DECDEG_BEGLAT),
+longitude (DECDEG_BEGLON), depth (AVGDEPTH), surface and bottom
+temperature (SURFTEMP, BOTTEMP) and salinity (SURSALIN, BOTSALIN)
+
+A representative tow is a tow with:
+
+- SHG code \<= 136 for tows on cruises on or before 2009 and
+- TOGA code \<= 1324 for tows on cruises after 2009
+
+``` r
+survdat::get_survdat_data(channel, 
+                          getLengths = F, 
+                          conversion.factor = F)
+```
+
+The list of cruises is retrieved for user specified years
+
+``` sql
+select unique year, cruise6, svvessel, season
+from svdbs.mstr_cruise
+where purpose_code = 10
+and year in <userYears>
+and season = 'FALL'  or season = 'SPRING'
+order by year, cruise6
+```
+
+The station data is retrieved for the cruises (pulled above) and the
+tables joined
+
+``` sql
+select unique cruise6, svvessel, station, stratum, tow, decdeg_beglat as lat, decdeg_beglon as lon, begin_est_towdate as est_towdate, avgdepth as depth, surftemp, surfsalin, bottemp, botsalin
+from svdbs.UNION_FSCS_SVSTA
+where cruise6 in <cruiseData>
+and (SHG <= 136 and cruise6 <= 200900)
+or (TOGA <= 1324 and cruise6 > 200900)
+order by cruise6, station)
+```
+
+The species data are retrieved for the cruises (pulled above) and joined
+to the cruise/station data table
+
+``` sql
+select cruise6, station, stratum, tow, svspp, catchsex,expcatchnum as abundance, expcatchwt as biomass
+from svdbs.UNION_FSCS_SVCAT
+where cruise6 in <cruiseData>
+and stratum not like 'YT%'
+order by cruise6, station, svspp
+```
+
+The resulting data frame will look like this:
+
+## Length data
+
+Individual lengths (to the nearest centimeter) of species sampled (in
+addition to the [base
+pull](https://noaa-edab.github.io/survdat/articles/base) data). Two
+additional fields are retrieved: length (LENGTH) AND numlen (EXPNUMLEN),
+the number of fish sampled at the given length. Use the argument
+`getLengths = T`
+
+``` r
+survdat::get_survdat_data(channel, 
+                          getLengths = T, 
+                          conversion.factor = F)
+```
+
+The length data are retrieved for ALL species for the user specified
+years and joined with the base pull data
+
+``` sql
+select cruise6, station, stratum, tow, svspp, catchsex, length, expnumlen as numlen
+from svdbs.UNION_FSCS_SVLEN
+where cruise6 in <cuiseData>
+and stratum not like 'YT%'
+order by cruise6, station, svspp, length
+```
+
+The resulting data frame has many more rows of data than the base pull.
+The tow level data for each species is replicated as many times as there
+are different lengths sampled
+
+The resulting data frame will look like this:
+
+## Length weight conversions
+
+Of the fish that have their length measured, only a subset of those have
+their weight measured. However based on a paper by Wigley et al
+length-weight coefficients have been calculated (for each species by
+season and sex) and reside in the table LENGTH_WEIGHT_COEFFICIENTS.
+These coefficients can be applied to the observed lengths to obtain
+estimates of weight. Use the argument `getWeightLength = T`.
+
+``` r
+survdat::get_survdat_data(channel, 
+                          getLengths = T,
+                          getWeightLength = T,
+                          conversion.factor = F)
+```
+
+The length-weight coefficients are pulled and are applied to the [length
+data](#lengths). Two additional columns are included: Predicted weight
+(PREDWT) and expanded weight (WGTLEN). WGTLEN is the predicted weight \*
+number of fish observed at the specified length.
+
+``` sql
+select svspp, sex, svlwexp, svlwcoeff, svlwexp_spring, svlwcoeff_spring, svlwexp_fall, svlwcoeff_fall, svlwexp_winter, svlwcoeff_winter, svlwexp_summer, svlwcoeff_summer
+from svdbs.length_weight_coefficients
+```
+
+**Note: The predicted weight is incorrect. The variance of the
+underlying fit is required. The reported predicted weight in an
+underestimate**
+
+The resulting data frame will look like this:
+
+## Biological data
+
+To pull additional biological data use the argument `getBio = T`
+
+``` r
+survdat::get_survdat_data(channel, 
+                          getLengths = T,
+                          getWeightLength = T,
+                          conversion.factor = F,
+                          getBio = T)
+```
+
+Additional fields are pulled, namely:
+
+- INDID - Individual fish identity.
+- INDWT - Individual weight of fish (Kg)
+- SEX - Sex of fish
+- MATURITY - Stage of maturation
+- AGE - Age of fish (yrs)
+- STOM_VOLUME - Volume of stomach (cc)
+- STOM_WGT - Weight of stomach (g)
+
+The biological data is retrieved and joined with the [length](#lengths)
+data
+
+``` sql
+select cruise6, station, stratum, svspp, catchsex, length, indid, indwt, sex, maturity, age, stom_volume, stom_wgt
+from svdbs.UNION_FSCS_SVBIO
+where cruise6 in <cruiseData>
+```
+
+The resulting data frame will look like this:
+
+**Species that have lengths but no additional “biological” data are
+dropped from the returned data frame**
+
+## Calibration factors
+
+Since the bottom trawl survey began there have been modifications to the
+sampling strategy. For example:
+
+- Door effects - In 1985 a new set of doors were introduced
+- Gear effects - From 1973 - 1981, in the spring survey, a different net
+  was used
+- Vessel effects - There have been several changes in ships used
+  (Delaware II, Albatross IV, Henry Bigelow (2009))
+
+Experiments to measure the relative catchability of two or more
+vessel-gear combinations are necessary to rigorously combine their
+information in analyses such as stock assessments. Without accounting
+for these effects the resulting abundance and biomass time series could
+exhibit shifts related to these effects. To help mitigate this
+conversion factors have been calculated to create a continuous time
+series. These conversion factors reside in the table
+SURVAN_CONVERSION_FACTORS and can be applied to the pulled data.
+
+using the argument `conversion.factor = T` will apply these conversion
+factors
+
+``` r
+survdat::get_survdat_data(channel, 
+                          getLengths = T,
+                          getWeightLength = T,
+                          conversion.factor = T,
+                          getBio = T)
+```
+
+The resulting data frame will look like this:
+
+**NOTE: The application of these conversion factors requires a review**
