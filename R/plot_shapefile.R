@@ -23,26 +23,24 @@
 #'
 #'@export
 
-plot_shapefile <- function(polygons,crs=4269, filterPolygons=NULL) {
-
+plot_shapefile <- function(polygons, crs = 4269, filterPolygons = NULL) {
   # transform crs
-  polygons <- sf::st_transform(polygons,crs)
-
+  polygons <- sf::st_transform(polygons, crs)
 
   if (is.null(filterPolygons)) {
     p <- ggplot2::ggplot() +
-      ggplot2::geom_sf(data=polygons,color = "Grey",alpha = .5)
-
+      ggplot2::geom_sf(data = polygons, color = "Grey", alpha = .5)
   } else {
-
     # plot shapefile
     p <- ggplot2::ggplot() +
-      ggplot2::geom_sf(data=polygons,color = "Grey",alpha = .5) +
-      ggplot2::geom_sf(data=polygons %>% dplyr::filter(STRATA %in% filterPolygons),
-                       color = "blue",alpha = .5)
+      ggplot2::geom_sf(data = polygons, color = "Grey", alpha = .5) +
+      ggplot2::geom_sf(
+        data = polygons %>% dplyr::filter(STRATA %in% filterPolygons),
+        color = "blue",
+        alpha = .5
+      )
   }
 
   print(p)
   #return(p)
-
 }

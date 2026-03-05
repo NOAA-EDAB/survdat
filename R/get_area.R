@@ -30,9 +30,7 @@
 #'
 #'@export
 
-
-get_area <- function(areaPolygon, areaDescription){
-
+get_area <- function(areaPolygon, areaDescription) {
   # Find area of polygons based on a lambert conformal conic coordinate reference
   # system
   crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
@@ -40,13 +38,13 @@ get_area <- function(areaPolygon, areaDescription){
   # turn off spherical geometry. Causes an issue in st_area function
   sf::sf_use_s2(FALSE)
 
-  Area <- units::set_units(sf::st_area(areaPolygon, crs),km^2)
+  Area <- units::set_units(sf::st_area(areaPolygon, crs), km^2)
 
   strata <- areaPolygon %>%
     as.data.frame() %>%
     dplyr::select(areaDescription) %>%
     dplyr::rename(STRATUM = areaDescription) %>%
-    cbind(.,Area) %>%
+    cbind(., Area) %>%
     dplyr::group_by(STRATUM) %>%
     dplyr::summarise(sum(Area), .groups = 'keep') %>%
     dplyr::rename(Area = 'sum(Area)') %>%

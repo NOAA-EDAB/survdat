@@ -11,8 +11,8 @@ capture_function_call <- function(...) {
   call <- evalq(match.call(expand.dots = FALSE), parent.frame(1))
   formals <- evalq(formals(), parent.frame(1))
 
-  for(i in setdiff(names(formals), names(call))){
-    call[i] <- list( formals[[i]] )
+  for (i in setdiff(names(formals), names(call))) {
+    call[i] <- list(formals[[i]])
   }
 
   return(match.call(sys.function(sys.parent()), call))

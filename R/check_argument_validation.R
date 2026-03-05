@@ -6,22 +6,23 @@
 #' @noRd
 
 # We can either create error messages (like below) or fix argument specs
-check_argument_validation <- function(getLengths,getBio,getWeightLength) {
-
+check_argument_validation <- function(getLengths, getBio, getWeightLength) {
   if (getWeightLength) {
-    if(!getLengths) {
+    if (!getLengths) {
       # Weight at Length Data -----------------------------------------------------
-      stop("Can not calculate weight at length without lengths...
-           Set getLengths = TRUE.")
+      stop(
+        "Can not calculate weight at length without lengths...
+           Set getLengths = TRUE."
+      )
     }
   }
 
   if (getBio) {
-    if(!getLengths) {
-      stop("Can not obtain individual fish biological data without lengths ...
-           Set getLengths = TRUE")
+    if (!getLengths) {
+      stop(
+        "Can not obtain individual fish biological data without lengths ...
+           Set getLengths = TRUE"
+      )
     }
   }
-
-
 }

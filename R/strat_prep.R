@@ -28,30 +28,36 @@
 #'
 #' @noRd
 
-
-strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
-                        areaDescription = "STRATA", filterByArea = "all",
-                        filterBySeason = "all") {
-
+strat_prep <- function(
+  surveyData,
+  areaPolygon = "NEFSC strata",
+  areaDescription = "STRATA",
+  filterByArea = "all",
+  filterBySeason = "all"
+) {
   # Break link to original data set so no changes are made to original
   surveyData <- data.table::copy(surveyData)
 
   # Calculate the proportional areas
   # Use original stratified design and built-in shapefile or flag for post
   # stratification
-  if(!is(areaPolygon, 'sf')){
-    if(areaPolygon == 'NEFSC strata'){
-      areaPolygon <- sf::st_read(dsn = system.file("extdata", "strata.shp",
-                                                   package = "survdat"), quiet = T)
+  if (!is(areaPolygon, 'sf')) {
+    if (areaPolygon == 'NEFSC strata') {
+      areaPolygon <- sf::st_read(
+        dsn = system.file("extdata", "strata.shp", package = "survdat"),
+        quiet = T
+      )
       poststratFlag <- F
     }
-  } else poststratFlag <- T
+  } else {
+    poststratFlag <- T
+  }
 
   # Calculate area of the polygons
   polygonArea <- survdat::get_area(areaPolygon, areaDescription)
 
   # post stratify if necessary
-  if(poststratFlag){
+  if (poststratFlag) {
     message("Post stratifying ...")
     surveyData <- survdat:::post_strat(surveyData, areaPolygon, areaDescription)
   } else {
@@ -61,42 +67,48 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
   }
 
   #FilterData
-  if(filterByArea[1] != "all" | filterBySeason[1] != "all"){
+  if (filterByArea[1] != "all" | filterBySeason[1] != "all") {
     message("Filtering data ...")
     seasonFlag <- T
   }
 
-  if(filterBySeason[1] == 'all'){
+  if (filterBySeason[1] == 'all') {
     filterBySeason <- unique(surveyData[, SEASON])
     seasonFlag <- F
   }
 
   # check to create all areas
-  if (length(filterByArea)==1) {
+  if (length(filterByArea) == 1) {
     if (filterByArea == "all") {
       filterByArea <- areaPolygon %>%
         sf::st_drop_geometry() %>%
         dplyr::select(areaDescription) %>%
         unlist() %>%
         unique()
-      if (is.factor(filterByArea)){ # convert to levels
+      if (is.factor(filterByArea)) {
+        # convert to levels
         filterByArea <- levels(filterByArea)
       }
     }
   }
   print(filterByArea)
 
-  filteredData <- surveyData[SEASON %in% filterBySeason & get(areaDescription) %in% filterByArea, ]
+  filteredData <- surveyData[
+    SEASON %in% filterBySeason & get(areaDescription) %in% filterByArea,
+  ]
 
   #Change to generic names for calculations
   data.table::setnames(filteredData, areaDescription, 'STRAT')
   data.table::setnames(polygonArea, c("STRATUM", "Area"), c('STRAT', 'S.AREA'))
 
   # if not using original stratification need to preserve unique key
-  if(!is.null(areaPolygon)){
+  if (!is.null(areaPolygon)) {
     filteredData[, STATION2 := as.numeric(paste0(STRATUM, STATION))]
-    data.table::setnames(filteredData, c('STATION', 'STATION2'),
-                         c('ORIGSTATION', 'STATION'))
+    data.table::setnames(
+      filteredData,
+      c('STATION', 'STATION2'),
+      c('ORIGSTATION', 'STATION')
+    )
   }
 
   #Station data - Finds list of distinct stations sampled through time
@@ -106,16 +118,18 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
 
   #x %>% dplyr::distinct(YEAR,CRUISE6,STRAT,STATION)
   # Count the number of stations in each year for each Region
-  if(seasonFlag){
+  if (seasonFlag) {
     data.table::setkey(stations, YEAR, CRUISE6, STRAT)
-  } else { data.table::setkey(stations, YEAR, STRAT)}
+  } else {
+    data.table::setkey(stations, YEAR, STRAT)
+  }
   stations[, ntows := length(STATION), by = key(stations)]
 
   #Merge stations and area
   stations <- base::merge(stations, polygonArea, by = 'STRAT', all.x = T)
 
   #Calculate stratum weight
-  if(seasonFlag){
+  if (seasonFlag) {
     keyoff <- c('YEAR', 'CRUISE6')
   } else {
     keyoff <- 'YEAR'
@@ -127,20 +141,33 @@ strat_prep <- function (surveyData, areaPolygon = "NEFSC strata",
   strat.year[, W.h := as.vector(W.h)] #Drops the units from the area
   strat.year[is.na(W.h), W.h := 0]
   strat.year[, S.AREA := NULL]
-  if(!seasonFlag) strat.year[, CRUISE6 := NULL]
+  if (!seasonFlag) {
+    strat.year[, CRUISE6 := NULL]
+  }
 
   #Merge back
   stations <- merge(stations, strat.year, by = key(stations))
 
   #Merge catch with station data
-  prepData <- merge(filteredData, stations, by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION'))
+  prepData <- merge(
+    filteredData,
+    stations,
+    by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION')
+  )
 
-  data.table::setnames(prepData, c('STRAT', 'S.AREA'),
-           c(areaDescription, "Area"))
+  data.table::setnames(
+    prepData,
+    c('STRAT', 'S.AREA'),
+    c(areaDescription, "Area")
+  )
 
   # Restore original station number if not using the original stratified design
-  if(!is.null(areaPolygon)){
-    data.table::setnames(prepData, c('STATION', 'ORIGSTATION'), c('STATION2', 'STATION'))
+  if (!is.null(areaPolygon)) {
+    data.table::setnames(
+      prepData,
+      c('STATION', 'ORIGSTATION'),
+      c('STATION2', 'STATION')
+    )
     prepData[, STATION2 := NULL]
   }
 

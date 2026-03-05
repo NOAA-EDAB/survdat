@@ -32,63 +32,87 @@
 #'
 #' @noRd
 
-
-strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "all",
-                        mergesexFlag = T, seasonFlag, areaDescription, poststratFlag) {
-
+strat_mean <- function(
+  prepData,
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = T,
+  seasonFlag,
+  areaDescription,
+  poststratFlag
+) {
   stratmeanData <- data.table::copy(prepData)
 
   #Remove length data if present
-  if(length(which(names(stratmeanData) == "LENGTH")) == 1){
-    data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
+  if (length(which(names(stratmeanData) == "LENGTH")) == 1) {
+    data.table::setkey(
+      stratmeanData,
+      CRUISE6,
+      STRATUM,
+      STATION,
+      SVSPP,
+      CATCHSEX
+    )
     stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
     stratmeanData[, c('LENGTH', 'NUMLEN') := NULL]
   }
 
-  data.table::setnames(stratmeanData, c(groupDescription, areaDescription),
-                       c('group', 'strat'))
+  data.table::setnames(
+    stratmeanData,
+    c(groupDescription, areaDescription),
+    c('group', 'strat')
+  )
 
   #Merge sex or keep separate
-  if(mergesexFlag == F) stratmeanData[, group := paste(group, CATCHSEX, sep = '')]
+  if (mergesexFlag == F) {
+    stratmeanData[, group := paste(group, CATCHSEX, sep = '')]
+  }
 
   data.table::setkey(stratmeanData, CRUISE6, strat, STATION, group)
-  stratmeanData[, BIOMASS   := sum(BIOMASS),   by = key(stratmeanData)]
+  stratmeanData[, BIOMASS := sum(BIOMASS), by = key(stratmeanData)]
   stratmeanData[, ABUNDANCE := sum(ABUNDANCE), by = key(stratmeanData)]
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
 
   #Fix Na's
-  stratmeanData[is.na(BIOMASS),   BIOMASS   := 0]
+  stratmeanData[is.na(BIOMASS), BIOMASS := 0]
   stratmeanData[is.na(ABUNDANCE), ABUNDANCE := 0]
 
   #Calculate total number of stations per year
   #Determine if merging year or treating seasons separate
-  if(seasonFlag){
+  if (seasonFlag) {
     keyoff <- c('YEAR', 'SEASON')
   } else {
-      keyoff <- 'YEAR'
-    }
+    keyoff <- 'YEAR'
+  }
   data.table::setkey(stratmeanData, CRUISE6, strat, STATION)
   stations <- unique(stratmeanData, by = key(stratmeanData))
   N <- stations[, length(ntows), by = keyoff]
   data.table::setnames(N, 'V1', 'N')
 
   #Subset data if necessary
-  if(filterByGroup[1] != 'all'){
-    if(mergesexFlag == F) filterByGroup <- c(paste0(filterByGroup, 0),
-                                             paste0(filterByGroup, 1),
-                                             paste0(filterByGroup, 2),
-                                             paste0(filterByGroup, 3))
+  if (filterByGroup[1] != 'all') {
+    if (mergesexFlag == F) {
+      filterByGroup <- c(
+        paste0(filterByGroup, 0),
+        paste0(filterByGroup, 1),
+        paste0(filterByGroup, 2),
+        paste0(filterByGroup, 3)
+      )
+    }
     stratmeanData <- stratmeanData[group %in% filterByGroup, ]
   }
 
   #Calculate weight per tow and number per tow
   data.table::setkeyv(stratmeanData, c('group', 'strat', keyoff))
 
-  stratmeanData[, biomass.tow   := sum(BIOMASS)   / ntows, by = key(stratmeanData)]
-  stratmeanData[, abundance.tow := sum(ABUNDANCE) / ntows, by = key(stratmeanData)]
+  stratmeanData[, biomass.tow := sum(BIOMASS) / ntows, by = key(stratmeanData)]
+  stratmeanData[,
+    abundance.tow := sum(ABUNDANCE) / ntows,
+    by = key(stratmeanData)
+  ]
 
   #Calculated stratified means
-  stratmeanData[, weighted.biomass   := biomass.tow   * W.h]
+  stratmeanData[, weighted.biomass := biomass.tow * W.h]
   stratmeanData[, weighted.abundance := abundance.tow * W.h]
 
   #Variance - need to account for zero catch
@@ -96,12 +120,18 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
 
   stratmeanData[, zero.var.b := n.zero * (0 - biomass.tow)^2]
   stratmeanData[, vari.b := (BIOMASS - biomass.tow)^2]
-  stratmeanData[, Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1), by = key(stratmeanData)]
+  stratmeanData[,
+    Sh.2.b := (zero.var.b + sum(vari.b)) / (ntows - 1),
+    by = key(stratmeanData)
+  ]
   stratmeanData[is.nan(Sh.2.b), Sh.2.b := 0]
 
   stratmeanData[, zero.var.a := n.zero * (0 - abundance.tow)^2]
   stratmeanData[, vari.a := (ABUNDANCE - abundance.tow)^2]
-  stratmeanData[, Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1), by = key(stratmeanData)]
+  stratmeanData[,
+    Sh.2.a := (zero.var.a + sum(vari.a)) / (ntows - 1),
+    by = key(stratmeanData)
+  ]
   stratmeanData[is.nan(Sh.2.a), Sh.2.a := 0]
 
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
@@ -111,42 +141,73 @@ strat_mean <- function (prepData, groupDescription = "SVSPP", filterByGroup = "a
   #Stratified mean
   data.table::setkeyv(stratmeanData, c('group', keyoff))
 
-  stratmeanData[, strat.biomass := sum(weighted.biomass),   by = key(stratmeanData)]
-  stratmeanData[, strat.abund   := sum(weighted.abundance), by = key(stratmeanData)]
+  stratmeanData[,
+    strat.biomass := sum(weighted.biomass),
+    by = key(stratmeanData)
+  ]
+  stratmeanData[,
+    strat.abund := sum(weighted.abundance),
+    by = key(stratmeanData)
+  ]
 
   #Stratified variance
-  if(poststratFlag == F){
-    stratmeanData[, biomass.var := sum(((W.h^2) * Sh.2.b) / ntows), by = key(stratmeanData)]
-    stratmeanData[, abund.var   := sum(((W.h^2) * Sh.2.a) / ntows), by = key(stratmeanData)]
+  if (poststratFlag == F) {
+    stratmeanData[,
+      biomass.var := sum(((W.h^2) * Sh.2.b) / ntows),
+      by = key(stratmeanData)
+    ]
+    stratmeanData[,
+      abund.var := sum(((W.h^2) * Sh.2.a) / ntows),
+      by = key(stratmeanData)
+    ]
   }
 
-  if(poststratFlag == T){
-    stratmeanData[, biomass.var := sum(Sh.2.b * W.h) / N + sum((1 - W.h) * Sh.2.b) / N^2, by = key(stratmeanData)]
-    stratmeanData[, abund.var   := sum(Sh.2.a * W.h) / N + sum((1 - W.h) * Sh.2.a) / N^2, by = key(stratmeanData)]
-
+  if (poststratFlag == T) {
+    stratmeanData[,
+      biomass.var := sum(Sh.2.b * W.h) / N + sum((1 - W.h) * Sh.2.b) / N^2,
+      by = key(stratmeanData)
+    ]
+    stratmeanData[,
+      abund.var := sum(Sh.2.a * W.h) / N + sum((1 - W.h) * Sh.2.a) / N^2,
+      by = key(stratmeanData)
+    ]
   }
 
   #standard error of the means
   stratmeanData[, biomass.SE := sqrt(biomass.var), by = key(stratmeanData)]
-  stratmeanData[, abund.SE   := sqrt(abund.var),   by = key(stratmeanData)]
+  stratmeanData[, abund.SE := sqrt(abund.var), by = key(stratmeanData)]
 
   #Delete extra rows/columns
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
-  stratmeanData <- stratmeanData[, list(YEAR, SEASON, group, CATCHSEX, N, strat.biomass,
-                                        biomass.var, biomass.SE, strat.abund,
-                                        abund.var, abund.SE)]
-  if(mergesexFlag == T) stratmeanData[, CATCHSEX := NULL]
+  stratmeanData <- stratmeanData[, list(
+    YEAR,
+    SEASON,
+    group,
+    CATCHSEX,
+    N,
+    strat.biomass,
+    biomass.var,
+    biomass.SE,
+    strat.abund,
+    abund.var,
+    abund.SE
+  )]
+  if (mergesexFlag == T) {
+    stratmeanData[, CATCHSEX := NULL]
+  }
 
-  if(mergesexFlag == F){
+  if (mergesexFlag == F) {
     stratmeanData[, glen := nchar(group)]
-    for(i in 2:4){
+    for (i in 2:4) {
       stratmeanData[glen == i, group := as.numeric(substr(group, 1, i - 1))]
     }
     stratmeanData[, glen := NULL]
     data.table::setkey(stratmeanData, YEAR, SVSPP, CATCHSEX)
   }
 
-  if(seasonFlag == F) stratmeanData[, SEASON := 'ALL']
+  if (seasonFlag == F) {
+    stratmeanData[, SEASON := 'ALL']
+  }
 
   data.table::setnames(stratmeanData, 'group', groupDescription)
 
