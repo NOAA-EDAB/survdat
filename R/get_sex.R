@@ -30,20 +30,19 @@
 #'
 #' @export
 
-get_sex <- function(channel){
-
+get_sex <- function(channel) {
   # creates the sql based on user input
   sqlStatement <- "select sex, sex_description from SVDBS.SEX_CODES"
 
-  query <- DBI::dbGetQuery(channel,sqlStatement)
+  query <- DBI::dbGetQuery(channel, sqlStatement)
 
   # get column names
   sqlcolName <- "select COLUMN_NAME from ALL_TAB_COLUMNS where TABLE_NAME = 'SEX_CODES' and owner='SVDBS'"
-  colNames <- t(DBI::dbGetQuery(channel,sqlcolName))
+  colNames <- t(DBI::dbGetQuery(channel, sqlcolName))
 
-  return (list(data=dplyr::as_tibble(query),sql=sqlStatement, colNames=colNames))
-
+  return(list(
+    data = dplyr::as_tibble(query),
+    sql = sqlStatement,
+    colNames = colNames
+  ))
 }
-
-
-

@@ -26,21 +26,17 @@
 #'}
 #'@export
 
-plot_data_area <- function(points,polygons,crs=4269) {
-
+plot_data_area <- function(points, polygons, crs = 4269) {
   message("Please be patient. This may take a minute (or two) ...")
   # convert data points to sf
-  points <- sf::st_as_sf(points,coords=c("LON","LAT")) %>%
-    sf::st_set_crs(.,crs) %>%
-    sf::st_transform(.,crs)
+  points <- sf::st_as_sf(points, coords = c("LON", "LAT")) %>%
+    sf::st_set_crs(., crs) %>%
+    sf::st_transform(., crs)
 
   # Make sure both point and polygons are on the same projection
-  polygons <- sf::st_transform(polygons,crs)
-
+  polygons <- sf::st_transform(polygons, crs)
 
   ggplot2::ggplot() +
-    ggplot2::geom_sf(data=points,size=1,alpha=0.2) +
-    ggplot2::geom_sf(data=polygons,color = "Blue",alpha = .5)
-
-
+    ggplot2::geom_sf(data = points, size = 1, alpha = 0.2) +
+    ggplot2::geom_sf(data = polygons, color = "Blue", alpha = .5)
 }

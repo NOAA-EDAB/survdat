@@ -19,9 +19,7 @@
 #'
 #' @noRd
 
-
-post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
-
+post_strat <- function(surveyData, areaPolygon, areaDescription, na.keep = F) {
   # transform Regional Shape file using lambert conformal conic coordinate ref system
   crs <- "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
 
@@ -30,12 +28,11 @@ post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
     sf::st_transform(., crs)
 
   # find unique stations and transform to required crs
-    stations <- surveyData %>%
+  stations <- surveyData %>%
     dplyr::select(CRUISE6, STRATUM, STATION, LAT, LON) %>%
     dplyr::distinct() %>%
-    sf::st_as_sf(., coords = c("LON","LAT"), crs=4326) %>%
+    sf::st_as_sf(., coords = c("LON", "LAT"), crs = 4326) %>%
     sf::st_transform(., crs)
-
 
   # Intersect the stations with the polygon
   # Assigns stations with polygons
@@ -45,19 +42,20 @@ post_strat <- function (surveyData, areaPolygon, areaDescription, na.keep = F) {
     dplyr::arrange(CRUISE6, STRATUM, STATION)
 
   # Join survey data with stations (which now are assigned to an area based on the shape file)
-  master <- base::merge(surveyData, station_area,
-                        by = c("CRUISE6","STRATUM","STATION")) %>%
+  master <- base::merge(
+    surveyData,
+    station_area,
+    by = c("CRUISE6", "STRATUM", "STATION")
+  ) %>%
     dplyr::rename(!!areaDescription := areaDescription)
 
   # check to see if we want to keep points that fall outside of all o fthe polygons found in the shape file
-  if (!(na.keep)) { # removes all points that fall outside of the areas defined by the polygons in stratum
+  if (!(na.keep)) {
+    # removes all points that fall outside of the areas defined by the polygons in stratum
     master <- master %>%
       dplyr::filter(!is.na(get(areaDescription))) %>%
       data.table::as.data.table()
   }
 
-
   return(master)
-
 }
-
