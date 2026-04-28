@@ -19,7 +19,8 @@ temperature (SURFTEMP, BOTTEMP) and salinity (SURSALIN, BOTSALIN)
 A representative tow is a tow with:
 
 - SHG code \<= 136 for tows on cruises on or before 2009 and
-- TOGA code \<= 1324 for tows on cruises after 2009
+- TOGA code: T (type) \<= 1 and O (operation) \<= 3 and G (gear) \<= 2
+  for tows on cruises after 2009
 
 ``` r
 survdat::get_survdat_data(channel, 
@@ -46,7 +47,7 @@ select unique cruise6, svvessel, station, stratum, tow, decdeg_beglat as lat, de
 from svdbs.UNION_FSCS_SVSTA
 where cruise6 in <cruiseData>
 and (SHG <= 136 and cruise6 <= 200900)
-or (TOGA <= 1324 and cruise6 > 200900)
+or (type_code <= 1 and operation_code <= 3 and gear_code <= 2 and cruise6 > 200900)
 order by cruise6, station)
 ```
 

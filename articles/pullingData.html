@@ -98,7 +98,8 @@ temperature (SURFTEMP, BOTTEMP) and salinity (SURSALIN, BOTSALIN)</p>
 <p>A representative tow is a tow with:</p>
 <ul>
 <li>SHG code &lt;= 136 for tows on cruises on or before 2009 and</li>
-<li>TOGA code &lt;= 1324 for tows on cruises after 2009</li>
+<li>TOGA code: T (type) &lt;= 1 and O (operation) &lt;= 3 and G (gear)
+&lt;= 2 for tows on cruises after 2009</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">survdat</span><span class="fu">::</span><span class="fu"><a href="../reference/get_survdat_data.html">get_survdat_data</a></span><span class="op">(</span><span class="va">channel</span>, </span>
@@ -117,7 +118,7 @@ tables joined</p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="kw">from</span> svdbs.UNION_FSCS_SVSTA</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="kw">where</span> cruise6 <span class="kw">in</span> <span class="op">&lt;</span>cruiseData<span class="op">&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="kw">and</span> (SHG <span class="op">&lt;=</span> <span class="dv">136</span> <span class="kw">and</span> cruise6 <span class="op">&lt;=</span> <span class="dv">200900</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="kw">or</span> (TOGA <span class="op">&lt;=</span> <span class="dv">1324</span> <span class="kw">and</span> cruise6 <span class="op">&gt;</span> <span class="dv">200900</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="kw">or</span> (type_code <span class="op">&lt;=</span> <span class="dv">1</span> <span class="kw">and</span> operation_code <span class="op">&lt;=</span> <span class="dv">3</span> <span class="kw">and</span> gear_code <span class="op">&lt;=</span> <span class="dv">2</span> <span class="kw">and</span> cruise6 <span class="op">&gt;</span> <span class="dv">200900</span>)</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> cruise6, station)</span></code></pre></div>
 <p>The species data are retrieved for the cruises (pulled above) and
 joined to the cruise/station data table</p>
