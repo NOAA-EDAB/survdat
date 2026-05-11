@@ -5,6 +5,7 @@
 <!-- badges: start -->
 [![gh-pages](https://github.com/NOAA-EDAB/survdat/workflows/gh-pages/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
 [![R-CMD-check](https://github.com/NOAA-EDAB/survdat/actions/workflows/check-standard.yaml/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions/workflows/check-standard.yaml) [![gitleaks](https://github.com/NOAA-EDAB/survdat/workflows/gitleaks/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions)
+[![format-check.yaml](https://github.com/NOAA-EDAB/survdat/actions/workflows/format-check.yml/badge.svg)](https://github.com/NOAA-EDAB/survdat/actions/workflows/format-check.yml)
 <!-- badges: end -->
 ---
 
