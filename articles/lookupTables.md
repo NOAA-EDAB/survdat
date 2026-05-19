@@ -1,6 +1,7 @@
 # Lookup tables
 
 ``` r
+
 library(survdat)
 ```
 

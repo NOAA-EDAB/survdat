@@ -56,6 +56,7 @@ columns `ntows` and `W.h` to the data set. The number of tows (`ntows`)
 is simply the length of unique station records per stratum:
 
 ``` r
+
 # Count the number of stations in each year for each Region
   data.table::setkey(stations, YEAR, STRAT)
   stations[, ntows := length(STATION), by = key(stations)]
@@ -67,9 +68,14 @@ Lambert Conformal Conic projection. The `get_area` function creates a
 list of strata and their corresponding areas (A) which `strat_prep` uses
 to calculate the relative weight (W) of each strata h as:
 
-$$\begin{array}{r}
-{W_{h} = \frac{A_{h}}{\sum A_{h}}}
-\end{array}$$
+``` math
+\begin{equation}
+    \label{PropArea}
+    \begin{split}
+    W_h = \frac{A_h}{\sum{A_h}}
+\end{split}
+\end{equation}
+```
 
 After counting the number of tows and calculating the relative weight of
 each strata, the resulting `prepData` is then passed to the `strat_mean`
@@ -89,6 +95,7 @@ The first few actions are straightforward. Length data is removed to
 ensure each catch is accounted for once.
 
 ``` r
+
 #Remove length data if present
   data.table::setkey(stratmeanData, CRUISE6, STRATUM, STATION, SVSPP, CATCHSEX)
   stratmeanData <- unique(stratmeanData, by = key(stratmeanData))
@@ -102,6 +109,7 @@ species are kept separate by changing their group designation to a
 concatenation of their group name and catch sex.
 
 ``` r
+
 #Merge sex or keep separate
   if(mergesexFlag == F) stratmeanData[, group := paste(group, CATCHSEX, sep = '')]
 
@@ -115,6 +123,7 @@ The total number of tows per year is the sum of `ntows` for all of the
 strata sampled for a given year.
 
 ``` r
+
 #Calculate total number of stations per year
   data.table::setkey(stratmeanData, strat, YEAR)
   N <- unique(stratmeanData, by = key(stratmeanData))
@@ -129,39 +138,70 @@ argument.
 
 Finally, the stratified mean biomass is calculated as:
 
-$$\bar{B} = \sum\limits_{h = 1}^{L}{W_{h}\bar{B_{h}}}$$
+``` math
+\begin{equation}
+    \label{Stratifed}
+    \bar{B} = \sum_{h = 1}^{L}{W_h\bar{B_h}}
+\end{equation}
+```
 
-where $\bar{B}$ is the stratified mean biomass, $W_{h}$ and
-$\bar{B_{h}}$ the relative weight and mean biomass from stratum $h$, and
-$L$ the total number of strata. $\bar{B_{h}}$ is calculated as:
+where $`\bar{B}`$ is the stratified mean biomass, $`W_h`$ and
+$`\bar{B_h}`$ the relative weight and mean biomass from stratum $`h`$,
+and $`L`$ the total number of strata. $`\bar{B_h}`$ is calculated as:
 
-$$\bar{B_{h}} = \frac{\sum\limits_{i = 1}^{n}B_{i}}{n_{h}}$$
+``` math
+\begin{equation}
+    \label{mean biomass}
+    \bar{B_h} = \frac{\sum_{i = 1}^n{B_i}}{n_h}
+\end{equation}
+```
 
-where $B_{i}$ is the biomass at station $i$ and $n_{h}$ the number of
-stations in stratum $h$.
+where $`B_i`$ is the biomass at station $`i`$ and $`n_h`$ the number of
+stations in stratum $`h`$.
 
 Additionally, variance is calculated as:
 
-$$s_{\bar{B}}^{2} = \sum\limits_{h = 1}^{L}\frac{W_{h}^{2}s_{h}^{2}}{n_{h}}$$
+``` math
+\begin{equation}
+    \label{stratified variance}
+    s_{\bar{B}}^2 = \sum_{h = 1}^L{\frac{W_{h}^{2} s_{h}^{2}}{n_{h}}}
+\end{equation}
+```
 
-where $s_{\bar{B}}^{2}$ is the variance of the stratified mean biomass
-and $s_{h}^{2}$ the variance of the mean for stratum $h$. $s_{h}^{2}$ is
+where $`s_{\bar{B}}^2`$ is the variance of the stratified mean biomass
+and $`s_h^2`$ the variance of the mean for stratum $`h`$. $`s_h^2`$ is
 calculated as:
 
-$$s_{h}^{2} = \frac{\left( B_{i} - \bar{B_{h}} \right)^{2}}{n_{h} - 1}$$
+``` math
+\begin{equation}
+    \label{strata variance}
+    s_h^2 = \frac{{(B_i - \bar{B_h})}^2}{n_h - 1}
+\end{equation}
+```
 
 If the `poststratFlag` was set to *TRUE* because a different
 stratification was used rather than the survey design, the variance
 calculation becomes:
 
-$$s_{\bar{B}}^{2} = \frac{\sum\limits_{h = 1}^{L}{s_{h}^{2}W_{h}}}{N} + \sum\limits_{h = 1}^{L}\frac{\left( 1 - W_{h} \right)s_{h}^{2}}{N^{2}}$$
+``` math
+\begin{equation}
+    \label{penalty variance}
+    s_{\bar{B}}^2 = \frac{\sum_{h = 1}^L{s_{h}^{2} W_h}}{N} + 
+                    \sum_{h = 1}^L{\frac{(1 - W_h)s_h^2}{N^2}}
+\end{equation}
+```
 
-where $N$ is the total number of stations for the year.
+where $`N`$ is the total number of stations for the year.
 
 The final calculation for the `calc_stratified_mean` function is the
 standard error of the mean which is:
 
-$$s_{\bar{B}} = \sqrt{s_{\bar{B}}^{2}}$$
+``` math
+\begin{equation}
+    \label{standard error}
+    s_{\bar{B}} = \sqrt{s_{\bar{B}}^2}
+\end{equation}
+```
 
 Similar calculations are carried out for abundance with numbers
 replacing biomass in the equations above.
@@ -175,6 +215,6 @@ will melt the table down so that each year/group combo will now have a
 seperate row for stratified mean biomass, stratified mean abundance,
 variance of the stratified mean biomass, and variance of the stratified
 mean abundance. The tidy data will also append a units column to the
-data set. The units for the stratified mean biomass is $kgtow^{-}1$
-while the stratified mean abundance is $numberstow^{-}1$. Note that the
+data set. The units for the stratified mean biomass is $`kg tow^-1`$
+while the stratified mean abundance is $`numbers tow^-1`$. Note that the
 tidy data set does not include the standard errors.

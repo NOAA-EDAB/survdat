@@ -1,6 +1,7 @@
 # Survey Design
 
 ``` r
+
 library(survdat)
 ```
 
@@ -46,7 +47,7 @@ primary vessel for the bottom trawl survey.
 | Vessel Conversion I  | VCF  | Delaware II records   |
 | Vessel Conversion II | BCF  | Henry Bigelow records |
 
-Calibration factors for NEFSC trawl survey data
+Calibration factors for NEFSC trawl survey data {.table}
 
 Describe a little about the survey process that pertains to the data.
 
@@ -64,8 +65,7 @@ Azarovitz, T. R. 1981. “A Brief Historical Review of the Woods Hole
 Laboratory Trawl Survey Time Series.” *Canadian Special Publication of
 Fisheries and Aquatic Sciences* 58: 62–67.
 
-Miller, T. J., C. Das, P. J. Politis, A. S. Miller, S. M. Lucey, C. M.
-Legault, R. W. Brown, and P. J. Rago. 2010. “Estimation of Albatross IV
-to Henry B. Bigelow Calibration Factors.” 10-05. Woods Hole, MA:
+Miller, T. J., C. Das, P. J. Politis, et al. 2010. *Estimation of
+Albatross IV to Henry B. Bigelow Calibration Factors*. Nos. 10-05.
 National Marine Fisheries Service.
 <https://www.nefsc.noaa.gov/publications/crd/crd1005/crd1005.pdf>.

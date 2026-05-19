@@ -1,6 +1,7 @@
 # Pulling Data
 
 ``` r
+
 library(survdat)
 library(DT)
 ```
@@ -23,6 +24,7 @@ A representative tow is a tow with:
   for tows on cruises after 2009
 
 ``` r
+
 survdat::get_survdat_data(channel, 
                           getLengths = F, 
                           conversion.factor = F)
@@ -74,6 +76,7 @@ the number of fish sampled at the given length. Use the argument
 `getLengths = T`
 
 ``` r
+
 survdat::get_survdat_data(channel, 
                           getLengths = T, 
                           conversion.factor = F)
@@ -106,6 +109,7 @@ These coefficients can be applied to the observed lengths to obtain
 estimates of weight. Use the argument `getWeightLength = T`.
 
 ``` r
+
 survdat::get_survdat_data(channel, 
                           getLengths = T,
                           getWeightLength = T,
@@ -133,6 +137,7 @@ The resulting data frame will look like this:
 To pull additional biological data use the argument `getBio = T`
 
 ``` r
+
 survdat::get_survdat_data(channel, 
                           getLengths = T,
                           getWeightLength = T,
@@ -188,6 +193,7 @@ using the argument `conversion.factor = T` will apply these conversion
 factors
 
 ``` r
+
 survdat::get_survdat_data(channel, 
                           getLengths = T,
                           getWeightLength = T,

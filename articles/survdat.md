@@ -1,6 +1,7 @@
 # Usage
 
 ``` r
+
 library(survdat)
 ```
 
@@ -42,6 +43,7 @@ Two shape files are included in the package, `strata.shp` and `EPU.shp`
 To read and plot the `EPU.shp` file:
 
 ``` r
+
 areaPolygon <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"), quiet=T)
 plot_shapefile(areaPolygon)
 ```
@@ -64,6 +66,7 @@ features](https://r-spatial.github.io/sf/index.html)) object.
   Georges Bank in the Spring:
 
 ``` r
+
 calc_swept_area(data$survdat,
                 areaPolygon=areaPolygon,
                 areaDescription="EPU",
@@ -77,6 +80,7 @@ The `filterByArea` value should be one of the values found in the
 - To return the values in TIDY format add the `tidy=T` argument:
 
 ``` r
+
 calc_swept_area(data$survdat,
                 areaPolygon=areaPolygon,
                 areaDescription="EPU",
