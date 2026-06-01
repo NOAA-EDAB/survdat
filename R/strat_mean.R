@@ -23,7 +23,7 @@
 #'
 #' @importFrom data.table "key"
 #'
-#'@family surdat
+#'@family survdat
 #'
 #'@examples
 #'\dontrun{
