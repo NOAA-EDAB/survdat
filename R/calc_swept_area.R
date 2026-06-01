@@ -1,6 +1,9 @@
 #' Calculate swept area biomass
 #'
-#' Calculates the biomass. Details found here ...
+#' This function is a wrapper of intermediate functions \code{\link{calc_stratified_mean}} and \code{\link{swept_area}}.  
+#' The \code{\link{calc_stratified_mean}} function is used to calculate the stratified mean biomass and abundance for each group (e.g. species) and season, as well as the variance and standard error of the mean.  
+#' The resulting output of \code{\link{calc_stratified_mean}} is then passed to the \code{\link{swept_area}} function which calculates the total biomass/abundance estimates.
+#' 
 #'
 #' @inheritParams calc_stratified_mean
 #' @param q Data frame. Table of survey catchabilities with a column corresponding
