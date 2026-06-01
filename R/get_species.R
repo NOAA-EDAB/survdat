@@ -1,6 +1,6 @@
 #' Extract SPECIES information from SVDBS
 #'
-#'Extract a list of speices names, code, market category, etc from the SVDBS SVSPECIES_LIST table
+#' Extract a list of species names, code, market category, etc from the SVDBS SVSPECIES_LIST table
 #'
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
