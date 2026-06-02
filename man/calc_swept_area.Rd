@@ -56,6 +56,12 @@ data frame
 \description{
 Calculates the biomass. Details found here ...
 }
+\section{Source}{
+
+
+43rd Northeast Regional Stock Assessment Workshop (43rd SAW): **43rd SAW assess-
+}
+
 \examples{
 \dontrun{
 # Pull data and apply conversion corrections

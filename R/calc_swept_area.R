@@ -9,6 +9,11 @@
 #' @param a Numeric. The average swept area of the trawl.  Default value is the
 #'  swept area of a standard NOAA Ship Albatross IV tow.
 #'
+#'@section Source:
+#'
+#' 43rd Northeast Regional Stock Assessment Workshop (43rd SAW): **43rd SAW assess-
+# 'ment report.** US Dep. Commer., Northeast Fish. Sci. Cent. Ref. Doc. 06-25; 400 p.
+#'
 #' @return data frame
 #'
 #'@family survdat
