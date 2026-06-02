@@ -58,7 +58,7 @@ calc_swept_area <- function(
 
   #Calculate total biomass/abundance estimates
   message("Calculating Swept Area Estimate  ...")
-  sweptareaData <- survdat:::swept_area(
+  sweptareaData <- survdat::swept_area(
     prepData = stratmeanData$prepData,
     stratmeanData = stratmeanData$stratmeanData,
     q = q,
