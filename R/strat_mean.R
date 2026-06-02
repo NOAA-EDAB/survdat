@@ -23,14 +23,14 @@
 #'
 #' @importFrom data.table "key"
 #'
-#'@family surdat
+#'@family internal
 #'
 #'@examples
 #'\dontrun{
 #' # Called internally
 #'}
 #'
-#' @noRd
+#' @export
 
 strat_mean <- function(
   prepData,

@@ -19,14 +19,14 @@
 #'
 #' @importFrom data.table "key"
 #'
-#'@family survdat
+#'@family internal
 #'
 #'\@examples
 #' \dontrun{
 #' # Called internally
 #' }
 #'
-#' @noRd
+#' @export
 
 strat_prep <- function(
   surveyData,
