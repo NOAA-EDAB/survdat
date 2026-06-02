@@ -25,7 +25,7 @@ reference:
   - get_survdat_clam_data
   - get_survdat_scallop_data
   - get_length_weight_data
-- title: "Internal Function"
+- title: "Internal Functions"
   desc: "Functions that are used internally but can be used externally "
 - contents:
   - strat_prep
