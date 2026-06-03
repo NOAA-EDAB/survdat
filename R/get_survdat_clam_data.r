@@ -90,7 +90,7 @@ get_survdat_clam_data <- function(
   data.table::setkey(cruise, CRUISE6, SVVESSEL)
 
   #Use cruise codes to select other data
-  cruise6 <- survdat:::sqltext(cruise$CRUISE6)
+  cruise6 <- sqltext(cruise$CRUISE6)
 
   #Station data
   if (shg.check == T) {

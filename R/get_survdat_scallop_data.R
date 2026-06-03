@@ -104,7 +104,7 @@ get_survdat_scallop_data <- function(
   if (is.na(filterByYear[1])) {
     years <- ">= 1963"
   } else {
-    years <- paste0("in (", survdat:::sqltext(filterByYear), ")")
+    years <- paste0("in (", sqltext(filterByYear), ")")
   }
 
   cruise.qry <- paste0(
@@ -121,7 +121,7 @@ get_survdat_scallop_data <- function(
   data.table::setkey(cruise, CRUISE6, SVVESSEL)
 
   #Use cruise codes to select other data
-  cruise6 <- survdat:::sqltext(cruise$CRUISE6)
+  cruise6 <- sqltext(cruise$CRUISE6)
 
   # Station Data --------------------------------------------------------------
   message("Getting Station data ...")

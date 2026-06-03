@@ -15,9 +15,9 @@
 #'
 #' @importFrom magrittr "%>%"
 #'
-#'@family survdat
+#'@family internal
 #'
-#' @noRd
+#' @export
 
 post_strat <- function(surveyData, areaPolygon, areaDescription, na.keep = F) {
   # transform Regional Shape file using lambert conformal conic coordinate ref system
