@@ -60,6 +60,7 @@ Calculates the biomass. Details found here ...
 
 
 43rd Northeast Regional Stock Assessment Workshop (43rd SAW): **43rd SAW assess-
+ment report.** US Dep. Commer., Northeast Fish. Sci. Cent. Ref. Doc. 06-25; 400 p.
 }
 
 \examples{
