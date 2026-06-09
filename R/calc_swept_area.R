@@ -7,11 +7,11 @@
 #'  to \code{groupDescription} and a column of catchabilities.  If NULL, assumes
 #'  a \code{q} of 1 for each \code{groupDescription} (Minimum swept area estimates).
 #' @param a Numeric. The average swept area of the trawl.  Default value is the
-#'  swept area of a standard NOAA Ship Albatross IV tow.^1
+#'  swept area of a standard NOAA Ship Albatross IV tow.(NEFSC, 2006)
 #'
 #' @section Source:
 #'
-#' 1. 43rd Northeast Regional Stock Assessment Workshop (43rd SAW): **43rd SAW assess-
+#' 43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006. **43rd SAW assess-
 #' ment report.** US Dep. Commer., Northeast Fish. Sci. Cent. Ref. Doc. 06-25; 400 p.
 #'
 #' @return data frame
