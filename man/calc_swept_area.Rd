@@ -59,8 +59,8 @@ Calculates the biomass. Details found here ...
 \section{Source}{
 
 
-43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006. **43rd SAW assess-
-ment report.** US Dep. Commer., Northeast Fish. Sci. Cent. Ref. Doc. 06-25; 400 p.
+43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006.  \href{https://repository.library.noaa.gov/view/noaa/25243}{**43rd SAW assess-
+ment report.** US Dep. Commer., Northeast Fish. Sci. Cent. Ref. Doc. 06-25; 400 p.}
 }
 
 \examples{
