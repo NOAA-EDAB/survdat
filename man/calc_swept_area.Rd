@@ -48,7 +48,7 @@ to \code{groupDescription} and a column of catchabilities.  If NULL, assumes
 a \code{q} of 1 for each \code{groupDescription} (Minimum swept area estimates).}
 
 \item{a}{Numeric. The average swept area of the trawl.  Default value is the
-swept area of a standard NOAA Ship Albatross IV tow.(NEFSC, 2006)}
+swept area of a standard NOAA Ship Albatross IV tow^1^ (NEFSC, 2006)}
 }
 \value{
 data frame
