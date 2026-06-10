@@ -4,6 +4,10 @@
 #'
 #' @return the function call
 #'
+#'\@examples
+#' \dontrun{
+#' # Called internally in get_survdat_data, get_survdat_scallop_data, and get_mass_inshore_survey_data
+#' }
 #'
 #'@noRd
 
