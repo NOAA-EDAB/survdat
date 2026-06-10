@@ -20,8 +20,16 @@
 #' @section Internal:
 #' This is an internal function.
 #' To pull the values of the conversion factors use \code{\link{get_conversion_factors}}
+#' 
+#' @examples
+#' \dontrun{
+#' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
+#' data <- get_survdat_data(channel)
+#' apply_conversion_factors(channel = channel, survdat.raw = data, use.SAD = F)
+#'}
 #'
 #'@noRd
+#'
 
 apply_conversion_factors <- function(channel, survdat.raw, use.SAD = F) {
   survdat <- survdat.raw
