@@ -6,7 +6,7 @@
 #'
 #'\@examples
 #' \dontrun{
-#' # Called internally in get_survdat_data, get_survdat_scallop_data, and get_mass_inshore_survey_data
+#' # Called internally in get_survdat_data, get_survdat_scallop_data, get_survdat_clam_data, and get_mass_inshore_survey_data
 #' }
 #'
 #'@noRd
