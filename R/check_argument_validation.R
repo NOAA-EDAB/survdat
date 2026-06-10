@@ -2,6 +2,11 @@
 #'
 #' check to make sure arguments passed do not contradict each other
 #' @inheritParams get_survdat_data
+#' 
+#' #'\@examples
+#' \dontrun{
+#' # Called internally in get_survdat_data
+#' }
 #'
 #' @noRd
 
