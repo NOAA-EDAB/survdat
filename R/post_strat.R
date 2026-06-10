@@ -17,6 +17,11 @@
 #'
 #'@family survdat
 #'
+#'\@examples
+#' \dontrun{
+#' # Called internally in 'strat_prep' which is then used to calculate stratified mean biomass
+#' }
+#'
 #' @noRd
 
 post_strat <- function(surveyData, areaPolygon, areaDescription, na.keep = F) {
