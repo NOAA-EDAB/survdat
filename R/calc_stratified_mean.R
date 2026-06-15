@@ -1,6 +1,6 @@
 #' Calculate stratified mean
 #'
-#' Calculates the stratified mean. 
+#' Calculates the stratified mean.
 #' This function is actually a wrapper of intermediate functions: \code{\link{strat_prep}} and \code{\link{strat_mean}}
 #' \code{\link{strat_prep}} prepares the data set so that the stratified means can be calculated
 #' After counting the number of tows and calculating the relative weight of each strata, the resulting output of \code{\link{strat_prep}} is then passed to the \code{\link{strat_mean}} function
