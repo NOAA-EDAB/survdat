@@ -22,7 +22,6 @@
 #'
 #'@export
 
-
 get_length_weight <- function(channel) {
   #Grab survey length/weight coefficients
   lw.qry <- "select svspp, sex, svlwexp, svlwcoeff, svlwexp_spring, svlwcoeff_spring,
