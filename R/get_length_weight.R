@@ -14,6 +14,12 @@
 #'
 #'@family helper
 #'
+#' @examples
+#' \dontrun{
+#' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
+#' get_length_weight(channel = channel)
+#'}
+#'
 #'@export
 
 get_length_weight <- function(channel) {
