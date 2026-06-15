@@ -139,7 +139,7 @@ get_survdat_data <- function(
   if (is.na(filterByYear[1])) {
     years <- ">= 1963"
   } else {
-    years <- paste0("in (", survdat:::sqltext(filterByYear), ")")
+    years <- paste0("in (", sqltext(filterByYear), ")")
   }
 
   if (all.season == F) {
@@ -176,7 +176,7 @@ get_survdat_data <- function(
 
   #Use cruise codes to select other data
 
-  cruise6 <- survdat:::sqltext(cruise$CRUISE6)
+  cruise6 <- sqltext(cruise$CRUISE6)
 
   # Station Data --------------------------------------------------------------
 

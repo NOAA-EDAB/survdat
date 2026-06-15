@@ -19,14 +19,14 @@
 #'
 #' @importFrom data.table "key"
 #'
-#'@family survdat
+#'@family internal
 #'
 #'\@examples
 #' \dontrun{
 #' # Called internally
 #' }
 #'
-#' @noRd
+#' @export
 
 strat_prep <- function(
   surveyData,
@@ -59,7 +59,7 @@ strat_prep <- function(
   # post stratify if necessary
   if (poststratFlag) {
     message("Post stratifying ...")
-    surveyData <- survdat:::post_strat(surveyData, areaPolygon, areaDescription)
+    surveyData <- survdat::post_strat(surveyData, areaPolygon, areaDescription)
   } else {
     #Add extra column to original data to mimic what happens when post-stratifying
     surveyData <- surveyData[, areaDescription := STRATUM]

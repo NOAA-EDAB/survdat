@@ -22,14 +22,14 @@
 #'
 #'@importFrom data.table "key"
 #'
-#'@family survdat
+#'@family internal
 #'
 #'@examples
 #'\dontrun{
 #'# Called internally
 #'}
 #'
-#'@noRd
+#'@export
 
 swept_area <- function(
   prepData,
