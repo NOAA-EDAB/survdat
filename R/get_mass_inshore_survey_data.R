@@ -2,8 +2,8 @@
 #'
 #' @description The Massachusetts Department of Marine Fisheries (DMF) conducts spring and fall surveys quantifying
 #' the distribution, relative abundance, and size composition of finfish and select invertebrates in state waters since 1978.
-#' This function extracts data from the NEFSC survdat Oracle database for the Massachusetts inshore bottom trawl survey. 
-#' The data includes catch and physical attributes of tows conducted as part of the survey. 
+#' This function extracts data from the NEFSC survdat Oracle database for the Massachusetts inshore bottom trawl survey.
+#' The data includes catch and physical attributes of tows conducted as part of the survey.
 #'
 #' @inheritParams get_survdat_data
 #'
