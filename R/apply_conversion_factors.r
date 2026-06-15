@@ -20,7 +20,7 @@
 #' @section Internal:
 #' This is an internal function.
 #' To pull the values of the conversion factors use \code{\link{get_conversion_factors}}
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
