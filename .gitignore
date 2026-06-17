@@ -6,6 +6,7 @@ inst/doc
 
 #files
 *.rds
+*.png
 #folder
 testing
 docs
