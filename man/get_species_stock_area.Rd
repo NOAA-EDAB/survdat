@@ -65,15 +65,15 @@ get_species_stock_area(channel,species= c("164712","168559"))
 \seealso{
 \code{\link[dbutils]{connect_to_database}}
 
-Other helper: 
-\code{\link{get_conversion_factors}()},
-\code{\link{get_cruise_purpose}()},
-\code{\link{get_length_weight}()},
-\code{\link{get_maturity}()},
-\code{\link{get_sex}()},
-\code{\link{get_sex_fscs}()},
-\code{\link{get_species}()},
-\code{\link{get_strata}()},
-\code{\link{get_vessel}()}
+Other helper:
+\code{\link[=get_conversion_factors]{get_conversion_factors()}},
+\code{\link[=get_cruise_purpose]{get_cruise_purpose()}},
+\code{\link[=get_length_weight]{get_length_weight()}},
+\code{\link[=get_maturity]{get_maturity()}},
+\code{\link[=get_sex]{get_sex()}},
+\code{\link[=get_sex_fscs]{get_sex_fscs()}},
+\code{\link[=get_species]{get_species()}},
+\code{\link[=get_strata]{get_strata()}},
+\code{\link[=get_vessel]{get_vessel()}}
 }
 \concept{helper}

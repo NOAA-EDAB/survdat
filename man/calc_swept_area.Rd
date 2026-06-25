@@ -9,7 +9,7 @@ calc_swept_area(
   areaPolygon = "NEFSC strata",
   areaDescription = "STRATA",
   filterByArea = "all",
-  filterBySeason,
+  filterBySeason = "all",
   groupDescription = "SVSPP",
   filterByGroup = "all",
   mergesexFlag = T,
@@ -54,12 +54,14 @@ swept area of a standard NOAA Ship Albatross IV tow.(\href{https://repository.li
 data frame
 }
 \description{
-Calculates the biomass. Details found here ...
+This function is a wrapper of intermediate functions \code{\link{calc_stratified_mean}} and \code{\link{swept_area}}.
+The \code{\link{calc_stratified_mean}} function is used to calculate the stratified mean biomass and abundance for each group (e.g. species) and season, as well as the variance and standard error of the mean.
+The resulting output of \code{\link{calc_stratified_mean}} is then passed to the \code{\link{swept_area}} function which calculates the total biomass/abundance estimates.
 }
 \section{Source}{
 
 
-43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006.  \href{https://repository.library.noaa.gov/view/noaa/25243}{**43rd SAW 
+43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006.  \href{https://repository.library.noaa.gov/view/noaa/25243}{**43rd SAW
 assessment report.** US Dep. Commer., Northeast Fish. Sci. Cent. Ref. Doc. 06-25; 400 p.}
 }
 
@@ -80,12 +82,12 @@ calc_swept_area(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU"
 
 }
 \seealso{
-Other survdat: 
-\code{\link{calc_stratified_mean}()},
-\code{\link{get_area}()},
-\code{\link{get_mass_inshore_survey_data}()},
-\code{\link{get_survdat_clam_data}()},
-\code{\link{get_survdat_data}()},
-\code{\link{get_survdat_scallop_data}()}
+Other survdat:
+\code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
+\code{\link[=get_area]{get_area()}},
+\code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
+\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
+\code{\link[=get_survdat_data]{get_survdat_data()}},
+\code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }
 \concept{survdat}

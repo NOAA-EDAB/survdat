@@ -3,7 +3,7 @@
 \docType{data}
 \name{sampleBio}
 \alias{sampleBio}
-\title{Sample data pull with spcies specific biological data}
+\title{Sample data pull with species specific biological data}
 \format{
 A data frame with n rows and m variables
 }
@@ -14,7 +14,7 @@ sampleBio
 get_survdat_data(channel, getLengths = T, getWeightLength = F, conversion.factor = F, getBio = T)
 }
 \seealso{
-Other sampleData: 
+Other sampleData:
 \code{\link{sampleLengthWeight}},
 \code{\link{sampleLengths}},
 \code{\link{sampleRaw}},
