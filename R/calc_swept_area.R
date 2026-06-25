@@ -19,7 +19,11 @@
 #'
 #' @return data frame
 #'
-#'@family survdat
+#' @family survdat
+#'
+#' @importFrom data.table :=
+#' @import dplyr
+#' @import tidyr
 #'
 #' @examples
 #' \dontrun{
@@ -39,19 +43,42 @@
 #' @export
 
 calc_swept_area <- function(
-  surveyData,
-  areaPolygon = 'NEFSC strata',
-  areaDescription = 'STRATA',
-  filterByArea = "all",
-  filterBySeason,
-  groupDescription = "SVSPP",
-  filterByGroup = "all",
-  mergesexFlag = T,
-  tidy = F,
-  q = NULL,
-  a = 0.0384
+    surveyData,
+    areaPolygon = 'NEFSC strata',
+    areaDescription = 'STRATA',
+    filterByArea = "all",
+    filterBySeason = "all", # ISSUE 79 FIX: Default to "all" to prevent missing argument errors
+    groupDescription = "SVSPP",
+    filterByGroup = "all",
+    mergesexFlag = T,
+    tidy = F,
+    q = NULL,
+    a = 0.0384
 ) {
-  #Run stratified mean
+  
+  # -----------------------------------------------------------------------
+  # ISSUE 79 FIX: Check for required fields early to prevent cryptic crashes
+  # -----------------------------------------------------------------------
+  required_cols <- c("YEAR", "SEASON", "STRATUM", "TOW", "ABUNDANCE", "BIOMASS", groupDescription)
+  missing_cols <- setdiff(required_cols, names(surveyData))
+  
+  if (length(missing_cols) > 0) {
+    stop(sprintf(
+      "Cannot calculate swept area. The surveyData object is missing required fields: %s",
+      paste(missing_cols, collapse = ", ")
+    ))
+  }
+  
+  # -----------------------------------------------------------------------
+  # ISSUE 79 FIX: Ensure input is a data.table to prevent legacy := crashes
+  # -----------------------------------------------------------------------
+  if (!data.table::is.data.table(surveyData)) {
+    surveyData <- data.table::as.data.table(surveyData)
+  }
+  
+  # -----------------------------------------------------------------------
+  # Run Stratified Mean
+  # -----------------------------------------------------------------------
   stratmeanData <- calc_stratified_mean(
     surveyData,
     areaPolygon,
@@ -63,8 +90,10 @@ calc_swept_area <- function(
     mergesexFlag,
     returnPrepData = T
   )
-
-  #Calculate total biomass/abundance estimates
+  
+  # -----------------------------------------------------------------------
+  # Calculate total biomass/abundance estimates
+  # -----------------------------------------------------------------------
   message("Calculating Swept Area Estimate  ...")
   sweptareaData <- survdat::swept_area(
     prepData = stratmeanData$prepData,
@@ -74,37 +103,45 @@ calc_swept_area <- function(
     a = a,
     groupDescription = groupDescription
   )
-
-  #create tidy data set
+  
+  # -----------------------------------------------------------------------
+  # ISSUE 79 FIX: Explicitly assign units and format output
+  # -----------------------------------------------------------------------
   if (tidy) {
     message("Tidying data  ...")
-    tidyData <- data.table::melt.data.table(
-      sweptareaData,
-      id.vars = c('YEAR', groupDescription),
-      measure.vars = c(
-        'strat.biomass',
-        'biomass.var',
-        'strat.abund',
-        'abund.var',
-        'tot.biomass',
-        'tot.bio.var',
-        'tot.abundance',
-        'tot.abund.var'
+    # Converted to tidyr logic for safer execution and explicit unit mapping
+    sweptareaData <- sweptareaData |>
+      as_tibble() |>
+      pivot_longer(
+        cols = c('strat.biomass', 'biomass.var', 'strat.abund', 'abund.var',
+                 'tot.biomass', 'tot.bio.var', 'tot.abundance', 'tot.abund.var'),
+        names_to = "variable",
+        values_to = "value"
+      ) |>
+      mutate(
+        units = case_when(
+          variable == 'strat.biomass' ~ 'kg tow^-1',
+          variable == 'biomass.var'   ~ '(kg tow^-1)^2',
+          variable == 'strat.abund'   ~ 'number',
+          variable == 'abund.var'     ~ 'numbers^2',
+          variable == 'tot.biomass'   ~ 'kg',
+          variable == 'tot.bio.var'   ~ 'kg^2',
+          variable == 'tot.abundance' ~ 'number',
+          variable == 'tot.abund.var' ~ 'numbers^2',
+          TRUE ~ NA_character_
+        )
       )
-    )
-    tidyData[variable == 'strat.biomass', units := 'kg tow^-1']
-    tidyData[variable == 'biomass.var', units := '(kg tow^-1)^2']
-    tidyData[variable == 'strat.abund', units := 'number']
-    tidyData[variable == 'abund.var', units := 'numbers^2']
-    tidyData[variable == 'tot.biomass', units := 'kg']
-    tidyData[variable == 'tot.bio.var', units := 'kg^2']
-    tidyData[variable == 'tot.abundance', units := 'number']
-    tidyData[variable == 'tot.abund.var', units := 'numbers^2']
-
-    sweptareaData <- tidyData
+  } else {
+    # If not tidy, add descriptive unit columns to the wide format
+    sweptareaData <- sweptareaData |>
+      as_tibble() |>
+      mutate(
+        Biomass_Units = "kg",
+        Abundance_Units = "number",
+        Stratified_Biomass_Units = "kg tow^-1",
+        Swept_Area_Used = a
+      )
   }
-
-  sweptareaData[]
-
+  
   return(sweptareaData)
 }
