@@ -43,17 +43,17 @@
 #' @export
 
 calc_swept_area <- function(
-    surveyData,
-    areaPolygon = 'NEFSC strata',
-    areaDescription = 'STRATA',
-    filterByArea = "all",
-    filterBySeason = "all", # ISSUE 79 FIX: Default to "all" to prevent missing argument errors
-    groupDescription = "SVSPP",
-    filterByGroup = "all",
-    mergesexFlag = T,
-    tidy = F,
-    q = NULL,
-    a = 0.0384
+  surveyData,
+  areaPolygon = 'NEFSC strata',
+  areaDescription = 'STRATA',
+  filterByArea = "all",
+  filterBySeason = "all", # ISSUE 79 FIX: Default to "all" to prevent missing argument errors
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = T,
+  tidy = F,
+  q = NULL,
+  a = 0.0384
 ) {
   
   # -----------------------------------------------------------------------
