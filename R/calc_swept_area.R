@@ -94,7 +94,6 @@ calc_swept_area <- function(
     mergesexFlag,
     returnPrepData = T
   )
-  
   # -----------------------------------------------------------------------
   # Calculate total biomass/abundance estimates
   # -----------------------------------------------------------------------
