@@ -131,11 +131,11 @@ calc_swept_area <- function(
       mutate(
         units = case_when(
           variable == 'strat.biomass' ~ 'kg tow^-1',
-          variable == 'biomass.var'   ~ '(kg tow^-1)^2',
-          variable == 'strat.abund'   ~ 'number',
-          variable == 'abund.var'     ~ 'numbers^2',
-          variable == 'tot.biomass'   ~ 'kg',
-          variable == 'tot.bio.var'   ~ 'kg^2',
+          variable == 'biomass.var' ~ '(kg tow^-1)^2',
+          variable == 'strat.abund' ~ 'number',
+          variable == 'abund.var' ~ 'numbers^2',
+          variable == 'tot.biomass' ~ 'kg',
+          variable == 'tot.bio.var' ~ 'kg^2',
           variable == 'tot.abundance' ~ 'number',
           variable == 'tot.abund.var' ~ 'numbers^2',
           TRUE ~ NA_character_
