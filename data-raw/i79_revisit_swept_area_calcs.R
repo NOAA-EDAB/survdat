@@ -59,13 +59,18 @@ message("\n--- Test 3: Checking missing field errors ---")
 
 # Break the dataset by removing fields that swept area math needs
 
-bad_data <- test_data |> 
-  select(-STRATUM, -BIOMASS) 
+bad_data <- test_data |>
+  select(-STRATUM, -BIOMASS)
 
-tryCatch({
-  bad_results <- calc_swept_area(bad_data)
-  message("WARNING: The function ran successfully despite missing STRATUM and BIOMASS.")
-}, error = function(e) {
-  message("The function failed (as expected). Here is the error it threw:")
-  message("--> ", e$message)
-})
+tryCatch(
+  {
+    bad_results <- calc_swept_area(bad_data)
+    message(
+      "WARNING: The function ran successfully despite missing STRATUM and BIOMASS."
+    )
+  },
+  error = function(e) {
+    message("The function failed (as expected). Here is the error it threw:")
+    message("--> ", e$message)
+  }
+)
