@@ -58,7 +58,15 @@ calc_swept_area <- function(
   # -----------------------------------------------------------------------
   # ISSUE 79 FIX: Check for required fields early to prevent cryptic crashes
   # -----------------------------------------------------------------------
-  required_cols <- c("YEAR", "SEASON", "STRATUM", "TOW", "ABUNDANCE", "BIOMASS", groupDescription)
+  required_cols <- c(
+    "YEAR",
+    "SEASON",
+    "STRATUM",
+    "TOW",
+    "ABUNDANCE",
+    "BIOMASS",
+    groupDescription
+  )
   missing_cols <- setdiff(required_cols, names(surveyData))
   
   if (length(missing_cols) > 0) {
