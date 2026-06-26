@@ -106,7 +106,6 @@ calc_swept_area <- function(
     a = a,
     groupDescription = groupDescription
   )
-  
   # -----------------------------------------------------------------------
   # ISSUE 79 FIX: Explicitly assign units and format output
   # -----------------------------------------------------------------------
