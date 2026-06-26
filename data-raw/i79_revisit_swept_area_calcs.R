@@ -37,7 +37,10 @@ print(names(baseline_results))
 message("\n--- Test 2: Checking filterBySeason parameter ---")
 
 # What happens if we don't specify a season? (Does it default to SPRING/FALL or keep all?)
-message("Seasons in baseline output: ", paste(unique(baseline_results$SEASON), collapse = ", "))
+message(
+  "Seasons in baseline output: ",
+  paste(unique(baseline_results$SEASON), collapse = ", ")
+)
 
 # What happens if we pass a specific season?
 tryCatch(
