@@ -1,8 +1,9 @@
 # =========================================================================
 # Title: Issue 79 - Review calc_swept_area()
 # Purpose: Test the current state of survdat::calc_swept_area() using
-#          vignette sample data before implementing fixes for missing units,
-#          required field checks, and filterBySeason defaults if needed.
+#          vignette sample data before implementing fixes for missing
+#          units, required field checks, and filterBySeason defaults
+#          if needed.
 # =========================================================================
 
 # 0. Setup ----------------------------------------------------------------
@@ -41,7 +42,8 @@ print(names(baseline_results))
 # 2. Test filterBySeason Behavior -----------------------------------------
 message("\n--- Test 2: Checking filterBySeason parameter ---")
 
-# What happens if we don't specify a season? (Does it default to SPRING/FALL or keep all?)
+# What happens if we don't specify a season?
+# (Does it default to SPRING/FALL or keep all?)
 message(
   "Seasons in baseline output: ",
   paste(unique(baseline_results$SEASON), collapse = ", ")
@@ -66,7 +68,6 @@ tryCatch(
 message("\n--- Test 3: Checking missing field errors ---")
 
 # Break the dataset by removing fields that swept area math needs
-
 bad_data <- test_data |>
   select(-STRATUM, -BIOMASS)
 
@@ -74,7 +75,8 @@ tryCatch(
   {
     bad_results <- calc_swept_area(bad_data)
     message(
-      "WARNING: The function ran successfully despite missing STRATUM and BIOMASS."
+      "WARNING: The function ran successfully despite missing STRATUM ",
+      "and BIOMASS."
     )
   },
   error = function(e) {
