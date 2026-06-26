@@ -80,7 +80,6 @@ calc_swept_area <- function(
   if (!data.table::is.data.table(surveyData)) {
     surveyData <- data.table::as.data.table(surveyData)
   }
-  
   # -----------------------------------------------------------------------
   # Run Stratified Mean
   # -----------------------------------------------------------------------
