@@ -74,7 +74,6 @@ calc_swept_area <- function(
       paste(missing_cols, collapse = ", ")
     ))
   }
-  
   # -----------------------------------------------------------------------
   # ISSUE 79 FIX: Ensure input is a data.table to prevent legacy := crashes
   # -----------------------------------------------------------------------
