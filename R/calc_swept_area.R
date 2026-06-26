@@ -68,7 +68,6 @@ calc_swept_area <- function(
     groupDescription
   )
   missing_cols <- setdiff(required_cols, names(surveyData))
-  
   if (length(missing_cols) > 0) {
     stop(sprintf(
       "Cannot calculate swept area. The surveyData object is missing required fields: %s",
