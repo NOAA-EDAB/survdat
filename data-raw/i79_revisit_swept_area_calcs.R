@@ -22,7 +22,10 @@ data("sampleRaw", package = "survdat")
 test_data <- sampleRaw
 
 # Inspect the available columns to know what we are working with
-message("Columns available in test_data: ", paste(names(test_data), collapse = ", "))
+message(
+  "Columns available in test_data: ",
+  paste(names(test_data), collapse = ", ")
+)
 
 
 # 1. Test Output Units ----------------------------------------------------
