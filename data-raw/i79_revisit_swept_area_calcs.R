@@ -40,12 +40,18 @@ message("\n--- Test 2: Checking filterBySeason parameter ---")
 message("Seasons in baseline output: ", paste(unique(baseline_results$SEASON), collapse = ", "))
 
 # What happens if we pass a specific season?
-tryCatch({
-  spring_results <- calc_swept_area(test_data, filterBySeason = "SPRING")
-  message("Seasons in spring-filtered output: ", paste(unique(spring_results$SEASON), collapse = ", "))
-}, error = function(e) {
-  message("Filtering by 'SPRING' threw an error: ", e$message)
-})
+tryCatch(
+  {
+    spring_results <- calc_swept_area(test_data, filterBySeason = "SPRING")
+    message(
+      "Seasons in spring-filtered output: ",
+      paste(unique(spring_results$SEASON), collapse = ", ")
+    )
+  },
+  error = function(e) {
+    message("Filtering by 'SPRING' threw an error: ", e$message)
+  }
+)
 
 
 # 3. Test Missing Fields Handling -----------------------------------------
