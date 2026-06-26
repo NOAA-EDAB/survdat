@@ -115,8 +115,16 @@ calc_swept_area <- function(
     sweptareaData <- sweptareaData |>
       as_tibble() |>
       pivot_longer(
-        cols = c('strat.biomass', 'biomass.var', 'strat.abund', 'abund.var',
-                 'tot.biomass', 'tot.bio.var', 'tot.abundance', 'tot.abund.var'),
+        cols = c(
+          'strat.biomass',
+          'biomass.var',
+          'strat.abund',
+          'abund.var',
+          'tot.biomass',
+          'tot.bio.var',
+          'tot.abundance',
+          'tot.abund.var'
+        ),
         names_to = "variable",
         values_to = "value"
       ) |>
