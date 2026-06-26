@@ -1,7 +1,7 @@
 # =========================================================================
 # Title: Issue 79 - Review calc_swept_area()
-# Purpose: Test the current state of survdat::calc_swept_area() using 
-#          vignette sample data before implementing fixes for missing units, 
+# Purpose: Test the current state of survdat::calc_swept_area() using
+#          vignette sample data before implementing fixes for missing units,
 #          required field checks, and filterBySeason defaults if needed.
 # =========================================================================
 
