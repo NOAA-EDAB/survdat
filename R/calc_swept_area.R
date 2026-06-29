@@ -66,18 +66,20 @@
 #'
 #'
 #' @export
-calc_swept_area <- function(surveyData,
-                            areaPolygon = "NEFSC strata",
-                            areaDescription = "STRATA",
-                            filterByArea = "all",
-                            # ISSUE 79 FIX: Default to prevent missing arg
-                            filterBySeason = "all",
-                            groupDescription = "SVSPP",
-                            filterByGroup = "all",
-                            mergesexFlag = TRUE,
-                            tidy = FALSE,
-                            q = NULL,
-                            a = 0.0384) {
+calc_swept_area <- function(
+  surveyData,
+  areaPolygon = "NEFSC strata",
+  areaDescription = "STRATA",
+  filterByArea = "all",
+  # ISSUE 79 FIX: Default to prevent missing arg
+  filterBySeason = "all",
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = TRUE,
+  tidy = FALSE,
+  q = NULL,
+  a = 0.0384
+) {
   # -----------------------------------------------------------------------
   # ISSUE 79 FIX: Check for required fields early to prevent crashes
   # -----------------------------------------------------------------------
@@ -90,7 +92,7 @@ calc_swept_area <- function(surveyData,
     "BIOMASS",
     groupDescription
   )
-  
+
   missing_cols <- setdiff(required_cols, names(surveyData))
   if (length(missing_cols) > 0) {
     stop(
@@ -100,14 +102,14 @@ calc_swept_area <- function(surveyData,
       )
     )
   }
-  
+
   # -----------------------------------------------------------------------
   # ISSUE 79 FIX: Ensure input is a data.table to prevent legacy := crashes
   # -----------------------------------------------------------------------
   if (!data.table::is.data.table(surveyData)) {
     surveyData <- data.table::as.data.table(surveyData)
   }
-  
+
   # -----------------------------------------------------------------------
   # Run Stratified Mean
   # -----------------------------------------------------------------------
@@ -122,7 +124,7 @@ calc_swept_area <- function(surveyData,
     mergesexFlag,
     returnPrepData = TRUE
   )
-  
+
   # -----------------------------------------------------------------------
   # Calculate total biomass/abundance estimates
   # -----------------------------------------------------------------------
@@ -135,7 +137,7 @@ calc_swept_area <- function(surveyData,
     a = a,
     groupDescription = groupDescription
   )
-  
+
   # -----------------------------------------------------------------------
   # ISSUE 79 FIX: Explicitly assign units and format output
   # -----------------------------------------------------------------------
@@ -161,14 +163,14 @@ calc_swept_area <- function(surveyData,
       mutate(
         units = case_when(
           variable == "strat.biomass" ~ "kg tow^-1",
-          variable == "biomass.var"   ~ "(kg tow^-1)^2",
-          variable == "strat.abund"   ~ "number",
-          variable == "abund.var"     ~ "numbers^2",
-          variable == "tot.biomass"   ~ "kg",
-          variable == "tot.bio.var"   ~ "kg^2",
+          variable == "biomass.var" ~ "(kg tow^-1)^2",
+          variable == "strat.abund" ~ "number",
+          variable == "abund.var" ~ "numbers^2",
+          variable == "tot.biomass" ~ "kg",
+          variable == "tot.bio.var" ~ "kg^2",
           variable == "tot.abundance" ~ "number",
           variable == "tot.abund.var" ~ "numbers^2",
-          TRUE                        ~ NA_character_
+          TRUE ~ NA_character_
         )
       )
   } else {
@@ -182,6 +184,6 @@ calc_swept_area <- function(surveyData,
         Swept_Area_Used = a
       )
   }
-  
+
   return(sweptareaData)
 }
