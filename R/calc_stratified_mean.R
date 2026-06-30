@@ -129,7 +129,7 @@ calc_stratified_mean <- function(
     tidyData[variable == 'biomass.SE', units := 'kg tow^-1']
     tidyData[variable == 'strat.abund', units := 'number tow^-1']
     tidyData[variable == 'abund.var', units := '(numbers tow^-1)^2']
-    tidyData[variable == 'abund.SE', units := 'kg tow^-1']
+    tidyData[variable == 'abund.SE', units := 'number tow^-1']
     stratmeanData <- tidyData
   }
 
