@@ -60,11 +60,13 @@ swept_area <- function(
 
   #Merge q
   if (is.null(q)) {
+    # set q = 1 for all groups
+    q_value <- 1
     q <- data.table::data.table(
       groups = unique(swept.area[, get(groupDescription)]),
-      q = 1
+      q = q_value
     )
-    message("Assuming a value of q = ", q, " for all groups")
+    message("Assuming a value of q = ", q_value, " for all groups")
   } else if (length(q) == 1) {
     # apply q to all groups
     message("Assuming a value of q = ", q, " for all groups")
