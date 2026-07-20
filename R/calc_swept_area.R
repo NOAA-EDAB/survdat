@@ -71,7 +71,7 @@ calc_swept_area <- function(
   areaPolygon = "NEFSC strata",
   areaDescription = "STRATA",
   filterByArea = "all",
-  # ISSUE 79 FIX: Default to prevent missing arg
+  # Default to prevent missing arg
   filterBySeason = "all",
   groupDescription = "SVSPP",
   filterByGroup = "all",
@@ -80,9 +80,8 @@ calc_swept_area <- function(
   q = NULL,
   a = 0.0384
 ) {
-  # -----------------------------------------------------------------------
-  # ISSUE 79 FIX: Check for required fields early to prevent crashes
-  # -----------------------------------------------------------------------
+  
+  # Check for required fields early to prevent crashes
   required_cols <- c(
     "YEAR",
     "SEASON",
@@ -103,9 +102,7 @@ calc_swept_area <- function(
     )
   }
 
-  # -----------------------------------------------------------------------
-  # ISSUE 79 FIX: Ensure input is a data.table to prevent legacy := crashes
-  # -----------------------------------------------------------------------
+  # Ensure input is a data.table to prevent legacy := crashes
   if (!data.table::is.data.table(surveyData)) {
     surveyData <- data.table::as.data.table(surveyData)
   }
@@ -138,9 +135,8 @@ calc_swept_area <- function(
     groupDescription = groupDescription
   )
 
-  # -----------------------------------------------------------------------
-  # ISSUE 79 FIX: Explicitly assign units and format output
-  # -----------------------------------------------------------------------
+
+  # Explicitly assign units and format output
   if (tidy) {
     message("Tidying data  ...")
     # Converted to tidyr logic for explicit unit mapping
