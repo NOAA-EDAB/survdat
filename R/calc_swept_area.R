@@ -80,9 +80,7 @@ calc_swept_area <- function(
   q = NULL,
   a = 0.0384
 ) {
-  # -----------------------------------------------------------------------
-  # ISSUE 79 FIX: Check for required fields early to prevent crashes
-  # -----------------------------------------------------------------------
+    # Check for required fields early to prevent crashes
   required_cols <- c(
     "YEAR",
     "SEASON",
