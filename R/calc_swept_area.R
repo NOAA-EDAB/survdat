@@ -80,7 +80,6 @@ calc_swept_area <- function(
   q = NULL,
   a = 0.0384
 ) {
-  
   # Check for required fields early to prevent crashes
   required_cols <- c(
     "YEAR",
@@ -134,7 +133,6 @@ calc_swept_area <- function(
     a = a,
     groupDescription = groupDescription
   )
-
 
   # Explicitly assign units and format output
   if (tidy) {
