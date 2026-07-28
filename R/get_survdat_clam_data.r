@@ -120,8 +120,8 @@ get_survdat_clam_data <- function(
   
   if (assignRegionWeights) {
     
-    # 1. Clean the base stratum for geometric splits (extract the 2nd and 3rd digits)
-    clamdat[, calc_strat := substr(sprintf("%04d", STRATUM), 2, 3)]
+    # 1. Clean the base stratum (remove leading 6/06 and trailing 0) to match Dan's codes
+    clamdat[, calc_strat := gsub("0$", "", gsub("^0?6", "", as.character(STRATUM)))]
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
     
     # 2. Geometric Stratum Splits
@@ -205,13 +205,12 @@ get_survdat_clam_data <- function(
     clamdat[!is.na(DEPTH) & DEPTH > 80, new_stratum := '0']
     
     # 4. Map to Assessment Regions (South vs GBK)
-    # Valid strata are mapped explicitly. Anything else (including deepwater '0' or non-clam 
-    # strata) defaults to NA and will drop during the base::merge(), perfectly matching historical row logic.
+    # 2018+ regions are identified by capturing format variations of 1-6 (South) and 7-12 (GBK)
     clamdat[, clam.region := data.table::fcase(
       new_stratum %in% c("1S","2S","3S","4S","5S","6S","1Q","2Q","3Q","4Q","5Q","6Q"), "South",
       new_stratum %in% c("7S","8S","9S","10S","11S","12S","7Q","8Q","9Q","10Q","11Q","12Q"), "GBK",
-      sv_year >= 2018 & new_stratum %in% c("1", "2", "3", "4", "5", "6", "01", "02", "03", "04", "05", "06"), "South",
-      sv_year >= 2018 & new_stratum %in% c("7", "8", "9", "10", "11", "12", "07", "08", "09"), "GBK",
+      sv_year >= 2018 & new_stratum %in% as.character(c(1:6, paste0("0", 1:6), paste0("00", 1:6))), "South",
+      sv_year >= 2018 & new_stratum %in% as.character(c(7:12, paste0("0", 7:12), paste0("00", 7:12))), "GBK",
       default = NA_character_
     )]
     
@@ -229,7 +228,9 @@ get_survdat_clam_data <- function(
     )
     
     coeff[, clam.region := as.factor(clam.region)]
-    clamdat <- base::merge(clamdat, coeff, by = 'clam.region')
+    
+    # CRITICAL FIX: all.x = TRUE prevents the dropping of unmapped/recent strata
+    clamdat <- base::merge(clamdat, coeff, by = 'clam.region', all.x = TRUE)
     
     #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
     clamdat[SVSPP == 403, meatwt := (exp(sc.a) * (LENGTH * 10)^sc.b) / 1000]
