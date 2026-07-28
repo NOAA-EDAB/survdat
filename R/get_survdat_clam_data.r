@@ -229,7 +229,7 @@ get_survdat_clam_data <- function(
     
     coeff[, clam.region := as.factor(clam.region)]
     
-    # CRITICAL FIX: all.x = TRUE prevents the dropping of unmapped/recent strata
+    # all.x = TRUE prevents the dropping of unmapped/recent strata
     clamdat <- base::merge(clamdat, coeff, by = 'clam.region', all.x = TRUE)
     
     #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
