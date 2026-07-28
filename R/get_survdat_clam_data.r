@@ -120,8 +120,13 @@ get_survdat_clam_data <- function(
   
   if (assignRegionWeights) {
     
-    # 1. Clean the base stratum (remove leading 6/06 and trailing 0) to match Dan's codes
-    clamdat[, calc_strat := gsub("0$", "", gsub("^0?6", "", as.character(STRATUM)))]
+    # 1. Clean the base stratum safely
+    clamdat[, calc_strat := as.character(STRATUM)]
+    # ONLY strip leading 6 and trailing 0 if it is an old 4+ digit shellfish stratum (e.g. 6170, 6010)
+    # This protects the modern 2018+ strata (1 through 12) from being corrupted
+    clamdat[nchar(calc_strat) >= 4 & grepl("^6", calc_strat), 
+            calc_strat := gsub("0$", "", gsub("^6", "", calc_strat))]
+    
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
     
     # 2. Geometric Stratum Splits
@@ -205,17 +210,18 @@ get_survdat_clam_data <- function(
     clamdat[!is.na(DEPTH) & DEPTH > 80, new_stratum := '0']
     
     # 4. Map to Assessment Regions (South vs GBK)
-    # 2018+ regions are identified by capturing format variations of 1-6 (South) and 7-12 (GBK)
+    clamdat[, num_strat := suppressWarnings(as.numeric(new_stratum))]
+    
     clamdat[, clam.region := data.table::fcase(
       new_stratum %in% c("1S","2S","3S","4S","5S","6S","1Q","2Q","3Q","4Q","5Q","6Q"), "South",
       new_stratum %in% c("7S","8S","9S","10S","11S","12S","7Q","8Q","9Q","10Q","11Q","12Q"), "GBK",
-      sv_year >= 2018 & new_stratum %in% as.character(c(1:6, paste0("0", 1:6), paste0("00", 1:6))), "South",
-      sv_year >= 2018 & new_stratum %in% as.character(c(7:12, paste0("0", 7:12), paste0("00", 7:12))), "GBK",
+      sv_year >= 2018 & num_strat %in% 1:6, "South",
+      sv_year >= 2018 & num_strat %in% 7:12, "GBK",
       default = NA_character_
     )]
     
     # Clean up intermediate geometric columns
-    clamdat[, c('calc_strat', 'sv_year', 'new_stratum') := NULL]
+    clamdat[, c('calc_strat', 'sv_year', 'new_stratum', 'num_strat') := NULL]
     
     # 5. Apply Meat Weight Coefficients
     # TODO: Fill in the NA values with the new biological parameters for South/GBK
@@ -229,7 +235,7 @@ get_survdat_clam_data <- function(
     
     coeff[, clam.region := as.factor(clam.region)]
     
-    # all.x = TRUE prevents the dropping of unmapped/recent strata
+    # all.x = TRUE prevents the dropping of unmapped/non-assessment tows
     clamdat <- base::merge(clamdat, coeff, by = 'clam.region', all.x = TRUE)
     
     #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
