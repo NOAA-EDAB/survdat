@@ -120,8 +120,8 @@ get_survdat_clam_data <- function(
   
   if (assignRegionWeights) {
     
-    # 1. Clean the base stratum for geometric splits (remove 6 and 0 prefix)
-    clamdat[, calc_strat := sub("^0?60?", "", as.character(STRATUM))]
+    # 1. Clean the base stratum for geometric splits (extract the 2nd and 3rd digits)
+    clamdat[, calc_strat := substr(sprintf("%04d", STRATUM), 2, 3)]
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
     
     # 2. Geometric Stratum Splits
@@ -202,15 +202,21 @@ get_survdat_clam_data <- function(
       default = "0"
     )]
     
-    # Ensure DEPTH is capitalized here as well
     clamdat[!is.na(DEPTH) & DEPTH > 80, new_stratum := '0']
     
     # 4. Map to Assessment Regions (South vs GBK)
-    south_strata <- c("1S","2S","3S","4S","5S","6S","1Q","2Q","3Q","4Q","5Q","6Q")
-    clamdat[, clam.region := data.table::fifelse(new_stratum %in% south_strata, "South", "GBK")]
+    # Valid strata are mapped explicitly. Anything else (including deepwater '0' or non-clam 
+    # strata) defaults to NA and will drop during the base::merge(), perfectly matching historical row logic.
+    clamdat[, clam.region := data.table::fcase(
+      new_stratum %in% c("1S","2S","3S","4S","5S","6S","1Q","2Q","3Q","4Q","5Q","6Q"), "South",
+      new_stratum %in% c("7S","8S","9S","10S","11S","12S","7Q","8Q","9Q","10Q","11Q","12Q"), "GBK",
+      sv_year >= 2018 & new_stratum %in% c("1", "2", "3", "4", "5", "6", "01", "02", "03", "04", "05", "06"), "South",
+      sv_year >= 2018 & new_stratum %in% c("7", "8", "9", "10", "11", "12", "07", "08", "09"), "GBK",
+      default = NA_character_
+    )]
     
     # Clean up intermediate geometric columns
-    clamdat[, c('calc_strat', 'sv_year') := NULL]
+    clamdat[, c('calc_strat', 'sv_year', 'new_stratum') := NULL]
     
     # 5. Apply Meat Weight Coefficients
     # TODO: Fill in the NA values with the new biological parameters for South/GBK
