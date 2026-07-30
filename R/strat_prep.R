@@ -91,7 +91,6 @@ strat_prep <- function(
       }
     }
   }
-  print(filterByArea)
 
   filteredData <- surveyData[
     SEASON %in% filterBySeason & get(areaDescription) %in% filterByArea,
