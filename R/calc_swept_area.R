@@ -68,20 +68,19 @@
 #'
 #' @export
 calc_swept_area <- function(
-    surveyData,
-    areaPolygon = "NEFSC strata",
-    areaDescription = "STRATA",
-    filterByArea = "all",
-    # Default to prevent missing arg
-    filterBySeason = "all",
-    groupDescription = "SVSPP",
-    filterByGroup = "all",
-    mergesexFlag = TRUE,
-    tidy = FALSE,
-    q = NULL,
-    a = 0.0384
+  surveyData,
+  areaPolygon = "NEFSC strata",
+  areaDescription = "STRATA",
+  filterByArea = "all",
+  # Default to prevent missing arg
+  filterBySeason = "all",
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = TRUE,
+  tidy = FALSE,
+  q = NULL,
+  a = 0.0384
 ) {
-  
   # -----------------------------------------------------------------------
   # Deprecation Warning
   # -----------------------------------------------------------------------
@@ -90,7 +89,7 @@ calc_swept_area <- function(
     "`calc_swept_area()` will soon strictly return tidy output.",
     call. = FALSE
   )
-  
+
   # Check for required fields early to prevent crashes
   required_cols <- c(
     "YEAR",
@@ -101,7 +100,7 @@ calc_swept_area <- function(
     "BIOMASS",
     groupDescription
   )
-  
+
   missing_cols <- setdiff(required_cols, names(surveyData))
   if (length(missing_cols) > 0) {
     stop(
@@ -111,12 +110,12 @@ calc_swept_area <- function(
       )
     )
   }
-  
+
   # Ensure input is a data.table to prevent legacy := crashes
   if (!data.table::is.data.table(surveyData)) {
     surveyData <- data.table::as.data.table(surveyData)
   }
-  
+
   # -----------------------------------------------------------------------
   # Run Stratified Mean
   # -----------------------------------------------------------------------
@@ -131,7 +130,7 @@ calc_swept_area <- function(
     mergesexFlag,
     returnPrepData = TRUE
   )
-  
+
   # -----------------------------------------------------------------------
   # Calculate total biomass/abundance estimates
   # -----------------------------------------------------------------------
@@ -144,7 +143,7 @@ calc_swept_area <- function(
     a = a,
     groupDescription = groupDescription
   )
-  
+
   # Explicitly assign units and format output
   if (tidy) {
     message("Tidying data  ...")
@@ -189,6 +188,6 @@ calc_swept_area <- function(
         Swept_Area_Used = a
       )
   }
-  
+
   return(sweptareaData)
 }
