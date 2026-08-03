@@ -207,7 +207,6 @@ get_survdat_clam_data <- function(
     clamdat[!is.na(DEPTH) & DEPTH > 80, new_stratum := '0']
     
     # 4. Map to Assessment Regions (South vs GBK)
-    # Because 2018+ data natively arrives as "1S", "2Q", etc., it matches these lists automatically!
     clamdat[, clam.region := data.table::fcase(
       new_stratum %in% c("1S","2S","3S","4S","5S","6S","1Q","2Q","3Q","4Q","5Q","6Q"), "South",
       new_stratum %in% c("7S","8S","9S","10S","11S","12S","7Q","8Q","9Q","10Q","11Q","12Q"), "GBK",
@@ -238,3 +237,22 @@ get_survdat_clam_data <- function(
     clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
     data.table::setnames(clamdat, "stamw", "BIOMASS.MW")
   }
+  
+  if (tidy) {
+    clamdat <- tibble::as_tibble(clamdat)
+  }
+  
+  sql <- list(
+    cruise = cruise.qry,
+    station = station.qry,
+    catch = catch.qry,
+    length = length.qry
+  )
+  
+  return(list(
+    data = clamdat,
+    sql = sql,
+    pullDate = date(),
+    functionCall = call
+  ))
+}
