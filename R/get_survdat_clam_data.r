@@ -116,7 +116,6 @@ get_survdat_clam_data <- function(
   data.table::setkey(clamdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
   clamdat <- base::merge(clamdat, len, all.x = T)
   
-  clamdat[, STRATUM := as.numeric(STRATUM)]
   
   if (assignRegionWeights) {
     
