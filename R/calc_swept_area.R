@@ -152,14 +152,19 @@ calc_swept_area <- function(
       as_tibble() |>
       pivot_longer(
         cols = c(
+          "N",
           "strat.biomass",
           "biomass.var",
+          "biomass.SE",
           "strat.abund",
           "abund.var",
+          "abund.SE",
           "tot.biomass",
           "tot.bio.var",
+          "tot.bio.SE",
           "tot.abundance",
-          "tot.abund.var"
+          "tot.abund.var",
+          "tot.abund.SE"
         ),
         names_to = "variable",
         values_to = "value"
@@ -168,12 +173,17 @@ calc_swept_area <- function(
         units = case_when(
           variable == "strat.biomass" ~ "kg tow^-1",
           variable == "biomass.var" ~ "(kg tow^-1)^2",
+          variable == "biomass.SE" ~ "kg tow^-1",
           variable == "strat.abund" ~ "number",
           variable == "abund.var" ~ "numbers^2",
+          variable == "abund.SE" ~ "number",
           variable == "tot.biomass" ~ "kg",
           variable == "tot.bio.var" ~ "kg^2",
+          variable == "tot.bio.SE" ~ "kg",
           variable == "tot.abundance" ~ "number",
           variable == "tot.abund.var" ~ "numbers^2",
+          variable == "tot.abund.SE" ~ "number",
+          variable == "N" ~ "tows",
           TRUE ~ NA_character_
         )
       )
