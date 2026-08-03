@@ -122,20 +122,19 @@ get_survdat_clam_data <- function(
     # 1. Clean the base stratum safely
     clamdat[, calc_strat := as.character(STRATUM)]
     # ONLY strip leading 6 and trailing 0 if it is an old 4+ digit shellfish stratum (e.g. 6170, 6010)
-    # This protects the modern 2018+ strata (1 through 12) from being corrupted
+    # This protects the modern 2018+ strata (which already look like "1S", "2Q") from being corrupted
     clamdat[nchar(calc_strat) >= 4 & grepl("^6", calc_strat), 
             calc_strat := gsub("0$", "", gsub("^6", "", calc_strat))]
     
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
     
-    # 2. Geometric Stratum Splits
+    # 2. Geometric Stratum Splits (Pre-2018)
     clamdat[calc_strat == '47', 
             calc_strat := data.table::fifelse(((LON - 69.23) * (41 - 40) - (LAT - 40) * (69.03 - 69.23)) > 0, '471', '472')]
     
     clamdat[calc_strat == '73', 
             calc_strat := data.table::fifelse(((LON - 66.8) * (41.9 - 41.35) - (LAT - 41.35) * (67.5 - 66.8)) > 0, '73', '74')]
     
-    # Hudson Canyon Quahog Splits
     clamdat[SVSPP == 409 & calc_strat %in% c('25', '26') & LAT >= 39.3 & LAT <= 40.2 & 
               (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0), 
             calc_strat := data.table::fifelse(calc_strat == '26', '30', '29')]
@@ -152,7 +151,6 @@ get_survdat_clam_data <- function(
               (((LON - 73.775) * (40.5 - 40.25) - (LAT - 40.25) * (73.825 - 73.775)) < 0), 
             calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')]
     
-    # Southernmost Quahog Splits
     clamdat[SVSPP == 409 & calc_strat == '17' & 
               (((LON - 74.29) * (38.6 - 38.94) - (LAT - 38.94) * (74.57 - 74.29)) < 0), 
             calc_strat := '0']
@@ -209,18 +207,15 @@ get_survdat_clam_data <- function(
     clamdat[!is.na(DEPTH) & DEPTH > 80, new_stratum := '0']
     
     # 4. Map to Assessment Regions (South vs GBK)
-    clamdat[, num_strat := suppressWarnings(as.numeric(new_stratum))]
-    
+    # Because 2018+ data natively arrives as "1S", "2Q", etc., it matches these lists automatically!
     clamdat[, clam.region := data.table::fcase(
       new_stratum %in% c("1S","2S","3S","4S","5S","6S","1Q","2Q","3Q","4Q","5Q","6Q"), "South",
       new_stratum %in% c("7S","8S","9S","10S","11S","12S","7Q","8Q","9Q","10Q","11Q","12Q"), "GBK",
-      sv_year >= 2018 & num_strat %in% 1:6, "South",
-      sv_year >= 2018 & num_strat %in% 7:12, "GBK",
       default = NA_character_
     )]
     
     # Clean up intermediate geometric columns
-    clamdat[, c('calc_strat', 'sv_year', 'new_stratum', 'num_strat') := NULL]
+    clamdat[, c('calc_strat', 'sv_year', 'new_stratum') := NULL]
     
     # 5. Apply Meat Weight Coefficients
     coeff <- data.table::data.table(
@@ -232,8 +227,6 @@ get_survdat_clam_data <- function(
     )
     
     coeff[, clam.region := as.factor(clam.region)]
-    
-    # all.x = TRUE prevents the dropping of unmapped/non-assessment tows
     clamdat <- base::merge(clamdat, coeff, by = 'clam.region', all.x = TRUE)
     
     #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
@@ -245,22 +238,3 @@ get_survdat_clam_data <- function(
     clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
     data.table::setnames(clamdat, "stamw", "BIOMASS.MW")
   }
-  
-  if (tidy) {
-    clamdat <- tibble::as_tibble(clamdat)
-  }
-  
-  sql <- list(
-    cruise = cruise.qry,
-    station = station.qry,
-    catch = catch.qry,
-    length = length.qry
-  )
-  
-  return(list(
-    data = clamdat,
-    sql = sql,
-    pullDate = date(),
-    functionCall = call
-  ))
-}
