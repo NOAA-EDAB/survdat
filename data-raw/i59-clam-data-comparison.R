@@ -26,27 +26,13 @@ my_user <- readline(prompt = "Enter your Oracle username: ")
 # Connect to the database
 channel <- dbutils::connect_to_database("NEFSC_pw_oraprod", my_user)
 
-# 2. Pull Data
-# ------------------------------------------------------------------------------
-message("Pulling old data...")
-t_old <- system.time({
-  old_pull <- get_survdat_clam_data_old(channel, assignRegionWeights = TRUE)
-})
-old_data <- old_pull$data
-
-message("Pulling new data...")
-t_new <- system.time({
-  new_pull <- get_survdat_clam_data(channel, assignRegionWeights = TRUE)
-})
-new_data <- new_pull$data
-
-# 3. Performance Benchmark
+# 2. Performance Benchmark
 # ------------------------------------------------------------------------------
 message("Performance Comparison:")
 message("Old version took: ", round(t_old["elapsed"], 2), " seconds")
 message("New version took: ", round(t_new["elapsed"], 2), " seconds")
 
-# 4. Data Integrity Checks
+# 3. Data Integrity Checks
 # ------------------------------------------------------------------------------
 message("\n--- Checking Row Counts ---")
 if (nrow(old_data) == nrow(new_data)) {
@@ -74,13 +60,13 @@ if (unmatched == 0) {
   message("FAIL: Found ", unmatched, " unmatched rows.")
 }
 
-# 5. Region Translation Checks
+# 4. Region Translation Checks
 # ------------------------------------------------------------------------------
 message("\n--- Region Translation Matrix (Old vs New) ---")
 # This shows how the old 7 regions map to the new South/GBK regions
 print(table(Old = comp_dt$old_region, New = comp_dt$new_region, useNA = "ifany"))
 
-# 6. Post-2017 Strata Check
+# 5. Post-2017 Strata Check
 # ------------------------------------------------------------------------------
 message("\n--- Checking 2018+ Region Assignments ---")
 comp_dt[, year := floor(as.numeric(CRUISE6) / 100)]
@@ -89,7 +75,7 @@ recent_data <- comp_dt[year >= 2018]
 print(table(Year = recent_data$year, New_Region = recent_data$new_region, useNA = "ifany"))
 
 
-# 7. Explicit 2018+ Missing Data Exploration (Table)
+# 6. Explicit 2018+ Missing Data Exploration (Table)
 # ------------------------------------------------------------------------------
 message("\n--- 2018+ Data Dropped by Old Script ---")
 missing_summary <- recent_data[, .(
@@ -101,7 +87,7 @@ missing_summary <- recent_data[, .(
 print(missing_summary)
 
 
-# 8. Mapping the Missing Data
+# 7. Mapping the Missing Data
 # ------------------------------------------------------------------------------
 message("\n--- Generating Spatial Map of Dropped 2018+ Tows ---")
 
@@ -142,7 +128,7 @@ print(p)
 ggsave("data-raw/i59_missing_2018_tows_map.png", p, width = 8, height = 6, bg = "white")
 message("Map saved to 'data-raw/i59_missing_2018_tows_map.png'")
 
-# 9. Identifying the Exact Year of the Strata Transition
+# 8. Identifying the Exact Year of the Strata Transition
 # ------------------------------------------------------------------------------
 message("\n--- Identifying the Exact Year of the Strata Transition ---")
 # Look at raw STRATUM codes between 2015 and 2019 to see exactly when the format shifts
