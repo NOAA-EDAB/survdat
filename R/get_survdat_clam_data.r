@@ -123,8 +123,8 @@ get_survdat_clam_data <- function(
     clamdat[, calc_strat := as.character(STRATUM)]
     # ONLY strip leading 6 and trailing 0 if it is an old 4+ digit shellfish stratum (e.g. 6170, 6010)
     # This protects the modern 2018+ strata (which already look like "1S", "2Q") from being corrupted
-    clamdat[nchar(calc_strat) >= 4 & grepl("^6", calc_strat), 
-            calc_strat := gsub("0$", "", gsub("^6", "", calc_strat))]
+    clamdat[nchar(calc_strat) >= 4 & grepl("^0?6", calc_strat), 
+            calc_strat := gsub("0$", "", gsub("^0?6", "", calc_strat))]
     
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
     
