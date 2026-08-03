@@ -224,13 +224,12 @@ get_survdat_clam_data <- function(
     clamdat[, c('calc_strat', 'sv_year', 'new_stratum', 'num_strat') := NULL]
     
     # 5. Apply Meat Weight Coefficients
-    # TODO: Fill in the NA values with the new biological parameters for South/GBK
     coeff <- data.table::data.table(
       clam.region = c('South', 'GBK'),
-      oq.a = c(NA_real_, NA_real_),
-      oq.b = c(NA_real_, NA_real_),
-      sc.a = c(NA_real_, NA_real_),
-      sc.b = c(NA_real_, NA_real_)
+      oq.a = c(-9.35615, -8.96907),
+      oq.b = c(2.84542, 2.767282),
+      sc.a = c(-8.52317, -8.27443),
+      sc.b = c(2.675218, 2.654215)
     )
     
     coeff[, clam.region := as.factor(clam.region)]
