@@ -26,11 +26,19 @@ my_user <- readline(prompt = "Enter your Oracle username: ")
 # Connect to the database
 channel <- dbutils::connect_to_database("NEFSC_pw_oraprod", my_user)
 
-# 2. Performance Benchmark
+# 2. Pull Data
 # ------------------------------------------------------------------------------
-message("Performance Comparison:")
-message("Old version took: ", round(t_old["elapsed"], 2), " seconds")
-message("New version took: ", round(t_new["elapsed"], 2), " seconds")
+message("Pulling old data...")
+t_old <- system.time({
+  old_pull <- get_survdat_clam_data_old(channel, assignRegionWeights = TRUE)
+})
+old_data <- old_pull$data
+
+message("Pulling new data...")
+t_new <- system.time({
+  new_pull <- get_survdat_clam_data(channel, assignRegionWeights = TRUE)
+})
+new_data <- new_pull$data
 
 # 3. Data Integrity Checks
 # ------------------------------------------------------------------------------
