@@ -18,172 +18,160 @@
 ### NOTE: possible new function call
 # calc_condition(surveyData, channel)
 
-### NOTE: old function call
-calc_condition <- function(
-  surveyData,
-  channel,
-  by_EPU = TRUE,
-  by_sex = FALSE,
-  length_break = NULL,
-  more_than_20_years = TRUE,
-  record_outliers = FALSE,
-  output = "soe"
-) {
-  ### NOTE: Code chunks below, revised from NEesp2::species_condition - test before putting in function
+load("~/survdat/data/EPUstrata.rda")
 
-  ### NOTE: FIGURE OUT HOW TO LOAD SHAPEFILE FROM SURVDAT, THEN FIX NEXT 7 LINES
-  survey.data <- surveyData$survdat |>
-    dplyr::left_join(EPUstrata)
-  # }
+survey.data <- surveyData$survdat |>
+  dplyr::left_join(EPUstrata)
+# }
 
-  # Change sex = NA to sex = 0
-  fall <- survey.data |>
-    dplyr::filter(.data$SEASON == "FALL") |>
-    dplyr::mutate(
-      sex = dplyr::if_else(is.na(.data$SEX), "0", as.character(.data$SEX))
-    )
-
-  # pull LW data from 'get_length_weight' and filter to fall
-  lwpull <- survdat::get_length_weight(channel)
-  lwfall <- lwpull$data |>
-    dplyr::select(
-      .data$SVSPP,
-      .data$CATCHSEX,
-      .data$SVLWCOEFF_FALL,
-      .data$SVLWEXP_FALL
-    )
-
-  # pull species common names and SVSPP from 'get_species'
-  species <- survdat::get_species(channel)
-  species_data <- species$data |>
-    dplyr::select(.data$SVSPP, .data$COMNAME) |>
-    tidyr::drop_na(.data$SVSPP, .data$COMNAME)
-
-  #group LWfall and species_data by SVSPP
-  combined_lw_species <- lwfall |>
-    dplyr::inner_join(species_data, by = "SVSPP")
-
-  # get sex info from 'get_sex' and join with combined_lw_species
-  sex_data <- survdat::get_sex(channel)
-  sex <- sex_data$data |>
-    dplyr::rename(CATCHSEX = SEX)
-
-  # add male, female, and unsexed descriptions to CATCHSEX numbers
-  ### NOTE: CATCHSEX 3-7 apply to Northern Shrimp and Lobster Only
-  LWsexed <- combined_lw_species |>
-    dplyr::inner_join(sex, by = "CATCHSEX") |>
-    dplyr::mutate(
-      SEX_DESCRIPTION = dplyr::case_when(
-        CATCHSEX == 0 ~ "Unsexed",
-        CATCHSEX == 1 ~ "Male",
-        CATCHSEX == 2 ~ "Female",
-        TRUE ~ SEX_DESCRIPTION # Keeps original value if CATCHSEX is anything else (e.g., NA)
-      )
-    )
-
-  # combine LW/sex/species data with Fall survey data
-  new_data <- LWsexed |>
-    dplyr::inner_join(fall, by = c("SVSPP", "CATCHSEX"))
-
-  # filters out values without losing rows with NAs:
-  mergewt <- dplyr::filter(new_data, is.na(.data$INDWT) | .data$INDWT < 900)
-  mergewtno0 <- dplyr::filter(mergewt, is.na(.data$INDWT) | .data$INDWT > 0.004)
-  mergelenno0 <- dplyr::filter(
-    mergewtno0,
-    is.na(.data$LENGTH) | .data$LENGTH > 0
+# Change sex = NA to sex = 0
+fall <- survey.data |>
+  dplyr::filter(.data$SEASON == "FALL") |>
+  dplyr::mutate(
+    sex = dplyr::if_else(is.na(.data$SEX), "0", as.character(.data$SEX))
   )
-  mergelen <- dplyr::filter(mergelenno0, !is.na(.data$LENGTH))
-  mergeindwt <- dplyr::filter(mergelen, !is.na(.data$INDWT))
-  mergeLW <- dplyr::filter(mergeindwt, !is.na(.data$SVLWCOEFF_FALL))
 
-  ### Calculate species condition ###
 
-  condcalc <- dplyr::mutate(
-    mergeLW,
-    predwt = (exp(.data$SVLWCOEFF_FALL)) * .data$LENGTH^.data$SVLWEXP_FALL,
-    RelCond = .data$INDWT / .data$predwt
-  ) |>
-    dplyr::filter(is.na(.data$RelCond) | .data$RelCond < 300) |>
-    dplyr::group_by(.data$SVSPP, .data$SEX) |>
-    dplyr::mutate(
-      mean = mean(.data$RelCond),
-      sd = stats::sd(.data$RelCond)
-    ) |>
-    dplyr::ungroup() |>
-    # might want to update this outlier removal eventually
-    dplyr::mutate(
-      outlier = .data$RelCond > (.data$mean + (2 * .data$sd)) |
-        .data$RelCond < (.data$mean - (2 * .data$sd))
+# pull LW data from 'get_length_weight' and filter to fall
+lwpull <- survdat::get_length_weight(channel)
+lwfall <- lwpull$data |>
+  dplyr::select(
+    .data$SVSPP,
+    .data$CATCHSEX,
+    .data$SVLWCOEFF_FALL,
+    .data$SVLWEXP_FALL
+  )
+
+# pull species common names and SVSPP from 'get_species'
+species <- survdat::get_species(channel)
+species_data <- species$data |>
+  dplyr::select(.data$SVSPP, .data$COMNAME) |>
+  tidyr::drop_na(.data$SVSPP, .data$COMNAME)
+
+#group LWfall and species_data by SVSPP
+combined_lw_species <- lwfall |>
+  dplyr::inner_join(species_data, by = "SVSPP")
+
+# get sex info from 'get_sex' and join with combined_lw_species
+sex_data <- survdat::get_sex(channel)
+sex <- sex_data$data |>
+  dplyr::rename(CATCHSEX = SEX)
+
+# add male, female, and unsexed descriptions to CATCHSEX numbers
+### NOTE: CATCHSEX 3-7 apply to Northern Shrimp and Lobster Only
+LWsexed <- combined_lw_species |>
+  dplyr::inner_join(sex, by = "CATCHSEX") |>
+  dplyr::mutate(
+    SEX_DESCRIPTION = dplyr::case_when(
+      CATCHSEX == 0 ~ "Unsexed",
+      CATCHSEX == 1 ~ "Male",
+      CATCHSEX == 2 ~ "Female",
+      TRUE ~ SEX_DESCRIPTION # Keeps original value if CATCHSEX is anything else (e.g., NA)
     )
+  )
 
-  ### NOTE: do we want to keep the outlier parameter and outlier recording? If so, uncomment the following lines
-  ### The record outliers parameter was from the NEesp2 script
-  message(paste0(
-    "Removing ",
-    sum(condcalc$outlier, na.rm = TRUE),
-    " outliers from the data set."
-  ))
+# combine LW/sex/species data with Fall survey data
+new_data <- LWsexed |>
+  dplyr::inner_join(fall, by = c("SVSPP", "CATCHSEX"))
 
-  if (record_outliers) {
-    outliers <- condcalc |>
-      dplyr::filter(.data$outlier == TRUE)
-  }
+# filters out values without losing rows with NAs:
+mergewt <- dplyr::filter(new_data, is.na(.data$INDWT) | .data$INDWT < 900)
+mergewtno0 <- dplyr::filter(mergewt, is.na(.data$INDWT) | .data$INDWT > 0.004)
+mergelenno0 <- dplyr::filter(
+  mergewtno0,
+  is.na(.data$LENGTH) | .data$LENGTH > 0
+)
+mergelen <- dplyr::filter(mergelenno0, !is.na(.data$LENGTH))
+mergeindwt <- dplyr::filter(mergelen, !is.na(.data$INDWT))
+mergeLW <- dplyr::filter(mergeindwt, !is.na(.data$SVLWCOEFF_FALL))
 
-  condcalc <- condcalc |>
-    #  dplyr::filter(.data$outlier == FALSE) |>
-    dplyr::filter(is.na(.data$sex) | .data$sex != 4) |>
-    dplyr::mutate(sexMF = .data$sex)
+### Calculate species condition ###
 
-  species.codes <- survdat::get_species(channel = channel)$data |>
-    dplyr::rename(Species = COMNAME) |>
-    dplyr::select(Species, SVSPP) |>
-    tidyr::drop_na()
+condcalc <- dplyr::mutate(
+  mergeLW,
+  predwt = (exp(.data$SVLWCOEFF_FALL)) * .data$LENGTH^.data$SVLWEXP_FALL,
+  RelCond = .data$INDWT / .data$predwt
+) |>
+  dplyr::filter(is.na(.data$RelCond) | .data$RelCond < 300) |>
+  dplyr::group_by(.data$SVSPP, .data$SEX) |>
+  dplyr::mutate(
+    mean = mean(.data$RelCond),
+    sd = stats::sd(.data$RelCond)
+  ) |>
+  dplyr::ungroup() |>
+  # might want to update this outlier removal eventually
+  dplyr::mutate(
+    outlier = .data$RelCond > (.data$mean + (2 * .data$sd)) |
+      .data$RelCond < (.data$mean - (2 * .data$sd))
+  )
 
-  cond.epu <- dplyr::left_join(condcalc, species.codes, by = c("SVSPP"))
+### NOTE: do we want to keep the outlier parameter and outlier recording? If so, uncomment the following lines
+### The record outliers parameter was from the NEesp2 script
+message(paste0(
+  "Removing ",
+  sum(condcalc$outlier, na.rm = TRUE),
+  " outliers from the data set."
+))
 
-  # Summarize annually -- parameterized groupings
-  grouping_vars <- c("Species", "YEAR", "EPU")
-
-  ### NOTE: the by_sex and length_break parameters were from the NEesp2 script. Do we want to keep them? If so, uncomment the following lines
-  # if (by_sex) {
-  #   grouping_vars <- c(grouping_vars, "sexMF")
-  # }
-  #
-  # if (!is.null(length_break)) {
-  #   cond.epu <- cond.epu |>
-  #     dplyr::mutate(
-  #       length_group = cut(
-  #         .data$LENGTH,
-  #         breaks = length_break,
-  #         include.lowest = TRUE
-  #       )
-  #     )
-  #   grouping_vars <- c(grouping_vars, "length_group")
-  # }
-  #
-  grouped_condition <- cond.epu |>
-    dplyr::group_by(!!!rlang::syms(grouping_vars))
-
-  condition <- grouped_condition |>
-    dplyr::summarize(
-      MeanCond = mean(.data$RelCond),
-      nCond = dplyr::n()
-    ) |>
-    dplyr::ungroup() |>
-    dplyr::filter(.data$nCond >= 3) |>
-    # select columns
-    dplyr::select(dplyr::all_of(c(grouping_vars, "MeanCond", "nCond"))) |>
-    # group again, without YEAR
-    dplyr::group_by(
-      !!!rlang::syms(grouping_vars[-which(grouping_vars == "YEAR")])
-    ) |>
-    # filter to only species with 20+ years of data
-    dplyr::mutate(n = dplyr::n())
-
-  return(condition)
+if (record_outliers) {
+  outliers <- condcalc |>
+    dplyr::filter(.data$outlier == TRUE)
 }
 
+condcalc <- condcalc |>
+  #  dplyr::filter(.data$outlier == FALSE) |>
+  dplyr::filter(is.na(.data$sex) | .data$sex != 4) |>
+  dplyr::mutate(sexMF = .data$sex)
+
+species.codes <- survdat::get_species(channel = channel)$data |>
+  dplyr::rename(Species = COMNAME) |>
+  dplyr::select(Species, SVSPP) |>
+  tidyr::drop_na()
+
+cond.epu <- dplyr::left_join(condcalc, species.codes, by = c("SVSPP"))
+
+# Summarize annually -- parameterized groupings
+grouping_vars <- c("Species", "YEAR", "EPU")
+
+### NOTE: the by_sex and length_break parameters were from the NEesp2 script. Do we want to keep them? If so, uncomment the following lines
+# if (by_sex) {
+#   grouping_vars <- c(grouping_vars, "sexMF")
+# }
+#
+# if (!is.null(length_break)) {
+#   cond.epu <- cond.epu |>
+#     dplyr::mutate(
+#       length_group = cut(
+#         .data$LENGTH,
+#         breaks = length_break,
+#         include.lowest = TRUE
+#       )
+#     )
+#   grouping_vars <- c(grouping_vars, "length_group")
+# }
+#
+grouped_condition <- cond.epu |>
+  dplyr::group_by(!!!rlang::syms(grouping_vars))
+
+condition <- grouped_condition |>
+  dplyr::summarize(
+    MeanCond = mean(.data$RelCond),
+    nCond = dplyr::n()
+  ) |>
+  dplyr::ungroup() |>
+  dplyr::filter(.data$nCond >= 3) |>
+  # select columns
+  dplyr::select(dplyr::all_of(c(grouping_vars, "MeanCond", "nCond"))) |>
+  # group again, without YEAR
+  dplyr::group_by(
+    !!!rlang::syms(grouping_vars[-which(grouping_vars == "YEAR")])
+  ) |>
+  # filter to only species with 20+ years of data
+  dplyr::mutate(n = dplyr::n())
+
+
 ######### Comparison of new and old data
+### Also ran new condition but using the Wigley LWparams to compare, matched old data. Must be some difference in the params between survdat and Wigley.
 write.csv(
   condition,
   file = here::here("data-raw/new_condition.csv"),
