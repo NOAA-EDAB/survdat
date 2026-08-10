@@ -221,8 +221,8 @@ get_survdat_clam_data <- function(
       clam.region = c('South', 'GBK'),
       oq.a = c(-9.35615, -8.96907),
       oq.b = c(2.84542, 2.767282),
-      sc.a = c(-8.52317, -8.27443),
-      sc.b = c(2.675218, 2.654215)
+      sc.a = c(log(9e-05), log(0.00011)), # Using 2024 MTA values wrapped in log()
+      sc.b = c(2.733, 2.733)              # Using 2024 MTA values
     )
     
     coeff[, clam.region := as.factor(clam.region)]
