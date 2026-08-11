@@ -32,8 +32,6 @@
 #' @family survdat
 #'
 #' @importFrom data.table :=
-#' @import dplyr
-#' @import tidyr
 #'
 #' @examples
 #' \dontrun{
@@ -149,8 +147,8 @@ calc_swept_area <- function(
     message("Tidying data  ...")
     # Converted to tidyr logic for explicit unit mapping
     sweptareaData <- sweptareaData |>
-      as_tibble() |>
-      pivot_longer(
+      dplyr::as_tibble() |>
+      tidyr::pivot_longer(
         cols = c(
           "N",
           "strat.biomass",
@@ -169,8 +167,8 @@ calc_swept_area <- function(
         names_to = "variable",
         values_to = "value"
       ) |>
-      mutate(
-        units = case_when(
+      dplyr::mutate(
+        units = dplyr::case_when(
           variable == "strat.biomass" ~ "kg tow^-1",
           variable == "biomass.var" ~ "(kg tow^-1)^2",
           variable == "biomass.SE" ~ "kg tow^-1",
@@ -190,8 +188,8 @@ calc_swept_area <- function(
   } else {
     # If not tidy, add descriptive unit columns to the wide format
     sweptareaData <- sweptareaData |>
-      as_tibble() |>
-      mutate(
+      dplyr::as_tibble() |>
+      dplyr::mutate(
         Biomass_Units = "kg",
         Abundance_Units = "number",
         Stratified_Biomass_Units = "kg tow^-1",
