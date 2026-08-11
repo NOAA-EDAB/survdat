@@ -319,7 +319,7 @@ get_survdat_clam_data <- function(
   }
 
   if (tidy) {
-    clamdat <- tibble::as_tibble(clamdat)
+    clamdat <- dplyr::as_tibble(clamdat)
   }
 
   sql <- list(
