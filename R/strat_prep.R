@@ -21,7 +21,7 @@
 #'
 #'@family internal
 #'
-#'\@examples
+#'@examples
 #' \dontrun{
 #' # Called internally
 #' }
