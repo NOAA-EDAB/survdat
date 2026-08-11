@@ -12,3 +12,5 @@ testing
 ^pkgdown$
 ^[.]?air[.]toml$
 ^\.vscode$
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
