@@ -219,8 +219,8 @@ get_survdat_clam_data <- function(
     # 5. Apply Meat Weight Coefficients
     coeff <- data.table::data.table(
       clam.region = c('South', 'GBK'),
-      oq.a = c(-9.35615, -8.96907),
-      oq.b = c(2.84542, 2.767282),
+      oq.a = c(log(0.00011),log(0.00011)), # Values from 2020 Stock Assessment
+      oq.b = c(2.733, 2.733), # Values from 2020 Stock Assessment
       sc.a = c(log(9e-05), log(0.00011)), # Using 2024 MTA values wrapped in log()
       sc.b = c(2.733, 2.733)              # Using 2024 MTA values
     )
