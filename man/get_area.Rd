@@ -41,7 +41,6 @@ Other survdat:
 \code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
 \code{\link[=calc_swept_area]{calc_swept_area()}},
 \code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
-\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
 \code{\link[=get_survdat_data]{get_survdat_data()}},
 \code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }

@@ -61,12 +61,14 @@ After counting the number of tows and calculating the relative weight of each st
 # Pull data and apply conversion corrections
 data <- get_survdat_data(channel)
 # Calculate stratified mean for specific survey strata for the SPRING season
-calc_stratified_mean(surveyData=data$survdat, filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING")
+calc_stratified_mean(surveyData = data$survdat, filterByArea = c(1220, 1240, 1260:1290,1360:1400),
+    filterBySeason = "SPRING")
 
 # Calculate stratified mean for area defined by EPU regions, for all seasons ("SPRING", "FALL")
 # Read in EPU shapefile (loaded as part of the package)
 area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"),quiet=T)
-calc_stratified_mean(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU", filterByArea="all",filterBySeason = "all")
+calc_stratified_mean(surveyData = data$survdat, areaPolygon = area, areaDescription="EPU",
+    filterByArea="all",filterBySeason = "all")
 
 }
 
@@ -77,7 +79,6 @@ Other survdat:
 \code{\link[=calc_swept_area]{calc_swept_area()}},
 \code{\link[=get_area]{get_area()}},
 \code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
-\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
 \code{\link[=get_survdat_data]{get_survdat_data()}},
 \code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }
