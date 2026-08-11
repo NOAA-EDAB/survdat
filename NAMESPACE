@@ -26,7 +26,9 @@ export(strat_prep)
 export(swept_area)
 import(dplyr)
 import(tidyr)
-importFrom(data.table,"%like%")
-importFrom(data.table,":=")
-importFrom(data.table,"key")
+importFrom(data.table,
+  "%like%",
+  ":=",
+  "key"
+)
 importFrom(magrittr,"%>%")
