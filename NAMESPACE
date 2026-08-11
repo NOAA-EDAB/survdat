@@ -24,8 +24,6 @@ export(post_strat)
 export(strat_mean)
 export(strat_prep)
 export(swept_area)
-import(dplyr)
-import(tidyr)
 importFrom(data.table,
   "%like%",
   ":=",
