@@ -48,7 +48,7 @@ or
 
 | [andybeet](https://github.com/andybeet) | [slucey](https://github.com/slucey) |
 |----|----|
-| [![](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet "andybeet avatar") | [![](https://avatars.githubusercontent.com/u/5578254?s=100&u=cd59cd654cab73ea583c697145bfe062222355cd&v=4)](https://github.com/slucey "slucey avatar") |
+| [![andybeet avatar](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet "andybeet avatar") | [![lucey avatar](https://avatars.githubusercontent.com/u/5578254?s=100&u=cd59cd654cab73ea583c697145bfe062222355cd&v=4)](https://github.com/slucey "slucey avatar") |
 
 #### Legal disclaimer
 

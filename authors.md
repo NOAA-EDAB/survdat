@@ -13,12 +13,12 @@ Source:
 [`DESCRIPTION`](https://github.com/NOAA-EDAB/survdat/blob/main/DESCRIPTION)
 
 Lucey S, Beet A (2026). *survdat: Tools for working with NEFSC survey
-data*. R package version 1.2.0, <https://github.com/NOAA-EDAB/survdat>.
+data*. R package version 2.0.0, <https://github.com/NOAA-EDAB/survdat>.
 
     @Manual{,
       title = {survdat: Tools for working with NEFSC survey data},
       author = {Sean Lucey and Andy Beet},
       year = {2026},
-      note = {R package version 1.2.0},
+      note = {R package version 2.0.0},
       url = {https://github.com/NOAA-EDAB/survdat},
     }

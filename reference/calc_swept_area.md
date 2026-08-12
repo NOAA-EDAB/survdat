@@ -1,6 +1,18 @@
 # Calculate swept area biomass
 
-Calculates the biomass. Details found here ...
+This function is a wrapper of intermediate functions
+[`calc_stratified_mean`](https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.md)
+and
+[`swept_area`](https://noaa-edab.github.io/survdat/reference/swept_area.md).
+The
+[`calc_stratified_mean`](https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.md)
+function is used to calculate the stratified mean biomass and abundance
+for each group (e.g. species) and season, as well as the variance and
+standard error of the mean. The resulting output of
+[`calc_stratified_mean`](https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.md)
+is then passed to the
+[`swept_area`](https://noaa-edab.github.io/survdat/reference/swept_area.md)
+function which calculates the total biomass/abundance estimates.
 
 ## Usage
 
@@ -10,11 +22,11 @@ calc_swept_area(
   areaPolygon = "NEFSC strata",
   areaDescription = "STRATA",
   filterByArea = "all",
-  filterBySeason,
+  filterBySeason = "all",
   groupDescription = "SVSPP",
   filterByGroup = "all",
-  mergesexFlag = T,
-  tidy = F,
+  mergesexFlag = TRUE,
+  tidy = FALSE,
   q = NULL,
   a = 0.0384
 )
@@ -66,7 +78,10 @@ calc_swept_area(
 
 - tidy:
 
-  Boolean. Return output in long format (Default = F).
+  \[Deprecated\] Logical. The `tidy` argument is deprecated and will be
+  removed in the next version. The function will soon strictly return
+  tidy output. Currently controls whether the output is formatted as a
+  tidy dataset.
 
 - q:
 
@@ -77,11 +92,19 @@ calc_swept_area(
 - a:
 
   Numeric. The average swept area of the trawl. Default value is the
-  swept area of a standard NOAA Ship Albatross IV tow.
+  swept area of a standard NOAA Ship Albatross IV tow. ([NEFSC,
+  2006](https://repository.library.noaa.gov/view/noaa/25243))
 
 ## Value
 
 data frame
+
+## Source
+
+43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006.
+[\*\*43rd SAW assessment report.\*\* US Dep. Commer., Northeast Fish.
+Sci. Cent. Ref. Doc. 06-25; 400
+p.](https://repository.library.noaa.gov/view/noaa/25243)
 
 ## See also
 
@@ -89,7 +112,6 @@ Other survdat:
 [`calc_stratified_mean()`](https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.md),
 [`get_area()`](https://noaa-edab.github.io/survdat/reference/get_area.md),
 [`get_mass_inshore_survey_data()`](https://noaa-edab.github.io/survdat/reference/get_mass_inshore_survey_data.md),
-[`get_survdat_clam_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.md),
 [`get_survdat_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_data.md),
 [`get_survdat_scallop_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.md)
 
@@ -99,13 +121,29 @@ Other survdat:
 if (FALSE) { # \dontrun{
 # Pull data and apply conversion corrections
 data <- get_survdat_data(channel)
-# Calculate swept area biomass for specific survey strata for the SPRING season
-calc_swept_area(surveyData=data$survdat, filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING")
+# Calculate swept area biomass for specific survey strata for the
+# SPRING season
+calc_swept_area(
+  surveyData = data$survdat,
+  filterByArea = c(1220, 1240, 1260:1290, 1360:1400),
+  filterBySeason = "SPRING"
+)
 
-# Calculate stratified mean for area defined by EPU regions, for all seasons ("SPRING", "FALL") and return in Tidy format
+# Calculate stratified mean for area defined by EPU regions, for all
+# seasons ("SPRING", "FALL") and return in Tidy format
 # Read in EPU shapefile (loaded as part of the package)
-area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"),quiet=T)
-calc_swept_area(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU", filterByArea="all",filterBySeason = "all",tidy=T)
+area <- sf::st_read(
+  dsn = system.file("extdata", "EPU.shp", package = "survdat"),
+  quiet = TRUE
+)
+calc_swept_area(
+  surveyData = data$survdat,
+  areaPolygon = area,
+  areaDescription = "EPU",
+  filterByArea = "all",
+  filterBySeason = "all",
+  tidy = TRUE
+)
 
 } # }
 

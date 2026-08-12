@@ -294,7 +294,6 @@ Other survdat:
 [`calc_swept_area()`](https://noaa-edab.github.io/survdat/reference/calc_swept_area.md),
 [`get_area()`](https://noaa-edab.github.io/survdat/reference/get_area.md),
 [`get_mass_inshore_survey_data()`](https://noaa-edab.github.io/survdat/reference/get_mass_inshore_survey_data.md),
-[`get_survdat_clam_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.md),
 [`get_survdat_scallop_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.md)
 
 ## Examples

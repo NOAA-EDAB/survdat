@@ -1,6 +1,12 @@
 # Extracts Massachusetts inshore bottom trawl survey data
 
-Pulls survey data
+The Massachusetts Department of Marine Fisheries (DMF) conducts spring
+and fall surveys quantifying the distribution, relative abundance, and
+size composition of finfish and select invertebrates in state waters
+since 1978. This function extracts data from the NEFSC survdat Oracle
+database for the Massachusetts inshore bottom trawl survey. The data
+includes catch and physical attributes of tows conducted as part of the
+survey.
 
 ## Usage
 
@@ -159,7 +165,6 @@ Other survdat:
 [`calc_stratified_mean()`](https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.md),
 [`calc_swept_area()`](https://noaa-edab.github.io/survdat/reference/calc_swept_area.md),
 [`get_area()`](https://noaa-edab.github.io/survdat/reference/get_area.md),
-[`get_survdat_clam_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.md),
 [`get_survdat_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_data.md),
 [`get_survdat_scallop_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.md)
 

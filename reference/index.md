@@ -26,6 +26,19 @@ Functions that pull data from the SVDBS database
 - [`get_length_weight_data()`](https://noaa-edab.github.io/survdat/reference/get_length_weight_data.md)
   : Extract Length and weight data from SVDBS
 
+## Internal Functions
+
+Functions that are used internally but can be used externally
+
+- [`strat_prep()`](https://noaa-edab.github.io/survdat/reference/strat_prep.md)
+  : Prepare survey data for calculating stratified mean
+- [`post_strat()`](https://noaa-edab.github.io/survdat/reference/post_strat.md)
+  : Assigns points to polygon
+- [`strat_mean()`](https://noaa-edab.github.io/survdat/reference/strat_mean.md)
+  : Calculate stratified mean biomass and abundance
+- [`swept_area()`](https://noaa-edab.github.io/survdat/reference/swept_area.md)
+  : Calculate the estimate of total biomass and abundance
+
 ## Helper Functions
 
 Functions that pull supporting information from the SVDBS database
@@ -56,7 +69,7 @@ Functions that pull supporting information from the SVDBS database
 Random sample of data from different types of data pulls
 
 - [`sampleBio`](https://noaa-edab.github.io/survdat/reference/sampleBio.md)
-  : Sample data pull with spcies specific biological data
+  : Sample data pull with species specific biological data
 - [`sampleLengthWeight`](https://noaa-edab.github.io/survdat/reference/sampleLengthWeight.md)
   : Sample data pull with species lengths and predicted weights
 - [`sampleLengths`](https://noaa-edab.github.io/survdat/reference/sampleLengths.md)

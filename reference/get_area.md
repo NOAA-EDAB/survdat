@@ -33,9 +33,9 @@ Returns a data.table (nx2).
 
 ## Coordinate reference system (CRS)
 
-The deafult CRS is the Lambert Conformal Conic as is denoted by :
+The deafult CRS is the Albers Equal Area as is denoted by :
 
-"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0
+"+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0
 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 
 ## See also
@@ -44,7 +44,6 @@ Other survdat:
 [`calc_stratified_mean()`](https://noaa-edab.github.io/survdat/reference/calc_stratified_mean.md),
 [`calc_swept_area()`](https://noaa-edab.github.io/survdat/reference/calc_swept_area.md),
 [`get_mass_inshore_survey_data()`](https://noaa-edab.github.io/survdat/reference/get_mass_inshore_survey_data.md),
-[`get_survdat_clam_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.md),
 [`get_survdat_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_data.md),
 [`get_survdat_scallop_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.md)
 

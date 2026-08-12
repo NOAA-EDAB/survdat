@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">survdat</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,36 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="survdat-200">survdat 2.0.0<a class="anchor" aria-label="anchor" href="#survdat-200"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-2-0-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-2-0-0"></a></h3>
+<ul><li>Dependency on R 4.1.0 to accommodate the native pipe</li>
+<li>Following functions, previously internal, are now external functions available to the user
+<ul><li><code>post_strat</code></li>
+<li><code>strat_mean</code></li>
+<li><code>strat_prep</code></li>
+<li><code>swept_area</code></li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-2-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-2-0-0"></a></h3>
+<ul><li>Printing of intermediate function output has been removed from <code><a href="../reference/calc_stratified_mean.html">calc_stratified_mean()</a></code>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="patch-fixes-2-0-0">Patch fixes<a class="anchor" aria-label="anchor" href="#patch-fixes-2-0-0"></a></h3>
+<ul><li>Units of variables in <code><a href="../reference/calc_stratified_mean.html">calc_stratified_mean()</a></code> correctly represent data</li>
+<li>
+<code>get_clam_survey_data()</code> reworked to use updated strata definitions from 2018 and resolved issue of dropped data</li>
+<li>
+<code>lwgeom</code> no longer utilized in area calculation</li>
+<li>Typecasting errors when converting between data.table and tibble</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.2.0" id="survdat-120">survdat 1.2.0<a class="anchor" aria-label="anchor" href="#survdat-120"></a></h2>
 <div class="section level3">
-<h3 id="new-feature-1-2-0">New Feature<a class="anchor" aria-label="anchor" href="#new-feature-1-2-0"></a></h3>
+<h3 id="new-features-1-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-2-0"></a></h3>
 <ul><li>
 <code>get_mass_inshore_survey_data</code> - pulls data from the Massachusetts Inshore Survey</li>
 </ul></div>
@@ -54,7 +81,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1.1" id="survdat-111">survdat 1.1.1<a class="anchor" aria-label="anchor" href="#survdat-111"></a></h2>
 <div class="section level3">
-<h3 id="bug-fixes-1-1-1">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-1"></a></h3>
+<h3 id="patch-fixes-1-1-1">Patch fixes<a class="anchor" aria-label="anchor" href="#patch-fixes-1-1-1"></a></h3>
 <ul><li>
 <code>calc_swept_area</code> function can now use a user supplied value of <code>a</code> (average swept area of trawl, km^-2)</li>
 <li>
@@ -82,7 +109,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

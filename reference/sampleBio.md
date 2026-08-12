@@ -1,4 +1,4 @@
-# Sample data pull with spcies specific biological data
+# Sample data pull with species specific biological data
 
 get_survdat_data(channel, getLengths = T, getWeightLength = F,
 conversion.factor = F, getBio = T)

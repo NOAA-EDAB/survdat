@@ -49,3 +49,12 @@ Other helper:
 [`get_species_stock_area()`](https://noaa-edab.github.io/survdat/reference/get_species_stock_area.md),
 [`get_strata()`](https://noaa-edab.github.io/survdat/reference/get_strata.md),
 [`get_vessel()`](https://noaa-edab.github.io/survdat/reference/get_vessel.md)
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+channel <- dbutils::connect_to_database(server="serverName",uid="userName")
+get_length_weight(channel = channel)
+} # }
+```

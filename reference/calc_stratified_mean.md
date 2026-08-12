@@ -1,6 +1,22 @@
 # Calculate stratified mean
 
-Calculates the stratified mean. Details of method found here ...
+Calculates the stratified mean. This function is actually a wrapper of
+intermediate functions:
+[`strat_prep`](https://noaa-edab.github.io/survdat/reference/strat_prep.md)
+and
+[`strat_mean`](https://noaa-edab.github.io/survdat/reference/strat_mean.md)
+[`strat_prep`](https://noaa-edab.github.io/survdat/reference/strat_prep.md)
+prepares the data set so that the stratified means can be calculated
+After counting the number of tows and calculating the relative weight of
+each strata, the resulting output of
+[`strat_prep`](https://noaa-edab.github.io/survdat/reference/strat_prep.md)
+is then passed to the
+[`strat_mean`](https://noaa-edab.github.io/survdat/reference/strat_mean.md)
+function
+[`strat_mean`](https://noaa-edab.github.io/survdat/reference/strat_mean.md)
+calculates the stratified mean biomass and abundance for each group
+(e.g. species) and season, as well as the variance and standard error of
+the mean.
 
 ## Usage
 
@@ -82,7 +98,6 @@ Other survdat:
 [`calc_swept_area()`](https://noaa-edab.github.io/survdat/reference/calc_swept_area.md),
 [`get_area()`](https://noaa-edab.github.io/survdat/reference/get_area.md),
 [`get_mass_inshore_survey_data()`](https://noaa-edab.github.io/survdat/reference/get_mass_inshore_survey_data.md),
-[`get_survdat_clam_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_clam_data.md),
 [`get_survdat_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_data.md),
 [`get_survdat_scallop_data()`](https://noaa-edab.github.io/survdat/reference/get_survdat_scallop_data.md)
 
@@ -93,12 +108,14 @@ if (FALSE) { # \dontrun{
 # Pull data and apply conversion corrections
 data <- get_survdat_data(channel)
 # Calculate stratified mean for specific survey strata for the SPRING season
-calc_stratified_mean(surveyData=data$survdat, filterByArea=c(1220, 1240, 1260:1290,1360:1400),filterBySeason = "SPRING")
+calc_stratified_mean(surveyData = data$survdat, filterByArea = c(1220, 1240, 1260:1290,1360:1400),
+    filterBySeason = "SPRING")
 
 # Calculate stratified mean for area defined by EPU regions, for all seasons ("SPRING", "FALL")
 # Read in EPU shapefile (loaded as part of the package)
 area <- sf::st_read(dsn = system.file("extdata","EPU.shp",package="survdat"),quiet=T)
-calc_stratified_mean(surveyData=data$survdat, areaPolygon=area, areaDescription="EPU", filterByArea="all",filterBySeason = "all")
+calc_stratified_mean(surveyData = data$survdat, areaPolygon = area, areaDescription="EPU",
+    filterByArea="all",filterBySeason = "all")
 
 } # }
 

@@ -1,6 +1,6 @@
 # Extract SPECIES information from SVDBS
 
-Extract a list of speices names, code, market category, etc from the
+Extract a list of species names, code, market category, etc from the
 SVDBS SVSPECIES_LIST table
 
 ## Usage

@@ -39,4 +39,7 @@ Useful links:
 
 Authors:
 
+- Andy Beet <andrew.beet@NOAA.gov>
+  ([ORCID](https://orcid.org/0000-0001-8270-7090))
+
 - Sean Lucey <Sean.Lucey@NOAA.gov>
