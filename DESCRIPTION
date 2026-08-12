@@ -19,24 +19,22 @@ URL: https://github.com/NOAA-EDAB/survdat, https://noaa-edab.github.io/survdat/
 BugReports: https://github.com/NOAA-EDAB/survdat/issues
 Imports: 
     data.table,
-    diagram,
-    here,
     DBI,
-    odbc,
-    sp,
     sf,
     units,
     dplyr,
+    tidyr,
     magrittr,
     ggplot2
 Suggests: 
     knitr,
     rmarkdown,
+    diagram,
     markdown,
     kableExtra,
     DT
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.5.0)
+    R (>= 4.1.0)
 LazyData: true
 Config/roxygen2/version: 8.1.0

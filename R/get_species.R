@@ -4,7 +4,7 @@
 #'
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
-#' to communicate with the database engine. (see \code{\link{connect_to_database}})
+#' to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
 #' @param species Numeric or character vector. A specific species code or set of codes. Default = "all".
 #' Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement. Character codes are short character strings.
 #'
@@ -22,7 +22,7 @@
 #'
 #'Note: species codes (svspp) are stored in the database as VARCHAR2(3 BYTE)
 #'
-#' @seealso \code{\link{connect_to_database}}
+#' @seealso \code{\link[dbutils]{connect_to_database}}
 #'
 #'@family helper
 #'

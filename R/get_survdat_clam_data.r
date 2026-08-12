@@ -1,7 +1,7 @@
 #' Extracts Clam data from Survey Database
 #'
 #'Connects to svdbs and pulls Clam & Quahog data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA.
-#'Pulls from Cruises with purpose code = 50. (See \code{\url{get_cruise_purpose}}). Data are assigned to one of 2 new regions
+#'Pulls from Cruises with purpose code = 50. (See \code{\link{get_cruise_purpose}}). Data are assigned to one of 2 new regions
 #'('South', 'GBK') and length-to-meat weight conversions applied.
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
@@ -319,7 +319,7 @@ get_survdat_clam_data <- function(
   }
 
   if (tidy) {
-    clamdat <- tibble::as_tibble(clamdat)
+    clamdat <- dplyr::as_tibble(clamdat)
   }
 
   sql <- list(
