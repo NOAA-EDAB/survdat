@@ -15,9 +15,14 @@
 #'
 #' @importFrom magrittr "%>%"
 #'
-#'@family survdat
+#'@family internal
 #'
-#' @noRd
+#'@examples
+#' \dontrun{
+#' # Called internally in 'strat_prep' which is then used to calculate stratified mean biomass
+#' }
+#'
+#' @export
 
 post_strat <- function(surveyData, areaPolygon, areaDescription, na.keep = F) {
   # transform Regional Shape file using lambert conformal conic coordinate ref system

@@ -1,7 +1,11 @@
 #' Applies conversion factors to Raw Survey data pull
 #'
 #' Connects to svdbs and pulls conversion factors from SURVAN_CONVERSION_FACTORS
-#' Explain what conversions do ...
+#'
+#' Experiments to measure the relative catchability of two or more vessel-gear combinations are necessary to rigorously combine their information in analyses such as stock assessments.
+#' Without accounting for these effects the resulting abundance and biomass time series could exhibit shifts related to these effects.
+#' To help mitigate this conversion factors have been calculated to create a continuous time series.
+#' These conversion factors reside in the table SURVAN_CONVERSION_FACTORS and can be applied to the pulled data.
 #'
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
@@ -17,7 +21,15 @@
 #' This is an internal function.
 #' To pull the values of the conversion factors use \code{\link{get_conversion_factors}}
 #'
+#' @examples
+#' \dontrun{
+#' channel <- dbutils::connect_to_database(server="serverName",uid="userName")
+#' data <- get_survdat_data(channel)
+#' apply_conversion_factors(channel = channel, survdat.raw = data, use.SAD = F)
+#'}
+#'
 #'@noRd
+#'
 
 apply_conversion_factors <- function(channel, survdat.raw, use.SAD = F) {
   survdat <- survdat.raw

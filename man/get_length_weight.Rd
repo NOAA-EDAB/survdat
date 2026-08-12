@@ -22,16 +22,23 @@ Returns a data.table (nx12).
 Pulls the length-weight coefficients from SVDBS.LENGTH_WEIGHT_COEFFICIENTS table
 These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 }
+\examples{
+\dontrun{
+channel <- dbutils::connect_to_database(server="serverName",uid="userName")
+get_length_weight(channel = channel)
+}
+
+}
 \seealso{
-Other helper: 
-\code{\link{get_conversion_factors}()},
-\code{\link{get_cruise_purpose}()},
-\code{\link{get_maturity}()},
-\code{\link{get_sex}()},
-\code{\link{get_sex_fscs}()},
-\code{\link{get_species}()},
-\code{\link{get_species_stock_area}()},
-\code{\link{get_strata}()},
-\code{\link{get_vessel}()}
+Other helper:
+\code{\link[=get_conversion_factors]{get_conversion_factors()}},
+\code{\link[=get_cruise_purpose]{get_cruise_purpose()}},
+\code{\link[=get_maturity]{get_maturity()}},
+\code{\link[=get_sex]{get_sex()}},
+\code{\link[=get_sex_fscs]{get_sex_fscs()}},
+\code{\link[=get_species]{get_species()}},
+\code{\link[=get_species_stock_area]{get_species_stock_area()}},
+\code{\link[=get_strata]{get_strata()}},
+\code{\link[=get_vessel]{get_vessel()}}
 }
 \concept{helper}

@@ -56,7 +56,10 @@ The version:
 \item{version}{The version of survdat used to pull the data}
 }
 \description{
-Pulls survey data
+The Massachusetts Department of Marine Fisheries (DMF) conducts spring and fall surveys quantifying
+the distribution, relative abundance, and size composition of finfish and select invertebrates in state waters since 1978.
+This function extracts data from the NEFSC survdat Oracle database for the Massachusetts inshore bottom trawl survey.
+The data includes catch and physical attributes of tows conducted as part of the survey.
 }
 \examples{
 \dontrun{
@@ -66,12 +69,11 @@ get_mass_inshore_survey_data(channel)
 
 }
 \seealso{
-Other survdat: 
-\code{\link{calc_stratified_mean}()},
-\code{\link{calc_swept_area}()},
-\code{\link{get_area}()},
-\code{\link{get_survdat_clam_data}()},
-\code{\link{get_survdat_data}()},
-\code{\link{get_survdat_scallop_data}()}
+Other survdat:
+\code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
+\code{\link[=calc_swept_area]{calc_swept_area()}},
+\code{\link[=get_area]{get_area()}},
+\code{\link[=get_survdat_data]{get_survdat_data()}},
+\code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }
 \concept{survdat}

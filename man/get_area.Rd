@@ -23,9 +23,9 @@ Calculates the area of a polygon from a shapefile.
 }
 \section{Coordinate reference system (CRS)}{
 
-The deafult CRS is the Lambert Conformal Conic as is denoted by :
+The deafult CRS is the Albers Equal Area as is denoted by :
 
-"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
+"+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 }
 
 \examples{
@@ -37,12 +37,11 @@ get_area(areaPolygon = area, areaDescription="STRATA")
 
 }
 \seealso{
-Other survdat: 
-\code{\link{calc_stratified_mean}()},
-\code{\link{calc_swept_area}()},
-\code{\link{get_mass_inshore_survey_data}()},
-\code{\link{get_survdat_clam_data}()},
-\code{\link{get_survdat_data}()},
-\code{\link{get_survdat_scallop_data}()}
+Other survdat:
+\code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
+\code{\link[=calc_swept_area]{calc_swept_area()}},
+\code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
+\code{\link[=get_survdat_data]{get_survdat_data()}},
+\code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }
 \concept{survdat}

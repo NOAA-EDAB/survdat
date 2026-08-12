@@ -8,7 +8,7 @@ get_species(channel, species = "all")
 }
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
-to communicate with the database engine. (see \code{\link{connect_to_database}})}
+to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})}
 
 \item{species}{Numeric or character vector. A specific species code or set of codes. Default = "all".
 Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement. Character codes are short character strings.}
@@ -23,7 +23,7 @@ A list is returned:
   \item{colNames}{a vector of the table's column names}
 }
 \description{
-Extract a list of speices names, code, market category, etc from the SVDBS SVSPECIES_LIST table
+Extract a list of species names, code, market category, etc from the SVDBS SVSPECIES_LIST table
 }
 \section{Reference}{
 
@@ -50,17 +50,17 @@ get_species(channel,species= c("73","135"))
 
 }
 \seealso{
-\code{\link{connect_to_database}}
+\code{\link[dbutils]{connect_to_database}}
 
-Other helper: 
-\code{\link{get_conversion_factors}()},
-\code{\link{get_cruise_purpose}()},
-\code{\link{get_length_weight}()},
-\code{\link{get_maturity}()},
-\code{\link{get_sex}()},
-\code{\link{get_sex_fscs}()},
-\code{\link{get_species_stock_area}()},
-\code{\link{get_strata}()},
-\code{\link{get_vessel}()}
+Other helper:
+\code{\link[=get_conversion_factors]{get_conversion_factors()}},
+\code{\link[=get_cruise_purpose]{get_cruise_purpose()}},
+\code{\link[=get_length_weight]{get_length_weight()}},
+\code{\link[=get_maturity]{get_maturity()}},
+\code{\link[=get_sex]{get_sex()}},
+\code{\link[=get_sex_fscs]{get_sex_fscs()}},
+\code{\link[=get_species_stock_area]{get_species_stock_area()}},
+\code{\link[=get_strata]{get_strata()}},
+\code{\link[=get_vessel]{get_vessel()}}
 }
 \concept{helper}
