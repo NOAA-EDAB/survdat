@@ -10,15 +10,15 @@
 #'
 
 # devtools::load_all()
-# source("../channel.R")
-# surveyData <- readRDS(
-#   "\\\\nefscdata\\EDAB_Datasets\\Workflows\\surveyBiologicalData.rds"
-# )
+source("../channel.R")
+surveyData <- readRDS(
+  "\\\\nefscdata\\EDAB_Datasets\\Workflows\\delete_brandon\\surveyBiologicalData.rds"
+)
 
 ### NOTE: possible new function call
 # calc_condition(surveyData, channel)
 
-load("~/survdat/data/EPUstrata.rda")
+load(here::here("data/EPUstrata.rda"))
 
 survey.data <- surveyData$survdat |>
   dplyr::left_join(EPUstrata)
@@ -113,13 +113,13 @@ message(paste0(
   " outliers from the data set."
 ))
 
-if (record_outliers) {
-  outliers <- condcalc |>
-    dplyr::filter(.data$outlier == TRUE)
-}
+# if (record_outliers) {
+outliers <- condcalc |>
+  dplyr::filter(.data$outlier == TRUE)
+# }
 
 condcalc <- condcalc |>
-  #  dplyr::filter(.data$outlier == FALSE) |>
+  dplyr::filter(.data$outlier == FALSE) |>
   dplyr::filter(is.na(.data$sex) | .data$sex != 4) |>
   dplyr::mutate(sexMF = .data$sex)
 
@@ -167,7 +167,8 @@ condition <- grouped_condition |>
     !!!rlang::syms(grouping_vars[-which(grouping_vars == "YEAR")])
   ) |>
   # filter to only species with 20+ years of data
-  dplyr::mutate(n = dplyr::n())
+  dplyr::mutate(n = dplyr::n()) |>
+  dplyr::filter(n >= 20)
 
 
 ######### Comparison of new and old data
@@ -177,6 +178,7 @@ write.csv(
   file = here::here("data-raw/new_condition.csv"),
   row.names = FALSE
 )
+new_condition <- condition
 
 old_condition <- NEesp2::species_condition(
   data = surveyData, # genereated by survdat::get_survdat_data(channel, getBio = TRUE, getLengths = TRUE)
@@ -196,6 +198,7 @@ write.csv(
   file = here::here("data-raw/old_condition.csv"),
   row.names = FALSE
 )
+old_condition <- read.csv(here::here("data-raw/old_condition.csv"))
 
 
 # Standardize keys and filter old dataset for MeanCond rows
@@ -228,3 +231,39 @@ comparison <- dplyr::full_join(
 
 # View summary of differences
 table(comparison$Status)
+
+### merge the length-weight tables to compare
+survdat_lw <- combined_lw_species |>
+  dplyr::mutate(
+    Gender = dplyr::case_when(
+      CATCHSEX == 0 ~ "Combined",
+      CATCHSEX == 1 ~ "Male",
+      CATCHSEX == 2 ~ "Female",
+      TRUE ~ "Unknown"
+    )
+  )
+neesp_lw <- NEesp2::LWparams |>
+  dplyr::filter(SEASON == "FALL") |>
+  dplyr::rename(SVSPP = LW_SVSPP) |>
+  dplyr::select(SpeciesName, SVSPP, b, lna, Gender)
+
+## look at species with biggest differences in params
+neesp_lw |>
+  dplyr::left_join(survdat_lw, by = c("SVSPP", "Gender")) |>
+  dplyr::mutate(diff_b = b - SVLWEXP_FALL, diff_lna = lna - SVLWCOEFF_FALL) |>
+  dplyr::select(
+    SpeciesName,
+    COMNAME,
+    SVSPP,
+    Gender,
+    CATCHSEX,
+    b,
+    SVLWEXP_FALL,
+    diff_b,
+    lna,
+    SVLWCOEFF_FALL,
+    diff_lna
+  ) |>
+  dplyr::filter(diff_b > 0.1 | diff_b < -0.1 | diff_lna > 1 | diff_lna < -1) |>
+  dplyr::arrange(-abs(diff_b)) |>
+  View()
