@@ -1,0 +1,29 @@
+Function,Tests
+get_species,Confirm that data has been retrieved (nrow > 0)
+,Confirm that correct species scientific names and common names are returned when inputting a SVSPP value 
+calc_swept_area,Confirm that data has been retrieved (nrow > 0)
+,"Confirm that each column for SVSPP 1 (first species at first year and later year), 73 ('middle' species with both years) and 311  (last species with both years) in 1968  and 1972 for the first example in the help file matches expected values."
+,Confirm that each column for SVSPP 998 in 2009 matches the example (last species in the data file.
+,"Columns checked = N, strat.biomass, biomass.var, biomass.SE, strat.abund, abund.var, abund.SE, tot.biomass, tot.abund.var, tot.abund.SE"
+get_vessel,Confirm that data has been retrieved nrow(list$data > 0)
+,"Confirm that $data from returned list contains correct data for each of the columns for 1st row, 6th row and 10th (last row).  "
+,"Columns checked = VESSEL_NAME, VESSEL_ABBREV, COUNTRY_OF_ORIGIN, HOME_PORT, AGENCY_NAME, LENGTH_OVERALL_FT, CONSTRUCTION, YEAR_BUILT"
+get_cruise_purpose,Confirm that data has been retrieved nrow(list$data > 0)
+,"Confirm that each column for rows 1, 30, 61 (last) match expected values"
+,"Columns checked = PURPOSE_CODE, PURPOSE, DOE, DOC, UOE, UOC"
+get_survdat_scallop_data,
+get_survdat_data,
+get_survdat_clam_data,
+get_sex_fscs,
+get_length_weight_data,
+calc_stratified_mean,
+get_area,"Confirm that example gives the correct values for the $Area in the data frame for rows 1 (first), 90 (middle) and 178 (last)"
+plot_data_area,
+get_species_stock_area,
+get_length_weight,
+plot_shapefile,
+get_sex,
+get_strata,
+get_maturity,
+get_conversion_factors,
+get_mass_inshore_survey_data,
