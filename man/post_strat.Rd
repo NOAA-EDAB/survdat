@@ -28,9 +28,9 @@ Returns a \code{surveyData} data.table with one additional column labeled
 \description{
 Assign survey data (points, lat and lon) to designated regions (polygons) from a shape file.
 }
-\seealso{
-Other internal: 
-\code{\link{strat_mean}()},
-\code{\link{swept_area}()}
-}
-\concept{internal}
+\concept{internal
+
+\@examples
+\dontrun{
+# Called internally in 'strat_prep' which is then used to calculate stratified mean biomass
+}}

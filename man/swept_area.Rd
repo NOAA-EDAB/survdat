@@ -48,7 +48,6 @@ the stratprep and stratmean functions.
 }
 \seealso{
 Other internal: 
-\code{\link{post_strat}()},
 \code{\link{strat_mean}()}
 }
 \concept{internal}

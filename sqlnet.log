@@ -1,0 +1,40 @@
+
+
+***********************************************************************
+Fatal NI connect error 12170, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=nefsc-prod-01-db.nmfs.noaa.gov)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=NEFSC_DB_PROD.nefscproddbsn.nefscprodvcn.oraclevcn.com)(SERVER=dedicated)(CID=(PROGRAM=C:\Program?Files\RStudio\resources\app\bin\rsession-utf8.exe)(HOST=NECL04959372)(USER=Robert.Gamble))(SERVER=dedicated)(CONNECTION_ID=zSwLcV9EQGuzGsWKCeNOAA==)))
+
+  VERSION INFORMATION:
+	TNS for 64-bit Windows: Version 21.0.0.0.0 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 64-bit Windows: Version 21.0.0.0.0 - Production
+  Version 21.7.0.0.0
+  Time: 09-JUN-2026 12:00:19
+  Tracing not turned on. Process Id = 24220 - Thread Id = 27284
+  Tns error struct:
+    ns main err code: 12535
+    TNS-12535: TNS:operation timed out
+    ns secondary err code: 12560
+    nt main err code: 505
+    TNS-00505: Operation timed out
+    nt secondary err code: 60
+    nt OS err code: 0
+
+
+***********************************************************************
+Fatal NI connect error 12170, connecting to:
+ (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=nefsc-prod-01-db.nmfs.noaa.gov)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=NEFSC_DB_PROD.nefscproddbsn.nefscprodvcn.oraclevcn.com)(SERVER=dedicated)(CID=(PROGRAM=C:\Program?Files\RStudio\resources\app\bin\rsession-utf8.exe)(HOST=NECL04959372)(USER=Robert.Gamble))(SERVER=dedicated)(CONNECTION_ID=L2IEAP1ZTkGTWj/ZKgGDzQ==)))
+
+  VERSION INFORMATION:
+	TNS for 64-bit Windows: Version 21.0.0.0.0 - Production
+	Windows NT TCP/IP NT Protocol Adapter for 64-bit Windows: Version 21.0.0.0.0 - Production
+  Version 21.7.0.0.0
+  Time: 14-JUL-2026 15:07:13
+  Tracing not turned on. Process Id = 26584 - Thread Id = 3764
+  Tns error struct:
+    ns main err code: 12535
+    TNS-12535: TNS:operation timed out
+    ns secondary err code: 12560
+    nt main err code: 505
+    TNS-00505: Operation timed out
+    nt secondary err code: 60
+    nt OS err code: 0

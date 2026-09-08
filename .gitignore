@@ -3,10 +3,10 @@
 .RData
 *.Rproj
 inst/doc
-
 #files
 *.rds
 #folder
 testing
 docs
 other
+sqlnet.log
