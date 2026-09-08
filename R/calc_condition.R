@@ -21,6 +21,7 @@
 #' calc_condition(channel = channel, surveyData=data$survdat, lengthweight = "Wigley", aggregate_by = "EPU", by_sex = FALSE, length_break = NULL)
 #'}
 #'
+#' @export
 
 calc_condition <- function(
   channel,
