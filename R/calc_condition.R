@@ -46,10 +46,8 @@ calc_condition <- function(
     length_break <- c(0, length_break)
   }
 
-  load(here::here("data/EPUstrata.rda"))
-
   survey.data <- surveyData |>
-    dplyr::left_join(EPUstrata)
+    dplyr::left_join(survdat::EPUstrata)
 
   # Change sex = NA to sex = 0
   fall <- survey.data |>
@@ -71,8 +69,7 @@ calc_condition <- function(
   }
 
   if (lengthweight == "Wigley") {
-    lwpull <- read.csv(here::here('data-raw/Wigley_LW.csv'))
-    lwfall <- lwpull |>
+    lwfall <- survdat::wigley_lw |>
       dplyr::filter(SEASON == "FALL") |>
       dplyr::rename(
         SVSPP = .data$LW_SVSPP,
@@ -215,4 +212,6 @@ calc_condition <- function(
     # filter to only species with 20+ years of data
     dplyr::mutate(n = dplyr::n()) |>
     dplyr::filter(n >= 20)
+
+  return(condition)
 }

@@ -17,4 +17,4 @@
 #'   \item{\code{lna}}{double Inverse of ln_a and lna1}
 #'   \item{\code{SEASON}}{character Parsed season data into Winter, Spring, or Fall}
 #'}
-"Wigley_LW.csv"
+"wigley_lw"
