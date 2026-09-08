@@ -70,7 +70,7 @@ calc_condition <- function(
   }
 
   if (lengthweight == "Wigley") {
-    lwfall <- survdat::wigley_lw |>
+    lwfall <- survdat::Wigley_LW |>
       dplyr::filter(SEASON == "FALL") |>
       dplyr::rename(
         SVSPP = .data$LW_SVSPP,
