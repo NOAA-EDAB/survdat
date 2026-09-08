@@ -50,7 +50,11 @@ as a list object. The default (F) returns only the \code{stratmeanData} as a
 data frame
 }
 \description{
-Calculates the stratified mean. Details of method found here ...
+Calculates the stratified mean.
+This function is actually a wrapper of intermediate functions: \code{\link{strat_prep}} and \code{\link{strat_mean}}
+\code{\link{strat_prep}} prepares the data set so that the stratified means can be calculated
+After counting the number of tows and calculating the relative weight of each strata, the resulting output of \code{\link{strat_prep}} is then passed to the \code{\link{strat_mean}} function
+\code{\link{strat_mean}} calculates the stratified mean biomass and abundance for each group (e.g. species) and season, as well as the variance and standard error of the mean.
 }
 \examples{
 \dontrun{

@@ -22,6 +22,13 @@ Returns a data.table (nx12).
 Pulls the length-weight coefficients from SVDBS.LENGTH_WEIGHT_COEFFICIENTS table
 These coefficients are described in NOAA Tech Memo NMFS-NE-171.
 }
+\examples{
+\dontrun{
+channel <- dbutils::connect_to_database(server="serverName",uid="userName")
+get_length_weight(channel = channel)
+}
+
+}
 \seealso{
 Other helper: 
 \code{\link{get_conversion_factors}()},

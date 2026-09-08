@@ -1,5 +1,12 @@
-#' @title Length-weight parameters from Wigley et al. (2003)
-#' @description Length-weight relationships for 74 fish species collected during NEFSC research vessel bottom trawl surveys, 1992-99 as published in Wigley et al. (2003)
+#' Length-weight parameters from Wigley et al. (2003)
+#'
+#' Length-weight relationships for 74 fish species collected during NEFSC
+#' research vessel bottom trawl surveys, 1992-99 as published in Wigley et al. (2003)
+#'
+#' @docType data
+#' @name wigley_lw
+#' @keywords datasets
+#' @export
 #' @format A data frame with 235 rows and 14 variables:
 #' \describe{
 #'   \item{\code{SpeciesName}}{character Species common name}
@@ -16,5 +23,5 @@
 #'   \item{\code{lna1}}{double Length-weight parameter estimate}
 #'   \item{\code{lna}}{double Inverse of ln_a and lna1}
 #'   \item{\code{SEASON}}{character Parsed season data into Winter, Spring, or Fall}
-#'}
+#' }
 "wigley_lw"

@@ -19,6 +19,7 @@
 #' data <- get_survdat_data(channel)
 #' # Calculate condition aggregated by EPU
 #' calc_condition(channel = channel, surveyData=data$survdat, lengthweight = "Wigley", aggregate_by = "EPU", by_sex = FALSE, length_break = NULL)
+#'}
 #'
 
 calc_condition <- function(
@@ -58,8 +59,8 @@ calc_condition <- function(
 
   if (lengthweight == "survdat") {
     # pull LW data from 'get_length_weight' and filter to fall
-    lwpull <- survdat::get_length_weight(channel)
-    lwfall <- lwpull$data |>
+    survdat_lw <- survdat::get_length_weight(channel)
+    lwfall <- survdat_lw$data |>
       dplyr::select(
         .data$SVSPP,
         .data$CATCHSEX,

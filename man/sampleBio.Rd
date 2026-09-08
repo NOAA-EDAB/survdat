@@ -3,7 +3,7 @@
 \docType{data}
 \name{sampleBio}
 \alias{sampleBio}
-\title{Sample data pull with spcies specific biological data}
+\title{Sample data pull with species specific biological data}
 \format{
 A data frame with n rows and m variables
 }

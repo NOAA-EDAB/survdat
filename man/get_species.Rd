@@ -23,7 +23,7 @@ A list is returned:
   \item{colNames}{a vector of the table's column names}
 }
 \description{
-Extract a list of speices names, code, market category, etc from the SVDBS SVSPECIES_LIST table
+Extract a list of species names, code, market category, etc from the SVDBS SVSPECIES_LIST table
 }
 \section{Reference}{
 
