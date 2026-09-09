@@ -30,3 +30,4 @@ importFrom(data.table,
   "key"
 )
 importFrom(magrittr,"%>%")
+importFrom(tibble,tibble)
