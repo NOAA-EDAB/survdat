@@ -25,7 +25,8 @@ Imports:
     dplyr,
     tidyr,
     magrittr,
-    ggplot2
+    ggplot2, 
+    tibble
 Suggests: 
     knitr,
     rmarkdown,
