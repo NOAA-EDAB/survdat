@@ -31,18 +31,6 @@ calc_condition <- function(
   by_sex = FALSE,
   length_break = NULL
 ) {
-  if (
-    by_sex |
-      !is.null(length_break)
-  ) {
-    if (output != "full") {
-      message(
-        "You asked to group results by sex and/or length ; data will not be formatted for SOE or ESP output."
-      )
-    }
-    output <- "full"
-  }
-
   # add 0 to length_break if needed
   if (!0 %in% length_break & !is.null(length_break)) {
     length_break <- c(0, length_break)
@@ -212,8 +200,8 @@ calc_condition <- function(
       !!!rlang::syms(grouping_vars[-which(grouping_vars == "YEAR")])
     ) |>
     # filter to only species with 20+ years of data
-    dplyr::mutate(n = dplyr::n()) |>
-    dplyr::filter(n >= 20)
+    dplyr::mutate(nYears = dplyr::n()) |>
+    dplyr::filter(nYears >= 20)
 
   return(condition)
 }
