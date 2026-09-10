@@ -14,7 +14,7 @@ sampleLengths
 get_survdat_data(channel, getLengths=T, conversion.factor=F)
 }
 \seealso{
-Other sampleData: 
+Other sampleData:
 \code{\link{sampleBio}},
 \code{\link{sampleLengthWeight}},
 \code{\link{sampleRaw}},

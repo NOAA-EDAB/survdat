@@ -34,7 +34,7 @@ plot_shapefile(polygons=area,filterPolygons = GB)
 
 }
 \seealso{
-Other plotting: 
-\code{\link{plot_data_area}()}
+Other plotting:
+\code{\link[=plot_data_area]{plot_data_area()}}
 }
 \concept{plotting}
