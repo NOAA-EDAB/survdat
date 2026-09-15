@@ -5,7 +5,6 @@
 #' @docType data
 #' @name EPUstrata
 #' @keywords datasets
-#' @export
 #' @format A tibble with 1354 rows and 2 variables:
 #' \describe{
 #'   \item{\code{STRATUM}}{integer A numerical code which represents a survey stratum in the NEFSC Bottom Trawl Survey}

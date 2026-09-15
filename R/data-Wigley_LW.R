@@ -6,7 +6,6 @@
 #' @docType data
 #' @name Wigley_LW
 #' @keywords datasets
-#' @export
 #' @format A tibble with 235 rows and 14 variables:
 #' \describe{
 #'   \item{\code{SpeciesName}}{character Species common name}
