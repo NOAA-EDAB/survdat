@@ -4,7 +4,7 @@
 create_Wigley_LW <- function() {
   # Read in the CSV file
   Wigley_LW <- read.csv(
-    here::here('data/Wigley_LW.csv'),
+    here::here('data-raw/data/Wigley_LW.csv'),
     stringsAsFactors = FALSE
   )
 
