@@ -3,7 +3,7 @@
 #'Extract STRATA information from the SVDBS.SVMSTRATA table
 #'
 #' @param channel an Object inherited from \link[DBI]{DBIConnection-class}. This object is used to connect
-#' to communicate with the database engine. (see \code{\link{connect_to_database}})
+#' to communicate with the database engine. (see \code{\link[dbutils]{connect_to_database}})
 #' @param strata Numeric or character vector. Set of strata codes. Default = "all".
 #' Numeric codes are converted to VARCHAR2(5 BYTE) when creating the sql statement. Alternatively enter name of stratum
 #'

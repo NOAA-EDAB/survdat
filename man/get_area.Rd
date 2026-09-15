@@ -23,9 +23,9 @@ Calculates the area of a polygon from a shapefile.
 }
 \section{Coordinate reference system (CRS)}{
 
-The deafult CRS is the Lambert Conformal Conic as is denoted by :
+The deafult CRS is the Albers Equal Area as is denoted by :
 
-"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
+"+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 }
 
 \examples{

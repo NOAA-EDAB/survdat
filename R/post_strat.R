@@ -17,7 +17,7 @@
 #'
 #'@family internal
 #'
-#'\@examples
+#'@examples
 #' \dontrun{
 #' # Called internally in 'strat_prep' which is then used to calculate stratified mean biomass
 #' }

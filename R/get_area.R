@@ -13,9 +13,9 @@
 #'\item{AREA}{The area of the STRATA in square kilometers}
 #'
 #'@section Coordinate reference system (CRS):
-#'The deafult CRS is the Lambert Conformal Conic as is denoted by :
+#'The deafult CRS is the Albers Equal Area as is denoted by :
 #'
-#'"+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
+#'"+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0 "
 #'
 #'@importFrom magrittr "%>%"
 #'
@@ -33,14 +33,25 @@
 get_area <- function(areaPolygon, areaDescription) {
   # Find area of polygons based on a lambert conformal conic coordinate reference
   # system
-  crs = "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
+  #crs <- "+proj=lcc +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
+  # original custom CRS (+proj=lcc) was Conformal (it preserves shapes, but
+  # distorts area). By changing it to +proj=aea (Equal-Area)
+  # while keeping the exact same latitude/longitude center points,
+  # the flat 2D math calculated by sf::st_area() will now match
+  # the true ellipsoidal lwgeom values
+  crs <- "+proj=aea +lat_1=20 +lat_2=60 +lat_0=40 +lon_0=-72 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs +ellps=GRS80 +towgs84=0,0,0"
 
   # turn off spherical geometry. Causes an issue in st_area function
   sf::sf_use_s2(FALSE)
+  # Repair any invalid geometries (resolves the duplicate vertex error)
+  areaPolygon_clean <- sf::st_make_valid(areaPolygon)
+  area_projected <- sf::st_transform(areaPolygon_clean, crs)
 
-  Area <- units::set_units(sf::st_area(areaPolygon, crs), km^2)
+  # bypass units package check and assign km^2 manually
+  raw_meters <- as.numeric(sf::st_area(area_projected))
+  Area <- units::set_units(raw_meters / 1000000, "km^2")
 
-  strata <- areaPolygon %>%
+  strata <- areaPolygon_clean %>%
     as.data.frame() %>%
     dplyr::select(areaDescription) %>%
     dplyr::rename(STRATUM = areaDescription) %>%

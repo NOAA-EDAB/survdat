@@ -52,6 +52,8 @@ associated variance and standard error.
 }
 \seealso{
 Other internal:
+\code{\link[=post_strat]{post_strat()}},
+\code{\link[=strat_prep]{strat_prep()}},
 \code{\link[=swept_area]{swept_area()}}
 }
 \concept{internal}

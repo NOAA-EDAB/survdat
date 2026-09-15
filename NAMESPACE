@@ -29,6 +29,7 @@ export(strat_prep)
 export(swept_area)
 importFrom(data.table,
   "%like%",
+  ":=",
   "key"
 )
 importFrom(magrittr,"%>%")
