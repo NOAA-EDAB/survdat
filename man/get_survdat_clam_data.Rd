@@ -28,16 +28,23 @@ A list containing a Data frame (data.table) (n x 21) and a list of SQL queries u
 }
 \description{
 Connects to svdbs and pulls Clam & Quahog data from MSTR_CRUISE, UNION_FSCS_SVCAT, UNION_FSCS_SVLEN, UNION_FSCS_SVSTA.
-
 Pulls from Cruises with purpose code = 50. (See \code{\link{get_cruise_purpose}}). Data are assigned to one of 2 new regions
 ('South', 'GBK') and length-to-meat weight conversions applied.
 }
 \examples{
 \dontrun{
-# Recommended use:
 channel <- dbutils::connect_to_database("serverName","userName")
 get_survdat_clam_data(channel)
-
 }
 
 }
+\seealso{
+Other survdat:
+\code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
+\code{\link[=calc_swept_area]{calc_swept_area()}},
+\code{\link[=get_area]{get_area()}},
+\code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
+\code{\link[=get_survdat_data]{get_survdat_data()}},
+\code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
+}
+\concept{survdat}
