@@ -35,9 +35,16 @@ Returns a prepSurvey data object with added columns for the number of
 Calculates the number of tows per strata and strata weight.  Run before
 sub setting the data by species of interest to ensure all stations are accounted.
 }
-\concept{internal
-
-\@examples
+\examples{
 \dontrun{
 # Called internally
-}}
+}
+
+}
+\seealso{
+Other internal:
+\code{\link[=post_strat]{post_strat()}},
+\code{\link[=strat_mean]{strat_mean()}},
+\code{\link[=swept_area]{swept_area()}}
+}
+\concept{internal}
