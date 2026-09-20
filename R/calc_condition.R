@@ -41,13 +41,13 @@ calc_condition <- function(
   }
 
   survey.data <- surveyData |>
-    dplyr::left_join(survdat::EPUstrata)
+    dplyr::left_join(survdat::EPUstrata, by = c("STRATUM"))
 
   # Change sex = NA to sex = 0
   fall <- survey.data |>
-    dplyr::filter(.data$SEASON == "FALL") |>
+    dplyr::filter(SEASON == "FALL") |>
     dplyr::mutate(
-      sex = dplyr::if_else(is.na(.data$SEX), "0", as.character(.data$SEX))
+      sex = dplyr::if_else(is.na(SEX), "0", as.character(SEX))
     )
 
   if (lengthweight == "survdat") {
@@ -55,10 +55,10 @@ calc_condition <- function(
     survdat_lw <- survdat::get_length_weight(channel)
     lwfall <- survdat_lw$data |>
       dplyr::select(
-        .data$SVSPP,
-        .data$CATCHSEX,
-        .data$SVLWCOEFF_FALL,
-        .data$SVLWEXP_FALL
+        SVSPP,
+        CATCHSEX,
+        SVLWCOEFF_FALL,
+        SVLWEXP_FALL
       )
   }
 
@@ -66,19 +66,19 @@ calc_condition <- function(
     lwfall <- survdat::Wigley_LW |>
       dplyr::filter(SEASON == "FALL") |>
       dplyr::rename(
-        SVSPP = .data$LW_SVSPP,
-        SVLWCOEFF_FALL = .data$lna,
-        SVLWEXP_FALL = .data$b
+        SVSPP = LW_SVSPP,
+        SVLWCOEFF_FALL = lna,
+        SVLWEXP_FALL = b
       ) |>
       dplyr::select(
-        .data$SVSPP,
-        .data$SVLWCOEFF_FALL,
-        .data$SVLWEXP_FALL,
-        .data$Gender
+        SVSPP,
+        SVLWCOEFF_FALL,
+        SVLWEXP_FALL,
+        Gender
       ) |>
       dplyr::mutate(
         CATCHSEX = dplyr::case_when(
-          Gender == "Combined" | .data$Gender == "Unsexed" ~ as.character(0),
+          Gender == "Combined" | Gender == "Unsexed" ~ as.character(0),
           Gender == "Male" ~ as.character(1),
           Gender == "Female" ~ as.character(2),
           TRUE ~ NA
@@ -90,8 +90,8 @@ calc_condition <- function(
   # pull species common names and SVSPP from 'get_species'
   species <- survdat::get_species(channel)
   species_data <- species$data |>
-    dplyr::select(.data$SVSPP, .data$COMNAME) |>
-    tidyr::drop_na(.data$SVSPP, .data$COMNAME)
+    dplyr::select(SVSPP, COMNAME) |>
+    tidyr::drop_na(SVSPP, COMNAME)
 
   #group LWfall and species_data by SVSPP
   combined_lw_species <- lwfall |>
@@ -120,34 +120,34 @@ calc_condition <- function(
     dplyr::inner_join(fall, by = c("SVSPP", "CATCHSEX"))
 
   # filters out values without losing rows with NAs:
-  mergewt <- dplyr::filter(new_data, is.na(.data$INDWT) | .data$INDWT < 900)
-  mergewtno0 <- dplyr::filter(mergewt, is.na(.data$INDWT) | .data$INDWT > 0.004)
+  mergewt <- dplyr::filter(new_data, is.na(INDWT) | INDWT < 900)
+  mergewtno0 <- dplyr::filter(mergewt, is.na(INDWT) | INDWT > 0.004)
   mergelenno0 <- dplyr::filter(
     mergewtno0,
-    is.na(.data$LENGTH) | .data$LENGTH > 0
+    is.na(LENGTH) | LENGTH > 0
   )
-  mergelen <- dplyr::filter(mergelenno0, !is.na(.data$LENGTH))
-  mergeindwt <- dplyr::filter(mergelen, !is.na(.data$INDWT))
-  mergeLW <- dplyr::filter(mergeindwt, !is.na(.data$SVLWCOEFF_FALL))
+  mergelen <- dplyr::filter(mergelenno0, !is.na(LENGTH))
+  mergeindwt <- dplyr::filter(mergelen, !is.na(INDWT))
+  mergeLW <- dplyr::filter(mergeindwt, !is.na(SVLWCOEFF_FALL))
 
   ### Calculate species condition ###
 
   condcalc <- dplyr::mutate(
     mergeLW,
-    predwt = (exp(.data$SVLWCOEFF_FALL)) * .data$LENGTH^.data$SVLWEXP_FALL,
-    RelCond = .data$INDWT / .data$predwt
+    predwt = (exp(SVLWCOEFF_FALL)) * LENGTH^SVLWEXP_FALL,
+    RelCond = INDWT / predwt
   ) |>
-    dplyr::filter(is.na(.data$RelCond) | .data$RelCond < 300) |>
-    dplyr::group_by(.data$SVSPP, .data$SEX) |>
+    dplyr::filter(is.na(RelCond) | RelCond < 300) |>
+    dplyr::group_by(SVSPP, SEX) |>
     dplyr::mutate(
-      mean = mean(.data$RelCond),
-      sd = stats::sd(.data$RelCond)
+      mean = mean(RelCond),
+      sd = stats::sd(RelCond)
     ) |>
     dplyr::ungroup()
 
   condcalc <- condcalc |>
-    dplyr::filter(is.na(.data$sex) | .data$sex != 4) |>
-    dplyr::mutate(sexMF = .data$sex)
+    dplyr::filter(is.na(sex) | sex != 4) |>
+    dplyr::mutate(sexMF = sex)
 
   species.codes <- survdat::get_species(channel = channel)$data |>
     dplyr::rename(Species = COMNAME) |>
@@ -175,7 +175,7 @@ calc_condition <- function(
     cond.epu <- cond.epu |>
       dplyr::mutate(
         length_group = cut(
-          .data$LENGTH,
+          LENGTH,
           breaks = length_break,
           include.lowest = TRUE
         )
@@ -192,11 +192,11 @@ calc_condition <- function(
 
   condition <- grouped_condition |>
     dplyr::summarize(
-      MeanCond = mean(.data$RelCond),
+      MeanCond = mean(RelCond),
       nCond = dplyr::n()
     ) |>
     dplyr::ungroup() |>
-    dplyr::filter(.data$nCond >= 3) |>
+    dplyr::filter(nCond >= 3) |>
     # select columns
     dplyr::select(dplyr::all_of(c(grouping_vars, "MeanCond", "nCond"))) |>
     # group again, without YEAR
