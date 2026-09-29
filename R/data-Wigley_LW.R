@@ -3,6 +3,9 @@
 #' Length-weight relationships for 74 fish species collected during NEFSC
 #' research vessel bottom trawl surveys, 1992-99 as published in Wigley et al. (2003)
 #'
+#' @section Species Exclusions:
+#' Note that the dataset does not include length-weight parameters for Blueback herring or Northern Searobin.
+#'
 #' @docType data
 #' @name Wigley_LW
 #' @keywords datasets

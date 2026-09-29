@@ -1,6 +1,13 @@
 #' Calculate species condition
 #'
 #' This function calculates species condition from NEFSC survey data
+#'
+#' @section Species Coverage:
+#' The choice of \code{lengthweight} parameter determines species availability. When using
+#' \code{lengthweight = "Wigley"}, species coverage is constrained to the static parameters
+#' from Wigley et al. (2003) and does not include Blueback herring or
+#' Northern Searobin. Using \code{lengthweight = "survdat"} includes all species from Wigley at al. plus Blueback herring and Northern Searobin.
+#'
 #' @section References:
 #' Methods derived from Laurel Smith ([GitHub Repository](https://github.com/Laurels1/Condition/blob/master/R/RelConditionEPU.R))
 #'
