@@ -150,7 +150,10 @@ get_survdat_clam_data <- function(
     clamdat[
       calc_strat == '47',
       calc_strat := data.table::fifelse(
-        ((LON - 69.23) * (41 - 40) - (LAT - 40) * (69.03 - 69.23)) > 0,
+        ((clam_west_longitude(LON) - 69.23) *
+          (41 - 40) -
+          (LAT - 40) * (69.03 - 69.23)) >
+          0,
         '471',
         '472'
       )
@@ -159,7 +162,10 @@ get_survdat_clam_data <- function(
     clamdat[
       calc_strat == '73',
       calc_strat := data.table::fifelse(
-        ((LON - 66.8) * (41.9 - 41.35) - (LAT - 41.35) * (67.5 - 66.8)) > 0,
+        ((clam_west_longitude(LON) - 66.8) *
+          (41.9 - 41.35) -
+          (LAT - 41.35) * (67.5 - 66.8)) >
+          0,
         '73',
         '74'
       )
@@ -170,14 +176,20 @@ get_survdat_clam_data <- function(
         calc_strat %in% c('25', '26') &
         LAT >= 39.3 &
         LAT <= 40.2 &
-        (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
+        (((clam_west_longitude(LON) - 72) *
+          (40.2 - 39.3) -
+          (LAT - 39.3) * (73.75 - 72)) <
+          0),
       calc_strat := data.table::fifelse(calc_strat == '26', '30', '29')
     ]
 
     clamdat[
       SVSPP == 409 &
         calc_strat %in% c('31', '32') &
-        (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
+        (((clam_west_longitude(LON) - 72) *
+          (40.2 - 39.3) -
+          (LAT - 39.3) * (73.75 - 72)) <
+          0),
       calc_strat := data.table::fifelse(calc_strat == '31', '27', '28')
     ]
 
@@ -186,7 +198,9 @@ get_survdat_clam_data <- function(
         calc_strat %in% c('25', '26') &
         LAT >= 40.2 &
         LAT <= 40.25 &
-        (((LON - 73.75) * (40.25 - 40.2) - (LAT - 40.25) * (73.775 - 73.75)) <
+        (((clam_west_longitude(LON) - 73.75) *
+          (40.25 - 40.2) -
+          (LAT - 40.25) * (73.775 - 73.75)) <
           0),
       calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')
     ]
@@ -196,7 +210,9 @@ get_survdat_clam_data <- function(
         calc_strat %in% c('25', '26') &
         LAT >= 40.25 &
         LAT <= 40.5 &
-        (((LON - 73.775) * (40.5 - 40.25) - (LAT - 40.25) * (73.825 - 73.775)) <
+        (((clam_west_longitude(LON) - 73.775) *
+          (40.5 - 40.25) -
+          (LAT - 40.25) * (73.825 - 73.775)) <
           0),
       calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')
     ]
@@ -204,7 +220,9 @@ get_survdat_clam_data <- function(
     clamdat[
       SVSPP == 409 &
         calc_strat == '17' &
-        (((LON - 74.29) * (38.6 - 38.94) - (LAT - 38.94) * (74.57 - 74.29)) <
+        (((clam_west_longitude(LON) - 74.29) *
+          (38.6 - 38.94) -
+          (LAT - 38.94) * (74.57 - 74.29)) <
           0),
       calc_strat := '0'
     ]
@@ -213,7 +231,10 @@ get_survdat_clam_data <- function(
       SVSPP == 409 &
         calc_strat == '13' &
         LAT >= 38.41 &
-        (((LON - 74.57) * (38.41 - 38.6) - (LAT - 38.6) * (74.64 - 74.57)) < 0),
+        (((clam_west_longitude(LON) - 74.57) *
+          (38.41 - 38.6) -
+          (LAT - 38.6) * (74.64 - 74.57)) <
+          0),
       calc_strat := '0'
     ]
 
@@ -222,7 +243,9 @@ get_survdat_clam_data <- function(
         calc_strat == '13' &
         LAT >= 38.15 &
         LAT <= 38.41 &
-        (((LON - 74.64) * (38.15 - 38.41) - (LAT - 38.41) * (74.67 - 74.64)) <
+        (((clam_west_longitude(LON) - 74.64) *
+          (38.15 - 38.41) -
+          (LAT - 38.41) * (74.67 - 74.64)) <
           0),
       calc_strat := '0'
     ]
@@ -231,7 +254,9 @@ get_survdat_clam_data <- function(
       SVSPP == 409 &
         calc_strat == '13' &
         LAT <= 38.15 &
-        (((LON - 74.67) * (37.83 - 38.15) - (LAT - 38.15) * (74.87 - 74.67)) <
+        (((clam_west_longitude(LON) - 74.67) *
+          (37.83 - 38.15) -
+          (LAT - 38.15) * (74.87 - 74.67)) <
           0),
       calc_strat := '0'
     ]
@@ -335,4 +360,9 @@ get_survdat_clam_data <- function(
     pullDate = date(),
     functionCall = call
   ))
+}
+
+clam_west_longitude <- function(LON) {
+  # Survey longitudes are negative degrees west; split coordinates are positive.
+  -LON
 }
