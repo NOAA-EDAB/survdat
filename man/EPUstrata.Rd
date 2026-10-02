@@ -5,16 +5,16 @@
 \alias{EPUstrata}
 \title{Key of survey strata and corresponding EPUs}
 \format{
-A tibble with 1354 rows and 2 variables:
+A tibble with 2 variables:
 \describe{
-\item{\code{STRATUM}}{integer A numerical code which represents a survey stratum in the NEFSC Bottom Trawl Survey}
-\item{\code{EPU}}{charater An abbreviated name for the Ecological Production Unit (EPU) that corresponds to the STRATUM column}
+\item{\code{STRATUM}}{integer. A numerical code which represents a survey stratum in the NEFSC Bottom Trawl Survey}
+\item{\code{EPU}}{charater. An abbreviated name for the Ecological Production Unit (EPU) that corresponds to the STRATUM column}
 }
 }
 \usage{
 EPUstrata
 }
 \description{
-Strata to EPU conversions derived from \href{https://github.com/NEFSC/READ_EDAB_SOE_Workflows/blob/main/R/aggregate_biomass.r#L118}{SOE_Workflows repository}
+Strata to EPU mappings are defined in the \href{https://noaa-edab.github.io/tech-doc/epu.html}{technical documentation} for the State of the Ecosystem report
 }
 \keyword{datasets}
