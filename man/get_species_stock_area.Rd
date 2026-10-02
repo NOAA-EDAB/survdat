@@ -9,7 +9,7 @@ get_species_stock_area(channel, species = "all", stock_name = NULL)
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
 This object is used to communicate with the database engine.
- (see \code{\link[dbutils]{connect_to_database}})}
+(see \code{\link[dbutils]{connect_to_database}})}
 
 \item{species}{A specific species code or set of codes. Either numeric or character vector. Defaults to "all" species.
 Numeric codes (SPECIES_ITIS) are converted to VARCHAR2 (6) when creating the sql statement.}
@@ -19,11 +19,11 @@ Numeric codes (SPECIES_ITIS) are converted to VARCHAR2 (6) when creating the sql
 \value{
 A list is returned:
 
-   \item{data}{containing the result of the executed \code{sqlStatement}}
+\item{data}{containing the result of the executed \code{sqlStatement}}
 
-   \item{sql}{containing the sql call}
+\item{sql}{containing the sql call}
 
-   \item{colNames}{ a vector of the table's column names}
+\item{colNames}{ a vector of the table's column names}
 
 The default sql statement "\code{select * from STOCKEFF.V_SV_STOCK_RECENT_STRATA_O}" is used
 }
