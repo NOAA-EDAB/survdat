@@ -80,7 +80,7 @@ The list of sql statements:
 
 The date:
 
- \item{pullDate}{The date the data was pulled from the database}
+\item{pullDate}{The date the data was pulled from the database}
 
 The expression:
 

@@ -19,7 +19,7 @@ get_survdat_data(
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
 This object is used to communicate with the database engine.
- (see \code{\link[dbutils]{connect_to_database}})}
+(see \code{\link[dbutils]{connect_to_database}})}
 
 \item{filterByYear}{Numeric vector. Subset of years from which to pull data.
 If not specified then all years are pulled. (Default = NA)}

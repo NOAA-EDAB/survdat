@@ -9,7 +9,7 @@ get_mass_inshore_survey_data(channel, filterByYear = NA)
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
 This object is used to communicate with the database engine.
- (see \code{\link[dbutils]{connect_to_database}})}
+(see \code{\link[dbutils]{connect_to_database}})}
 
 \item{filterByYear}{Numeric vector. Subset of years from which to pull data.
 If not specified then all years are pulled. (Default = NA)}
@@ -41,7 +41,6 @@ The data frame (Descriptions taken from NEFSC Data dictionary)
 \item{CATCHSEX}{Code used to identify species that are sexed at the catch level. See SVDBS.SEX_CODES}
 \item{ABUNDANCE}{Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)}
 \item{BIOMASS}{Expanded catch weight of a species caught at a given station. (EXPCATCHWT)}
-
 
 The date:
 
