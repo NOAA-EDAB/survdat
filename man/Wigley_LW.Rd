@@ -5,7 +5,7 @@
 \alias{Wigley_LW}
 \title{Length-weight parameters from Wigley et al. (2003)}
 \format{
-A tibble with 235 rows and 14 variables:
+A tibble with 14 variables:
 \describe{
 \item{\code{SpeciesName}}{character. Species common name}
 \item{\code{LW_SVSPP}}{integer. A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST}
@@ -32,7 +32,7 @@ research vessel bottom trawl surveys, 1992-99 as published in \href{#references}
 }
 \section{Species Exclusions}{
 
-Note that the dataset does not include length-weight parameters for Blueback herring or Northern Searobin.
+Note that the dataset does not include length-weight parameters for Blueback herring or Northern searobin.
 }
 
 \references{
