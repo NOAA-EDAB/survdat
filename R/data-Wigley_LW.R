@@ -4,7 +4,7 @@
 #' research vessel bottom trawl surveys, 1992-99 as published in [Wigley et al. (2003)](#references)
 #'
 #' @section Species Exclusions:
-#' Note that the dataset does not include length-weight parameters for Blueback herring or Northern Searobin.
+#' Note that the dataset does not include length-weight parameters for Blueback herring or Northern searobin.
 #'
 #' @references
 #'
