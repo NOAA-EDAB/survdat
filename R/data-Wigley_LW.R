@@ -14,7 +14,7 @@
 #' @docType data
 #' @name Wigley_LW
 #' @keywords datasets
-#' @format A tibble with 235 rows and 14 variables:
+#' @format A tibble with 14 variables:
 #' \describe{
 #'   \item{\code{SpeciesName}}{character. Species common name}
 #'   \item{\code{LW_SVSPP}}{integer. A standard code which represents a species caught in a trawl or dredge. Refer to the SVDBS.SVSPECIES_LIST}
