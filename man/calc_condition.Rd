@@ -38,8 +38,8 @@ A data frame. Each row contains the estimated condition by year, species, sex, s
 \item{YEAR}{Year for which condition is estimated}
 \item{EPU}{The Ecological Production Unit (EPU) for which condition is calculated}
 \item{STRATUM}{The survey stratum for which condition is calculated}
-\item{nCond}{??}
-\item{nYears}{??}
+\item{nCond}{Number of fish caught for Species/Sex/EPU combination in YEAR}
+\item{nYears}{Number of years where fish were observed for Species/Sex/EPU combination}
 \item{length_group}{The length interval for which condition is calulated}
 }
 \description{
