@@ -37,8 +37,8 @@ post-stratified uses of survey data.}
 }
 \value{
 Returns a table with stratified mean biomass and abundance for each group
- indicated by the \code{groupDescription}.  In addition, the variance and standard
- error for both means are provided.
+indicated by the \code{groupDescription}.  In addition, the variance and standard
+error for both means are provided.
 }
 \description{
 Calculates the stratified mean biomass and abundance.  Also calculates the

@@ -29,7 +29,7 @@ should be included.  Choices include "SPRING", "FALL", or "all".}
 }
 \value{
 Returns a prepSurvey data object with added columns for the number of
- tows (ntows) and stratum weights (W.h).
+tows (ntows) and stratum weights (W.h).
 }
 \description{
 Calculates the number of tows per strata and strata weight.  Run before
