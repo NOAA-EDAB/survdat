@@ -13,11 +13,11 @@ to communicate with the database engine. (see \code{\link[dbutils]{connect_to_da
 \value{
 A list is returned:
 
-  \item{data}{tibble containing the result of the executed \code{$sql} statement}
+\item{data}{tibble containing the result of the executed \code{$sql} statement}
 
-  \item{sql}{containing the sql call}
+\item{sql}{containing the sql call}
 
-  \item{colNames}{a vector of the table's column names}
+\item{colNames}{a vector of the table's column names}
 }
 \description{
 Extract a list of sex codes and descriptions from the SVDBS.FSCS_SEX_CODES table

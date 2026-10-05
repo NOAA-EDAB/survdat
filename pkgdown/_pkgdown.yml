@@ -14,6 +14,7 @@ reference:
 - title: "Estimation"
   desc: "Main functions for estimating swept area biomass and stratified mean"
 - contents:
+  - calc_condition
   - calc_swept_area
   - calc_stratified_mean
   - get_area
@@ -49,6 +50,11 @@ reference:
   desc: "Random sample of data from different types of data pulls"
 - contents:
   - starts_with("sample")
+- title: "Data"
+  desc: "Data sets included in the package"
+- contents:
+  - EPUstrata
+  - Wigley_LW
 - title: "Plotting"
   desc: "Basic plotting functions to visualize data"
 - contents:

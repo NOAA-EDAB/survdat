@@ -21,7 +21,6 @@ Tools to aid in extraction of survey data from the svdbs database
 \section{References}{
 
 
-
 To learn more about using \code{survdat}, start with the vignette: \code{browseVignettes(package="survdat")} or click the index below
 }
 
