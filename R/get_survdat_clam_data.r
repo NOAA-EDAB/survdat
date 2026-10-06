@@ -12,42 +12,34 @@
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 #'
-#' @family survdat
-#'
-#'@examples
-#'\dontrun{
-#' channel <- dbutils::connect_to_database("serverName","userName")
-#' get_survdat_clam_data(channel)
-#' }
-#'
 #'@export
 
 #-------------------------------------------------------------------------------
 #User parameters
 
 get_survdat_clam_data <- function(
-  channel,
-  shg.check = T,
-  clam.only = T,
-  tidy = F,
-  assignRegionWeights = T
+    channel,
+    shg.check = T,
+    clam.only = T,
+    tidy = F,
+    assignRegionWeights = T
 ) {
   call <- capture_function_call()
-
+  
   #Generate cruise list
   cruise.qry <- "select unique year, cruise6, svvessel
                  from svdbs.mstr_cruise
                  where purpose_code = 50
                  and year >= 1982
                  order by year, cruise6"
-
+  
   cruise <- data.table::as.data.table(DBI::dbGetQuery(channel, cruise.qry))
   cruise <- na.omit(cruise)
   data.table::setkey(cruise, CRUISE6, SVVESSEL)
-
+  
   #Use cruise codes to select other data
   cruise6 <- sqltext(cruise$CRUISE6)
-
+  
   #Station data
   if (shg.check == T) {
     station.qry <- paste(
@@ -73,13 +65,13 @@ get_survdat_clam_data <- function(
       sep = ''
     )
   }
-
+  
   station <- data.table::as.data.table(DBI::dbGetQuery(channel, station.qry))
   data.table::setkey(station, CRUISE6, SVVESSEL)
-
+  
   #merge cruise and station
   clamdat <- base::merge(cruise, station)
-
+  
   #Catch data
   if (clam.only == T) {
     catch.qry <- paste(
@@ -103,14 +95,14 @@ get_survdat_clam_data <- function(
       sep = ''
     )
   }
-
+  
   catch <- data.table::as.data.table(DBI::dbGetQuery(channel, catch.qry))
   data.table::setkey(catch, CRUISE6, STATION, STRATUM)
-
+  
   #merge with clamdat
   data.table::setkey(clamdat, CRUISE6, STATION, STRATUM)
   clamdat <- base::merge(clamdat, catch, all.x = T)
-
+  
   #Length data
   if (clam.only == T) {
     length.qry <- paste(
@@ -134,14 +126,14 @@ get_survdat_clam_data <- function(
       sep = ''
     )
   }
-
+  
   len <- data.table::as.data.table(DBI::dbGetQuery(channel, length.qry))
   data.table::setkey(len, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
-
+  
   #merge with clamdat
   data.table::setkey(clamdat, CRUISE6, STATION, STRATUM, SVSPP, CATCHSEX)
   clamdat <- base::merge(clamdat, len, all.x = T)
-
+  
   if (assignRegionWeights) {
     # 1. Clean the base stratum safely
     clamdat[, calc_strat := as.character(STRATUM)]
@@ -151,102 +143,107 @@ get_survdat_clam_data <- function(
       nchar(calc_strat) >= 4 & grepl("^0?6", calc_strat),
       calc_strat := gsub("0$", "", gsub("^0?6", "", calc_strat))
     ]
-
+    
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
-
+    
     # 2. Geometric Stratum Splits (Pre-2018)
+    # Split-line coordinates come from the clam survey reprocessing script and are
+    # in positive degrees west. SVDBS LON is negative (degrees east), so use a
+    # positive-west copy of LON for the line tests.
+    clamdat[, LONW := -LON]
+    
     clamdat[
       calc_strat == '47',
       calc_strat := data.table::fifelse(
-        ((LON - 69.23) * (41 - 40) - (LAT - 40) * (69.03 - 69.23)) > 0,
+        ((LONW - 69.23) * (41 - 40) - (LAT - 40) * (69.03 - 69.23)) > 0,
         '471',
         '472'
       )
     ]
-
+    
     clamdat[
       calc_strat == '73',
       calc_strat := data.table::fifelse(
-        ((LON - 66.8) * (41.9 - 41.35) - (LAT - 41.35) * (67.5 - 66.8)) > 0,
+        ((LONW - 66.8) * (41.9 - 41.35) - (LAT - 41.35) * (67.5 - 66.8)) > 0,
         '73',
         '74'
       )
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat %in% c('25', '26') &
         LAT >= 39.3 &
         LAT <= 40.2 &
-        (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
+        (((LONW - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
       calc_strat := data.table::fifelse(calc_strat == '26', '30', '29')
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat %in% c('31', '32') &
-        (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
+        (((LONW - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
       calc_strat := data.table::fifelse(calc_strat == '31', '27', '28')
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat %in% c('25', '26') &
         LAT >= 40.2 &
         LAT <= 40.25 &
-        (((LON - 73.75) * (40.25 - 40.2) - (LAT - 40.25) * (73.775 - 73.75)) <
-          0),
+        (((LONW - 73.75) * (40.25 - 40.2) - (LAT - 40.25) * (73.775 - 73.75)) <
+           0),
       calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat %in% c('25', '26') &
         LAT >= 40.25 &
         LAT <= 40.5 &
-        (((LON - 73.775) * (40.5 - 40.25) - (LAT - 40.25) * (73.825 - 73.775)) <
-          0),
+        (((LONW - 73.775) * (40.5 - 40.25) - (LAT - 40.25) * (73.825 - 73.775)) <
+           0),
       calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat == '17' &
-        (((LON - 74.29) * (38.6 - 38.94) - (LAT - 38.94) * (74.57 - 74.29)) <
-          0),
+        (((LONW - 74.29) * (38.6 - 38.94) - (LAT - 38.94) * (74.57 - 74.29)) <
+           0),
       calc_strat := '0'
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat == '13' &
         LAT >= 38.41 &
-        (((LON - 74.57) * (38.41 - 38.6) - (LAT - 38.6) * (74.64 - 74.57)) < 0),
+        (((LONW - 74.57) * (38.41 - 38.6) - (LAT - 38.6) * (74.64 - 74.57)) < 0),
       calc_strat := '0'
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat == '13' &
         LAT >= 38.15 &
         LAT <= 38.41 &
-        (((LON - 74.64) * (38.15 - 38.41) - (LAT - 38.41) * (74.67 - 74.64)) <
-          0),
+        (((LONW - 74.64) * (38.15 - 38.41) - (LAT - 38.41) * (74.67 - 74.64)) <
+           0),
       calc_strat := '0'
     ]
-
+    
     clamdat[
       SVSPP == 409 &
         calc_strat == '13' &
         LAT <= 38.15 &
-        (((LON - 74.67) * (37.83 - 38.15) - (LAT - 38.15) * (74.87 - 74.67)) <
-          0),
+        (((LONW - 74.67) * (37.83 - 38.15) - (LAT - 38.15) * (74.87 - 74.67)) <
+           0),
       calc_strat := '0'
     ]
-
+    
     # 3. Assign New Strata for Pre-2018
     clamdat[, new_stratum := calc_strat]
-
+    
     # Surfclams Pre-2018
     clamdat[
       SVSPP == 403 & sv_year < 2018,
@@ -266,7 +263,7 @@ get_survdat_clam_data <- function(
         default = "0"
       )
     ]
-
+    
     # Quahogs Pre-2018
     clamdat[
       SVSPP == 409 & sv_year < 2018,
@@ -286,21 +283,21 @@ get_survdat_clam_data <- function(
         default = "0"
       )
     ]
-
+    
     clamdat[!is.na(DEPTH) & DEPTH > 80, new_stratum := '0']
-
+    
     # 4. Map to Assessment Regions (South vs GBK)
     clamdat[,
-      clam.region := data.table::fcase(
-        new_stratum %in% c("1S", "2S", "3S", "4S", "5S", "6S", "1Q", "2Q", "3Q", "4Q", "5Q", "6Q")       , "South" ,
-        new_stratum %in% c("7S", "8S", "9S", "10S", "11S", "12S", "7Q", "8Q", "9Q", "10Q", "11Q", "12Q") , "GBK"   ,
-        default = NA_character_
-      )
+            clam.region := data.table::fcase(
+              new_stratum %in% c("1S", "2S", "3S", "4S", "5S", "6S", "1Q", "2Q", "3Q", "4Q", "5Q", "6Q")       , "South" ,
+              new_stratum %in% c("7S", "8S", "9S", "10S", "11S", "12S", "7Q", "8Q", "9Q", "10Q", "11Q", "12Q") , "GBK"   ,
+              default = NA_character_
+            )
     ]
-
+    
     # Clean up intermediate geometric columns
-    clamdat[, c('calc_strat', 'sv_year', 'new_stratum') := NULL]
-
+    clamdat[, c('calc_strat', 'sv_year', 'new_stratum', 'LONW') := NULL]
+    
     # 5. Apply Meat Weight Coefficients
     coeff <- data.table::data.table(
       clam.region = c('South', 'GBK'),
@@ -309,34 +306,34 @@ get_survdat_clam_data <- function(
       sc.a = c(log(9e-05), log(0.00011)), # Using 2024 MTA values wrapped in log()
       sc.b = c(2.733, 2.733) # Using 2024 MTA values
     )
-
+    
     coeff[, clam.region := as.factor(clam.region)]
     clamdat <- base::merge(clamdat, coeff, by = 'clam.region', all.x = TRUE)
-
+    
     #Lengths need to be in mm for formula to give g.  Divide by 1000 to get results in kg
     clamdat[SVSPP == 403, meatwt := (exp(sc.a) * (LENGTH * 10)^sc.b) / 1000]
     clamdat[SVSPP == 409, meatwt := (exp(oq.a) * (LENGTH * 10)^oq.b) / 1000]
     clamdat[, expmw := meatwt * NUMLEN]
     clamdat[,
-      stamw := sum(expmw, na.rm = TRUE),
-      by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')
+            stamw := sum(expmw, na.rm = TRUE),
+            by = c('CRUISE6', 'STRATUM', 'STATION', 'SVSPP')
     ]
-
+    
     clamdat[, c('oq.a', 'oq.b', 'sc.a', 'sc.b', 'meatwt', 'expmw') := NULL]
     data.table::setnames(clamdat, "stamw", "BIOMASS.MW")
   }
-
+  
   if (tidy) {
     clamdat <- dplyr::as_tibble(clamdat)
   }
-
+  
   sql <- list(
     cruise = cruise.qry,
     station = station.qry,
     catch = catch.qry,
     length = length.qry
   )
-
+  
   return(list(
     data = clamdat,
     sql = sql,
