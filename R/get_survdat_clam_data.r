@@ -12,14 +12,6 @@
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 #'
-#' @family survdat
-#'
-#'@examples
-#'\dontrun{
-#' channel <- dbutils::connect_to_database("serverName","userName")
-#' get_survdat_clam_data(channel)
-#' }
-#'
 #'@export
 
 #-------------------------------------------------------------------------------
@@ -155,10 +147,15 @@ get_survdat_clam_data <- function(
     clamdat[, sv_year := floor(as.numeric(CRUISE6) / 100)]
 
     # 2. Geometric Stratum Splits (Pre-2018)
+    # Split-line coordinates come from the clam survey reprocessing script and are
+    # in positive degrees west. SVDBS LON is negative (degrees east), so use a
+    # positive-west copy of LON for the line tests.
+    clamdat[, LONW := -LON]
+
     clamdat[
       calc_strat == '47',
       calc_strat := data.table::fifelse(
-        ((LON - 69.23) * (41 - 40) - (LAT - 40) * (69.03 - 69.23)) > 0,
+        ((LONW - 69.23) * (41 - 40) - (LAT - 40) * (69.03 - 69.23)) > 0,
         '471',
         '472'
       )
@@ -167,7 +164,7 @@ get_survdat_clam_data <- function(
     clamdat[
       calc_strat == '73',
       calc_strat := data.table::fifelse(
-        ((LON - 66.8) * (41.9 - 41.35) - (LAT - 41.35) * (67.5 - 66.8)) > 0,
+        ((LONW - 66.8) * (41.9 - 41.35) - (LAT - 41.35) * (67.5 - 66.8)) > 0,
         '73',
         '74'
       )
@@ -178,14 +175,14 @@ get_survdat_clam_data <- function(
         calc_strat %in% c('25', '26') &
         LAT >= 39.3 &
         LAT <= 40.2 &
-        (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
+        (((LONW - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
       calc_strat := data.table::fifelse(calc_strat == '26', '30', '29')
     ]
 
     clamdat[
       SVSPP == 409 &
         calc_strat %in% c('31', '32') &
-        (((LON - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
+        (((LONW - 72) * (40.2 - 39.3) - (LAT - 39.3) * (73.75 - 72)) < 0),
       calc_strat := data.table::fifelse(calc_strat == '31', '27', '28')
     ]
 
@@ -194,7 +191,7 @@ get_survdat_clam_data <- function(
         calc_strat %in% c('25', '26') &
         LAT >= 40.2 &
         LAT <= 40.25 &
-        (((LON - 73.75) * (40.25 - 40.2) - (LAT - 40.25) * (73.775 - 73.75)) <
+        (((LONW - 73.75) * (40.25 - 40.2) - (LAT - 40.25) * (73.775 - 73.75)) <
           0),
       calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')
     ]
@@ -204,7 +201,9 @@ get_survdat_clam_data <- function(
         calc_strat %in% c('25', '26') &
         LAT >= 40.25 &
         LAT <= 40.5 &
-        (((LON - 73.775) * (40.5 - 40.25) - (LAT - 40.25) * (73.825 - 73.775)) <
+        (((LONW - 73.775) *
+          (40.5 - 40.25) -
+          (LAT - 40.25) * (73.825 - 73.775)) <
           0),
       calc_strat := data.table::fifelse(calc_strat == '25', '29', '30')
     ]
@@ -212,7 +211,7 @@ get_survdat_clam_data <- function(
     clamdat[
       SVSPP == 409 &
         calc_strat == '17' &
-        (((LON - 74.29) * (38.6 - 38.94) - (LAT - 38.94) * (74.57 - 74.29)) <
+        (((LONW - 74.29) * (38.6 - 38.94) - (LAT - 38.94) * (74.57 - 74.29)) <
           0),
       calc_strat := '0'
     ]
@@ -221,7 +220,8 @@ get_survdat_clam_data <- function(
       SVSPP == 409 &
         calc_strat == '13' &
         LAT >= 38.41 &
-        (((LON - 74.57) * (38.41 - 38.6) - (LAT - 38.6) * (74.64 - 74.57)) < 0),
+        (((LONW - 74.57) * (38.41 - 38.6) - (LAT - 38.6) * (74.64 - 74.57)) <
+          0),
       calc_strat := '0'
     ]
 
@@ -230,7 +230,7 @@ get_survdat_clam_data <- function(
         calc_strat == '13' &
         LAT >= 38.15 &
         LAT <= 38.41 &
-        (((LON - 74.64) * (38.15 - 38.41) - (LAT - 38.41) * (74.67 - 74.64)) <
+        (((LONW - 74.64) * (38.15 - 38.41) - (LAT - 38.41) * (74.67 - 74.64)) <
           0),
       calc_strat := '0'
     ]
@@ -239,7 +239,7 @@ get_survdat_clam_data <- function(
       SVSPP == 409 &
         calc_strat == '13' &
         LAT <= 38.15 &
-        (((LON - 74.67) * (37.83 - 38.15) - (LAT - 38.15) * (74.87 - 74.67)) <
+        (((LONW - 74.67) * (37.83 - 38.15) - (LAT - 38.15) * (74.87 - 74.67)) <
           0),
       calc_strat := '0'
     ]
@@ -299,7 +299,7 @@ get_survdat_clam_data <- function(
     ]
 
     # Clean up intermediate geometric columns
-    clamdat[, c('calc_strat', 'sv_year', 'new_stratum') := NULL]
+    clamdat[, c('calc_strat', 'sv_year', 'new_stratum', 'LONW') := NULL]
 
     # 5. Apply Meat Weight Coefficients
     coeff <- data.table::data.table(
