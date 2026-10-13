@@ -6,6 +6,7 @@
 #'
 #' @param areaPolygon sf object or character string. Default = "NEFSC strata". The default option uses the survey strata shapefile bundled with the package.
 #' Use "shellfish strata" for the clam and scallop surveys.
+#' Use "scallop strata" for the scallop survey from 2025 onward (requires the NEFSCspatial package).
 #' To use any other shapefile for stratification, the shapefile must be read in as an \link[sf]{sf} object and the \code{areaDescription} argument must be specified.
 #' @param areaDescription Character String. Column name from \code{areaPolygon}
 #'                       that contains the strata designations.
@@ -31,16 +32,17 @@
 #' @export
 
 strat_prep <- function(
-    surveyData,
-    areaPolygon = "NEFSC strata",
-    areaDescription = "STRATA",
-    filterByArea = "all",
-    filterBySeason = "all",
-    postStratify = NULL
+  surveyData,
+  areaPolygon = "NEFSC strata",
+  areaDescription = "STRATA",
+  filterByArea = "all",
+  filterBySeason = "all",
+  postStratify = NULL
 ) {
   # Break link to original data set so no changes are made to original
   surveyData <- data.table::copy(surveyData)
-  
+  assignByLocation <- F
+
   # Calculate the proportional areas
   # Use original stratified design and built-in shapefile or flag for post
   # stratification
@@ -54,31 +56,54 @@ strat_prep <- function(
     } else if (areaPolygon == 'shellfish strata') {
       # clam and scallop surveys use their own design strata
       areaPolygon <- sf::st_read(
-        dsn = system.file("extdata", "shellfish_strata.shp", package = "survdat"),
+        dsn = system.file(
+          "extdata",
+          "shellfish_strata.shp",
+          package = "survdat"
+        ),
         quiet = T
       )
       # rename strata column so it doesn't collide with STRATUM in surveyData
       areaPolygon <- dplyr::rename(areaPolygon, STRATA = STRATUM)
       areaDescription <- 'STRATA'
       poststratFlag <- F
+    } else if (areaPolygon == 'scallop strata') {
+      # Sea scallop survey design strata (SAMS areas) used from 2025 onward,
+      # maintained in the NEFSCspatial package
+      if (!requireNamespace("NEFSCspatial", quietly = TRUE)) {
+        stop(
+          "areaPolygon = \"scallop strata\" requires the NEFSCspatial package. ",
+          "Install it with remotes::install_github(\"NEFSC/NEFSC-Spatial\")"
+        )
+      }
+      areaPolygon <- NEFSCspatial::scallop_strata
+      areaDescription <- 'NEWSAMS'
+      # Design strata, but stations are matched to strata by location
+      poststratFlag <- F
+      assignByLocation <- T
     } else {
       stop("areaPolygon incorrectly defined")
     }
   } else {
     poststratFlag <- T
   }
-  
+
   # User can declare that a supplied polygon is the survey's design strata
   if (!is.null(postStratify)) {
     poststratFlag <- postStratify
   }
-  
+
   # Calculate area of the polygons
   polygonArea <- survdat::get_area(areaPolygon, areaDescription)
-  
+
   # post stratify if necessary
   if (poststratFlag) {
     message("Post stratifying ...")
+    surveyData <- survdat::post_strat(surveyData, areaPolygon, areaDescription)
+  } else if (assignByLocation) {
+    # Design strata whose codes are not stored in STRATUM: assign each station
+    # to the stratum polygon it falls in. Variance stays design-based.
+    message("Assigning stations to design strata by location ...")
     surveyData <- survdat::post_strat(surveyData, areaPolygon, areaDescription)
   } else {
     #Add extra column to original data to mimic what happens when post-stratifying
@@ -87,7 +112,7 @@ strat_prep <- function(
     # Match the type of the polygon strata column so e.g. SVDBS "06010" matches 6010
     if (is.numeric(areaPolygon[[areaDescription]])) {
       surveyData[,
-                 (areaDescription) := suppressWarnings(as.numeric(get(areaDescription)))
+        (areaDescription) := suppressWarnings(as.numeric(get(areaDescription)))
       ]
     } else {
       surveyData[, (areaDescription) := as.character(get(areaDescription))]
@@ -103,18 +128,18 @@ strat_prep <- function(
       )
     }
   }
-  
+
   #FilterData
   if (filterByArea[1] != "all" | filterBySeason[1] != "all") {
     message("Filtering data ...")
     seasonFlag <- T
   }
-  
+
   if (filterBySeason[1] == 'all') {
     filterBySeason <- unique(surveyData[, SEASON])
     seasonFlag <- F
   }
-  
+
   # check to create all areas
   if (length(filterByArea) == 1) {
     if (filterByArea == "all") {
@@ -129,15 +154,15 @@ strat_prep <- function(
       }
     }
   }
-  
+
   filteredData <- surveyData[
     SEASON %in% filterBySeason & get(areaDescription) %in% filterByArea,
   ]
-  
+
   #Change to generic names for calculations
   data.table::setnames(filteredData, areaDescription, 'STRAT')
   data.table::setnames(polygonArea, c("STRATUM", "Area"), c('STRAT', 'S.AREA'))
-  
+
   # if not using original stratification need to preserve unique key
   if (!is.null(areaPolygon)) {
     # character key: as.numeric() turns alphanumeric strata (e.g. 2018+ clam
@@ -149,12 +174,12 @@ strat_prep <- function(
       c('ORIGSTATION', 'STATION')
     )
   }
-  
+
   #Station data - Finds list of distinct stations sampled through time
   data.table::setkey(filteredData, CRUISE6, STRAT, STATION)
   stations <- unique(filteredData, by = key(filteredData))
   stations <- stations[, list(YEAR, CRUISE6, STRAT, STATION)]
-  
+
   #x %>% dplyr::distinct(YEAR,CRUISE6,STRAT,STATION)
   # Count the number of stations in each year for each Region
   if (seasonFlag) {
@@ -163,10 +188,10 @@ strat_prep <- function(
     data.table::setkey(stations, YEAR, STRAT)
   }
   stations[, ntows := length(STATION), by = key(stations)]
-  
+
   #Merge stations and area
   stations <- base::merge(stations, polygonArea, by = 'STRAT', all.x = T)
-  
+
   #Calculate stratum weight
   if (seasonFlag) {
     keyoff <- c('YEAR', 'CRUISE6')
@@ -183,23 +208,23 @@ strat_prep <- function(
   if (!seasonFlag) {
     strat.year[, CRUISE6 := NULL]
   }
-  
+
   #Merge back
   stations <- merge(stations, strat.year, by = key(stations))
-  
+
   #Merge catch with station data
   prepData <- merge(
     filteredData,
     stations,
     by = c('YEAR', 'CRUISE6', 'STRAT', 'STATION')
   )
-  
+
   data.table::setnames(
     prepData,
     c('STRAT', 'S.AREA'),
     c(areaDescription, "Area")
   )
-  
+
   # Restore original station number if not using the original stratified design
   if (!is.null(areaPolygon)) {
     data.table::setnames(
@@ -209,6 +234,6 @@ strat_prep <- function(
     )
     prepData[, STATION2 := NULL]
   }
-  
+
   return(prepData[])
 }
