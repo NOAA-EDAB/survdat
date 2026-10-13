@@ -11,6 +11,7 @@ post_strat(surveyData, areaPolygon, areaDescription, na.keep = F)
 
 \item{areaPolygon}{sf object or character string. Default = "NEFSC strata". The default option uses the survey strata shapefile bundled with the package.
 Use "shellfish strata" for the clam and scallop surveys.
+Use "scallop strata" for the scallop survey from 2025 onward (requires the NEFSCspatial package).
 To use any other shapefile for stratification, the shapefile must be read in as an \link[sf]{sf} object and the \code{areaDescription} argument must be specified.}
 
 \item{areaDescription}{Character String. Column name from \code{areaPolygon}
