@@ -33,7 +33,10 @@ Suggests:
     diagram,
     markdown,
     kableExtra,
-    DT
+    DT,
+    NEFSCspatial
+Remotes:
+    NEFSC/NEFSC-Spatial
 VignetteBuilder: knitr
 Depends: 
     R (>= 4.1.0)
