@@ -23,7 +23,12 @@ calc_stratified_mean(
 
 \item{areaPolygon}{sf object or character string. Default = "NEFSC strata". The default option uses the survey strata shapefile bundled with the package.
 Use "shellfish strata" for the clam and scallop surveys, which uses the bundled shellfish strata shapefile.
-Both character options are treated as the survey's design strata (not post-stratified).
+Use "scallop strata" for the scallop survey from 2025 onward, when the survey switched to
+Scallop Area Management Simulator (SAMS) areas as strata. These polygons come from
+\code{NEFSCspatial::scallop_strata}, so the NEFSCspatial package must be installed. Stations
+are assigned to SAMS strata by their location, and strata are labeled by the \code{NEWSAMS} column.
+Earlier scallop survey years should use "shellfish strata".
+All character options are treated as the survey's design strata (not post-stratified).
 To use any other shapefile for stratification, the shapefile must be read in as an \link[sf]{sf} object and the \code{areaDescription} argument must be specified.}
 
 \item{areaDescription}{Character String. Column name from \code{areaPolygon}
@@ -84,6 +89,13 @@ clamData <- get_survdat_clam_data(channel)
 calc_stratified_mean(surveyData = clamData$data, areaPolygon = "shellfish strata",
     filterBySeason = "all")
 
+# Scallop survey: 6xxx shellfish strata before 2025, SAMS strata from 2025 on
+scallopData <- get_survdat_scallop_data(channel)
+calc_stratified_mean(surveyData = scallopData$survdat[YEAR < 2025],
+    areaPolygon = "shellfish strata", filterBySeason = "all")
+calc_stratified_mean(surveyData = scallopData$survdat[YEAR >= 2025],
+    areaPolygon = "scallop strata", filterBySeason = "all")
+
 }
 
 
@@ -93,6 +105,7 @@ Other survdat:
 \code{\link[=calc_swept_area]{calc_swept_area()}},
 \code{\link[=get_area]{get_area()}},
 \code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
+\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
 \code{\link[=get_survdat_data]{get_survdat_data()}},
 \code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }
