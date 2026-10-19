@@ -12,7 +12,7 @@
 #'
 #' @return A list containing a Data frame (data.table) (n x 21) and a list of SQL queries used to pull the data, the date of the pull, and the call expression
 #'
-#'#' @family survdat
+#' @family survdat
 #'
 #'@examples
 #'\dontrun{
