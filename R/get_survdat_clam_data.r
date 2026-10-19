@@ -19,7 +19,7 @@
 #' channel <- dbutils::connect_to_database("serverName","userName")
 #' get_survdat_clam_data(channel)
 #' }
-#' 
+#'
 #'@export
 
 #-------------------------------------------------------------------------------
