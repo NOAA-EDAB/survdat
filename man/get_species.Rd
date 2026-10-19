@@ -16,11 +16,11 @@ Numeric codes are converted to VARCHAR2(3 BYTE) when creating the sql statement.
 \value{
 A list is returned:
 
-  \item{species}{containing the result of the executed \code{$sql} statement}
+\item{species}{containing the result of the executed \code{$sql} statement}
 
-  \item{sql}{containing the sql call}
+\item{sql}{containing the sql call}
 
-  \item{colNames}{a vector of the table's column names}
+\item{colNames}{a vector of the table's column names}
 }
 \description{
 Extract a list of species names, code, market category, etc from the SVDBS SVSPECIES_LIST table

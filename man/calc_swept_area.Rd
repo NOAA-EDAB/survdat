@@ -41,7 +41,7 @@ contains the groups (e.g. "SVSPP") on which the means are based.}
 
 \item{mergesexFlag}{Boolean. Logical value to merge sexed species such as dogfish.}
 
-\item{tidy}{[Deprecated] Logical. The \code{tidy} argument is deprecated and will be removed in the next version. The function will soon strictly return tidy output. Currently controls whether the output is formatted as a tidy dataset.}
+\item{tidy}{\link{Deprecated} Logical. The \code{tidy} argument is deprecated and will be removed in the next version. The function will soon strictly return tidy output. Currently controls whether the output is formatted as a tidy dataset.}
 
 \item{q}{Data frame. Table of survey catchabilities with a column
 corresponding to \code{groupDescription} and a column of
@@ -69,8 +69,8 @@ total biomass/abundance estimates.
 
 
 43rd Northeast Regional Stock Assessment Workshop (43rd SAW). 2006.
-\href{https://repository.library.noaa.gov/view/noaa/25243}{**43rd SAW
-assessment report.** US Dep. Commer., Northeast Fish. Sci. Cent.
+\href{https://repository.library.noaa.gov/view/noaa/25243}{\strong{43rd SAW
+assessment report.} US Dep. Commer., Northeast Fish. Sci. Cent.
 Ref. Doc. 06-25; 400 p.}
 }
 
@@ -111,6 +111,7 @@ Other survdat:
 \code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
 \code{\link[=get_area]{get_area()}},
 \code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
+\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
 \code{\link[=get_survdat_data]{get_survdat_data()}},
 \code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }

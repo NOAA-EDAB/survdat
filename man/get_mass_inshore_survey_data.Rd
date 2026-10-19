@@ -9,7 +9,7 @@ get_mass_inshore_survey_data(channel, filterByYear = NA)
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
 This object is used to communicate with the database engine.
- (see \code{\link[dbutils]{connect_to_database}})}
+(see \code{\link[dbutils]{connect_to_database}})}
 
 \item{filterByYear}{Numeric vector. Subset of years from which to pull data.
 If not specified then all years are pulled. (Default = NA)}
@@ -42,7 +42,6 @@ The data frame (Descriptions taken from NEFSC Data dictionary)
 \item{ABUNDANCE}{Expanded number of individuals of a species caught at a given station.(EXPCATCHNUM)}
 \item{BIOMASS}{Expanded catch weight of a species caught at a given station. (EXPCATCHWT)}
 
-
 The date:
 
 \item{pullDate}{The date the data was pulled from the database}
@@ -73,6 +72,7 @@ Other survdat:
 \code{\link[=calc_stratified_mean]{calc_stratified_mean()}},
 \code{\link[=calc_swept_area]{calc_swept_area()}},
 \code{\link[=get_area]{get_area()}},
+\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
 \code{\link[=get_survdat_data]{get_survdat_data()}},
 \code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }

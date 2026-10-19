@@ -42,7 +42,7 @@ The sql statement
 
 The data frame listing all columns in the table
 
-  \item{colNames}{a vector of the table's column names}
+\item{colNames}{a vector of the table's column names}
 }
 \description{
 Extract a list of length and weights for species sampled in nefsc surveys (spring and fall)

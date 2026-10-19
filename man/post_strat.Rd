@@ -20,10 +20,10 @@ should be retained.}
 }
 \value{
 Returns a \code{surveyData} data.table with one additional column labeled
- with the value of \code{areaDescription}
+with the value of \code{areaDescription}
 
 \item{areaDescription}{The name of the region (found in \code{areaPolygon})
- that a record in \code{surveyData} is assigned to}
+that a record in \code{surveyData} is assigned to}
 }
 \description{
 Assign survey data (points, lat and lon) to designated regions (polygons) from a shape file.

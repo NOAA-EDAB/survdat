@@ -25,7 +25,8 @@ Imports:
     dplyr,
     tidyr,
     magrittr,
-    ggplot2
+    ggplot2, 
+    tibble
 Suggests: 
     knitr,
     rmarkdown,
@@ -38,3 +39,4 @@ Depends:
     R (>= 4.1.0)
 LazyData: true
 Config/roxygen2/version: 8.1.0
+Roxygen: list(markdown = TRUE)

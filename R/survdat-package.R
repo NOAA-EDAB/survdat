@@ -16,5 +16,11 @@
 #'
 #'To learn more about using \code{survdat}, start with the vignette: \code{browseVignettes(package="survdat")} or click the index below
 #'
-#'
+#' @importFrom tibble tibble
+#' @keywords internal
 "_PACKAGE"
+
+
+## usethis namespace: start
+## usethis namespace: end
+NULL

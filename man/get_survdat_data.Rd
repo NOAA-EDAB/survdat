@@ -19,7 +19,7 @@ get_survdat_data(
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
 This object is used to communicate with the database engine.
- (see \code{\link[dbutils]{connect_to_database}})}
+(see \code{\link[dbutils]{connect_to_database}})}
 
 \item{filterByYear}{Numeric vector. Subset of years from which to pull data.
 If not specified then all years are pulled. (Default = NA)}
@@ -134,6 +134,7 @@ Other survdat:
 \code{\link[=calc_swept_area]{calc_swept_area()}},
 \code{\link[=get_area]{get_area()}},
 \code{\link[=get_mass_inshore_survey_data]{get_mass_inshore_survey_data()}},
+\code{\link[=get_survdat_clam_data]{get_survdat_clam_data()}},
 \code{\link[=get_survdat_scallop_data]{get_survdat_scallop_data()}}
 }
 \concept{survdat}

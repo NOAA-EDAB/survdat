@@ -9,7 +9,7 @@ get_length_weight(channel)
 \arguments{
 \item{channel}{an Object inherited from \link[DBI]{DBIConnection-class}.
 This object is used to communicate with the database engine.
- (see \code{\link[dbutils]{connect_to_database}})}
+(see \code{\link[dbutils]{connect_to_database}})}
 }
 \value{
 Returns a data.table (nx12).
