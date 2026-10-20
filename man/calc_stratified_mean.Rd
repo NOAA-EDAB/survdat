@@ -55,10 +55,11 @@ as a list object. The default (F) returns only the \code{stratmeanData} as a
 \code{data.table}.}
 
 \item{postStratify}{Boolean or NULL. Should stations be spatially post-stratified into
-\code{areaPolygon}? Default (NULL) is F for "NEFSC strata" and "shellfish strata" and T
-for a user supplied sf object. Set to F when a user supplied sf object is the survey's
-design strata, so stations are matched by their recorded STRATUM and the design-based
-variance is used.}
+\code{areaPolygon}? Default (NULL) is F for the character options ("NEFSC strata",
+"shellfish strata" and "scallop strata") and T for a user supplied sf object. Set to F
+when a user supplied sf object is the survey's design strata, so stations are matched by
+their recorded STRATUM and the design-based variance is used. Set to T to force
+post-stratification and the post-stratified variance.}
 }
 \value{
 data frame
