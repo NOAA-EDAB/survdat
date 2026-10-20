@@ -36,7 +36,7 @@ Suggests:
     DT,
     NEFSCspatial
 Remotes:
-    NEFSC/NEFSC-Spatial
+    NEFSCspatial=github::NEFSC/NEFSC-Spatial
 VignetteBuilder: knitr
 Depends: 
     R (>= 4.1.0)
