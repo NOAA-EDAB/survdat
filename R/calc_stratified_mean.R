@@ -32,10 +32,11 @@
 #'   as a list object. The default (F) returns only the \code{stratmeanData} as a
 #'   \code{data.table}.
 #' @param postStratify Boolean or NULL. Should stations be spatially post-stratified into
-#'   \code{areaPolygon}? Default (NULL) is F for "NEFSC strata" and "shellfish strata" and T
-#'   for a user supplied sf object. Set to F when a user supplied sf object is the survey's
-#'   design strata, so stations are matched by their recorded STRATUM and the design-based
-#'   variance is used.
+#'   \code{areaPolygon}? Default (NULL) is F for the character options ("NEFSC strata",
+#'   "shellfish strata" and "scallop strata") and T for a user supplied sf object. Set to F
+#'   when a user supplied sf object is the survey's design strata, so stations are matched by
+#'   their recorded STRATUM and the design-based variance is used. Set to T to force
+#'   post-stratification and the post-stratified variance.
 #'
 #' @return data frame
 #'
@@ -73,17 +74,17 @@
 #' @export
 
 calc_stratified_mean <- function(
-  surveyData,
-  areaPolygon = 'NEFSC strata',
-  areaDescription = 'STRATA',
-  filterByArea = "all",
-  filterBySeason,
-  groupDescription = "SVSPP",
-  filterByGroup = "all",
-  mergesexFlag = T,
-  tidy = F,
-  returnPrepData = F,
-  postStratify = NULL
+    surveyData,
+    areaPolygon = 'NEFSC strata',
+    areaDescription = 'STRATA',
+    filterByArea = "all",
+    filterBySeason,
+    groupDescription = "SVSPP",
+    filterByGroup = "all",
+    mergesexFlag = T,
+    tidy = F,
+    returnPrepData = F,
+    postStratify = NULL
 ) {
   # Use original stratified design and built-in shapefile
   if (!is(areaPolygon, 'sf')) {
@@ -114,12 +115,12 @@ calc_stratified_mean <- function(
   } else {
     poststratFlag <- T
   }
-
+  
   # User can declare that a supplied polygon is the survey's design strata
   if (!is.null(postStratify)) {
     poststratFlag <- postStratify
   }
-
+  
   #Run stratification prep
   message("Prepping data ...")
   prepData <- survdat::strat_prep(
@@ -130,7 +131,7 @@ calc_stratified_mean <- function(
     filterBySeason,
     postStratify = poststratFlag
   )
-
+  
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
   #Check if calculating mean base on all station or by season
@@ -139,7 +140,7 @@ calc_stratified_mean <- function(
   } else {
     seasonFlag <- T
   }
-
+  
   stratmeanData <- survdat::strat_mean(
     prepData,
     groupDescription,
@@ -149,7 +150,7 @@ calc_stratified_mean <- function(
     areaDescription,
     poststratFlag
   )
-
+  
   # create tidy data
   if (tidy) {
     message("Tidying data  ...")
@@ -173,10 +174,10 @@ calc_stratified_mean <- function(
     tidyData[variable == 'abund.SE', units := 'number tow^-1']
     stratmeanData <- tidyData
   }
-
+  
   if (returnPrepData) {
     stratmeanData <- list(stratmeanData = stratmeanData, prepData = prepData)
   }
-
+  
   return(stratmeanData[])
 }
