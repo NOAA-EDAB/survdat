@@ -16,6 +16,7 @@
 #'   corresponding to \code{groupDescription} and a column of
 #'   catchabilities. If NULL, assumes a \code{q} of 1 for each
 #'   \code{groupDescription} (Minimum swept area estimates).
+#' @param postStratify Boolean or NULL. See \code{\link{calc_stratified_mean}}.
 #' @param a Numeric. The average swept area of the trawl. Default value
 #'   is the swept area of a standard NOAA Ship Albatross IV tow.
 #'   (\href{https://repository.library.noaa.gov/view/noaa/25243}{NEFSC, 2006})
@@ -61,6 +62,14 @@
 #'   tidy = TRUE
 #' )
 #'
+#' # Swept area for the scallop survey using the 2025+ SAMS design strata
+#' scallopData <- get_survdat_scallop_data(channel)
+#' calc_swept_area(
+#'   surveyData = scallopData$survdat[YEAR >= 2025],
+#'   areaPolygon = "scallop strata",
+#'   filterBySeason = "all"
+#' )
+#'
 #' }
 #'
 #'
@@ -77,7 +86,8 @@ calc_swept_area <- function(
   mergesexFlag = TRUE,
   tidy = FALSE,
   q = NULL,
-  a = 0.0384
+  a = 0.0384,
+  postStratify = NULL
 ) {
   # -----------------------------------------------------------------------
   # Deprecation Warning
@@ -126,8 +136,20 @@ calc_swept_area <- function(
     groupDescription,
     filterByGroup,
     mergesexFlag,
-    returnPrepData = TRUE
+    returnPrepData = TRUE,
+    postStratify = postStratify
   )
+
+  # Built-in strata options set their own strata column inside
+  # calc_stratified_mean(), so swept_area() must look for that column
+  if (is.character(areaPolygon)) {
+    areaDescription <- switch(
+      areaPolygon,
+      'shellfish strata' = 'STRATA',
+      'scallop strata' = 'NEWSAMS',
+      areaDescription
+    )
+  }
 
   # -----------------------------------------------------------------------
   # Calculate total biomass/abundance estimates
