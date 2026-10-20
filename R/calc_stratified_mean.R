@@ -74,17 +74,17 @@
 #' @export
 
 calc_stratified_mean <- function(
-    surveyData,
-    areaPolygon = 'NEFSC strata',
-    areaDescription = 'STRATA',
-    filterByArea = "all",
-    filterBySeason,
-    groupDescription = "SVSPP",
-    filterByGroup = "all",
-    mergesexFlag = T,
-    tidy = F,
-    returnPrepData = F,
-    postStratify = NULL
+  surveyData,
+  areaPolygon = 'NEFSC strata',
+  areaDescription = 'STRATA',
+  filterByArea = "all",
+  filterBySeason,
+  groupDescription = "SVSPP",
+  filterByGroup = "all",
+  mergesexFlag = T,
+  tidy = F,
+  returnPrepData = F,
+  postStratify = NULL
 ) {
   # Use original stratified design and built-in shapefile
   if (!is(areaPolygon, 'sf')) {
@@ -115,12 +115,12 @@ calc_stratified_mean <- function(
   } else {
     poststratFlag <- T
   }
-  
+
   # User can declare that a supplied polygon is the survey's design strata
   if (!is.null(postStratify)) {
     poststratFlag <- postStratify
   }
-  
+
   #Run stratification prep
   message("Prepping data ...")
   prepData <- survdat::strat_prep(
@@ -131,7 +131,7 @@ calc_stratified_mean <- function(
     filterBySeason,
     postStratify = poststratFlag
   )
-  
+
   #Calculate stratified mean
   message("Calculating Stratified Mean  ...")
   #Check if calculating mean base on all station or by season
@@ -140,7 +140,7 @@ calc_stratified_mean <- function(
   } else {
     seasonFlag <- T
   }
-  
+
   stratmeanData <- survdat::strat_mean(
     prepData,
     groupDescription,
@@ -150,7 +150,7 @@ calc_stratified_mean <- function(
     areaDescription,
     poststratFlag
   )
-  
+
   # create tidy data
   if (tidy) {
     message("Tidying data  ...")
@@ -174,10 +174,10 @@ calc_stratified_mean <- function(
     tidyData[variable == 'abund.SE', units := 'number tow^-1']
     stratmeanData <- tidyData
   }
-  
+
   if (returnPrepData) {
     stratmeanData <- list(stratmeanData = stratmeanData, prepData = prepData)
   }
-  
+
   return(stratmeanData[])
 }
